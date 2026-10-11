@@ -61,10 +61,10 @@
 	{#if prev}
 		<a
 			href="/summary/{prev.slug}"
-			class="btn-lift group flex items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3.5 hover:border-accent/60 hover:bg-accent-soft/40"
+			class="btn-lift group flex items-center gap-3 rounded-xl border border-accent bg-accent-soft/50 px-4 py-3.5 sm:border-line sm:bg-surface sm:hover:border-accent/60 sm:hover:bg-accent-soft/40"
 		>
 			<span
-				class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-colors group-hover:border-accent group-hover:text-accent-deep"
+				class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent text-accent-deep transition-colors sm:border-line sm:text-muted sm:group-hover:border-accent sm:group-hover:text-accent-deep"
 				aria-hidden="true"
 			>
 				<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none">
@@ -80,7 +80,7 @@
 			<span class="min-w-0">
 				<span class="block text-[12px] text-muted">หัวข้อก่อนหน้า</span>
 				<span
-					class="mt-0.5 block truncate text-[14.5px] font-semibold group-hover:text-accent-deep"
+					class="mt-0.5 block truncate text-[14.5px] font-semibold text-accent-deep sm:text-ink sm:group-hover:text-accent-deep"
 				>
 					{prev.title}
 				</span>
@@ -90,18 +90,18 @@
 	{#if next}
 		<a
 			href="/summary/{next.slug}"
-			class="btn-lift group flex items-center justify-end gap-3 rounded-xl border border-line bg-surface px-4 py-3.5 text-right hover:border-accent/60 hover:bg-accent-soft/40 sm:col-start-2"
+			class="btn-lift group flex items-center justify-end gap-3 rounded-xl border border-accent bg-accent-soft/50 px-4 py-3.5 text-right sm:col-start-2 sm:border-line sm:bg-surface sm:hover:border-accent/60 sm:hover:bg-accent-soft/40"
 		>
 			<span class="min-w-0">
 				<span class="block text-[12px] text-muted">ถัดไป</span>
 				<span
-					class="mt-0.5 block truncate text-[14.5px] font-semibold group-hover:text-accent-deep"
+					class="mt-0.5 block truncate text-[14.5px] font-semibold text-accent-deep sm:text-ink sm:group-hover:text-accent-deep"
 				>
 					{next.title}
 				</span>
 			</span>
 			<span
-				class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-colors group-hover:border-accent group-hover:text-accent-deep"
+				class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-accent text-accent-deep transition-colors sm:border-line sm:text-muted sm:group-hover:border-accent sm:group-hover:text-accent-deep"
 				aria-hidden="true"
 			>
 				<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none">
