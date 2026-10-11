@@ -65,7 +65,7 @@
 				</div>
 			{/if}
 			{#if actions}
-				<div class="mt-6 flex flex-col justify-center gap-2.5 sm:flex-row sm:items-center">
+				<div class="mt-6 flex flex-col justify-center gap-2.5">
 					{@render actions()}
 				</div>
 			{/if}
