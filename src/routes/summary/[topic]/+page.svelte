@@ -20,6 +20,9 @@
 				text: b.text
 			}))
 	);
+
+	// "First NoSQL Database — Amazon DynamoDB" -> "First NoSQL Database"
+	const shortTitle = (t) => t.split(' — ')[0].trim();
 </script>
 
 <svelte:head>
@@ -82,7 +85,7 @@
 				<span
 					class="mt-0.5 block truncate text-[14.5px] font-semibold text-accent-deep sm:text-ink sm:group-hover:text-accent-deep"
 				>
-					{prev.title}
+					{shortTitle(prev.title)}
 				</span>
 			</span>
 		</a>
@@ -97,7 +100,7 @@
 				<span
 					class="mt-0.5 block truncate text-[14.5px] font-semibold text-accent-deep sm:text-ink sm:group-hover:text-accent-deep"
 				>
-					{next.title}
+					{shortTitle(next.title)}
 				</span>
 			</span>
 			<span

@@ -196,7 +196,7 @@
 
 <!-- welcome alert on first visit -->
 <AlertModal open={welcomeOpen} title="พร้อมสอบแล้วหรือยัง?" onClose={closeWelcome}>
-	<div class="flex justify-center" aria-hidden="true">
+	<div class="flex justify-center py-2" aria-hidden="true">
 		<span class="animate-float"><StickerPencil /></span>
 	</div>
 	<ul class="mt-2 space-y-2.5">
