@@ -61,19 +61,59 @@
 	{#if prev}
 		<a
 			href="/summary/{prev.slug}"
-			class="group rounded-lg px-3 py-2 transition-colors hover:bg-surface"
+			class="btn-lift group flex items-center gap-3 rounded-xl border border-line bg-surface px-4 py-3.5 hover:border-accent/60 hover:bg-accent-soft/40"
 		>
-			<p class="text-[12px] text-muted">หัวข้อก่อนหน้า</p>
-			<p class="mt-0.5 text-[14.5px] font-medium group-hover:text-accent-deep">{prev.title}</p>
+			<span
+				class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-colors group-hover:border-accent group-hover:text-accent-deep"
+				aria-hidden="true"
+			>
+				<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+					<path
+						d="M20 12H4m0 0 5-5m-5 5 5 5"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+			</span>
+			<span class="min-w-0">
+				<span class="block text-[12px] text-muted">หัวข้อก่อนหน้า</span>
+				<span
+					class="mt-0.5 block truncate text-[14.5px] font-semibold group-hover:text-accent-deep"
+				>
+					{prev.title}
+				</span>
+			</span>
 		</a>
 	{/if}
 	{#if next}
 		<a
 			href="/summary/{next.slug}"
-			class="group rounded-lg px-3 py-2 text-right transition-colors hover:bg-surface sm:col-start-2"
+			class="btn-lift group flex items-center justify-end gap-3 rounded-xl border border-line bg-surface px-4 py-3.5 text-right hover:border-accent/60 hover:bg-accent-soft/40 sm:col-start-2"
 		>
-			<p class="text-[12px] text-muted">ถัดไป</p>
-			<p class="mt-0.5 text-[14.5px] font-medium group-hover:text-accent-deep">{next.title}</p>
+			<span class="min-w-0">
+				<span class="block text-[12px] text-muted">ถัดไป</span>
+				<span
+					class="mt-0.5 block truncate text-[14.5px] font-semibold group-hover:text-accent-deep"
+				>
+					{next.title}
+				</span>
+			</span>
+			<span
+				class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-colors group-hover:border-accent group-hover:text-accent-deep"
+				aria-hidden="true"
+			>
+				<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+					<path
+						d="M4 12h16m0 0-5-5m5 5-5 5"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+			</span>
 		</a>
 	{/if}
 </nav>
