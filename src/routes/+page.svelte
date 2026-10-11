@@ -1,11 +1,26 @@
 <script>
+	import { browser } from '$app/environment';
 	import quizData from '$lib/data/quiz.json';
 	import ChoiceBubble from '$lib/components/ChoiceBubble.svelte';
 	import ExplanationPanel from '$lib/components/ExplanationPanel.svelte';
+	import AlertModal from '$lib/components/AlertModal.svelte';
+	import StickerPencil from '$lib/components/stickers/StickerPencil.svelte';
 
 	const sample = quizData.find((q) => q.id === 82);
 	let picked = $state(null);
 	let done = $state(false);
+
+	const WELCOMED_KEY = 'awsquiz:v1:welcomed';
+	let welcomeOpen = $state(false);
+
+	$effect(() => {
+		if (browser && !localStorage.getItem(WELCOMED_KEY)) welcomeOpen = true;
+	});
+
+	function closeWelcome() {
+		welcomeOpen = false;
+		if (browser) localStorage.setItem(WELCOMED_KEY, '1');
+	}
 
 	const areas = [
 		{
@@ -41,31 +56,36 @@
 <section class="pt-14 sm:pt-20">
 	<div class="flex items-center gap-2.5" aria-hidden="true">
 		{#each ['ก', 'ข', 'ค', 'ง'] as letter, i (letter)}
-			<span class="transition-colors {i === 2 ? '' : 'text-muted/40'}">
-				<ChoiceBubble {letter} state={i === 2 ? 'selected' : 'default'} />
+			<span class="rise-in {i > 0 ? 'rise-d' + i : ''}">
+				<span class="animate-float" style:animation-delay="{i * 320}ms">
+					<ChoiceBubble {letter} state={i === 2 ? 'selected' : 'default'} />
+				</span>
 			</span>
 		{/each}
 	</div>
-	<h1 class="mt-6 max-w-[18ch] text-[34px] leading-[1.25] font-bold sm:text-[40px]">
+	<h1 class="rise-in rise-d1 mt-6 max-w-[18ch] text-[34px] leading-[1.25] font-bold sm:text-[40px]">
 		ทบทวนก่อนเข้าห้องสอบ
 	</h1>
-	<p class="mt-4 max-w-[56ch] text-[15.5px] leading-[1.95] text-muted">
+	<p class="rise-in rise-d2 mt-4 max-w-[56ch] text-[15.5px] leading-[1.95] text-muted">
 		สรุปทั้ง 8 หัวข้อและข้อสอบ 100 ข้อในที่เดียว — ตอบข้อไหนเสร็จ
 		เห็นเฉลยทันทีพร้อมเหตุผลของทุกตัวเลือก ว่าทำไมถึงถูกและทำไมถึงผิด
 	</p>
-	<div class="mt-7 flex flex-wrap gap-3">
+	<div class="rise-in rise-d3 mt-7 flex flex-wrap gap-3">
 		<a
 			href="/quiz"
-			class="rounded-full bg-ink px-7 py-3 text-[15px] font-medium text-paper transition-colors hover:bg-accent-deep"
+			class="btn-lift rounded-full bg-ink px-7 py-3 text-[15px] font-medium text-paper transition-colors hover:bg-accent-deep"
 		>
 			เริ่มทำแบบทดสอบ
 		</a>
 		<a
 			href="/summary"
-			class="rounded-full border border-ink/25 px-6 py-3 text-[14.5px] transition-colors hover:border-ink"
+			class="btn-lift rounded-full border border-ink/25 px-6 py-3 text-[14.5px] transition-colors hover:border-ink"
 		>
 			อ่านสรุปก่อนก็ได้
 		</a>
+		<span class="animate-float self-center" style:animation-delay="900ms" aria-hidden="true">
+			<StickerPencil />
+		</span>
 	</div>
 </section>
 
@@ -115,7 +135,7 @@
 						type="button"
 						disabled={!picked}
 						onclick={() => (done = true)}
-						class="rounded-full bg-ink px-6 py-2 text-[13.5px] font-medium text-paper transition-colors hover:bg-accent-deep disabled:pointer-events-none disabled:opacity-35"
+						class="btn-lift rounded-full bg-ink px-6 py-2 text-[13.5px] font-medium text-paper transition-colors hover:bg-accent-deep disabled:pointer-events-none disabled:opacity-35"
 					>
 						ดูเฉลย
 					</button>
@@ -127,14 +147,21 @@
 
 <!-- subject areas -->
 <section class="mt-16" aria-labelledby="areas-heading">
-	<h2 id="areas-heading" class="text-[13px] font-semibold text-muted">ขอบเขตการสอบ</h2>
+	<h2 id="areas-heading" class="rise-in text-[13px] font-semibold text-muted">ขอบเขตการสอบ</h2>
 	<ul class="mt-3 divide-y divide-line border-y border-line">
 		{#each areas as area (area.title)}
 			<li>
-				<a href={area.href} class="group flex flex-wrap items-baseline gap-x-4 gap-y-1 py-5">
-					<span class="text-[17px] font-semibold group-hover:text-accent-deep">{area.title}</span>
+				<a
+					href={area.href}
+					class="group flex flex-wrap items-baseline gap-x-4 gap-y-1 py-5 transition-colors hover:bg-surface/70"
+				>
 					<span
-						class="rounded-full bg-accent-soft px-3 py-1 text-[12px] font-medium text-accent-deep"
+						class="text-[17px] font-semibold transition-transform duration-200 group-hover:translate-x-1 group-hover:text-accent-deep"
+					>
+						{area.title}
+					</span>
+					<span
+						class="rounded-full bg-accent-soft px-3 py-1 text-[12px] font-medium text-accent-deep transition-transform duration-200 group-hover:scale-105"
 					>
 						{area.count}
 					</span>
@@ -166,3 +193,37 @@
 		{/each}
 	</ol>
 </section>
+
+<!-- welcome alert on first visit -->
+<AlertModal open={welcomeOpen} title="พร้อมสอบแล้วหรือยัง?" onClose={closeWelcome}>
+	<div class="flex justify-center" aria-hidden="true">
+		<span class="animate-float"><StickerPencil /></span>
+	</div>
+	<ul class="mt-2 space-y-2.5">
+		{#each ['อ่านสรุป 8 หัวข้อก่อน — แต่ละหน้ามี "จำก่อนสอบ" ให้กลับมาอ่านเร็ว ๆ', 'ทำแบบทดสอบ 100 ข้อ ตอบเสร็จเห็นเฉลยทันทีพร้อมเหตุผลของทุกตัวเลือก', 'เว็บจำข้อที่คุณพลาดไว้ให้ กลับมาทบทวนเฉพาะข้อที่ผิดได้ตลอด'] as tip, i (tip)}
+			<li class="flex items-start gap-2.5 text-[14px] leading-[1.85]">
+				<span class="mt-[.55em]"><ChoiceBubble letter={i + 1} state="selected" size="xs" /></span>
+				<span>{tip}</span>
+			</li>
+		{/each}
+	</ul>
+	<p class="mt-3 border-t border-line pt-3 text-[12.5px] leading-relaxed text-muted">
+		ความคืบหน้าและสถิติถูกเก็บไว้ในเครื่องของคุณเท่านั้น (localStorage) — ไม่มีการส่งข้อมูลออกไปไหน
+	</p>
+	{#snippet actions()}
+		<a
+			href="/quiz"
+			onclick={closeWelcome}
+			class="btn-lift rounded-full bg-ink px-5 py-2 text-[13.5px] font-medium text-paper transition-colors hover:bg-accent-deep"
+		>
+			เริ่มทำแบบทดสอบ
+		</a>
+		<a
+			href="/summary"
+			onclick={closeWelcome}
+			class="btn-lift rounded-full border border-ink/25 px-5 py-2 text-[13.5px] transition-colors hover:border-ink"
+		>
+			อ่านสรุปก่อน
+		</a>
+	{/snippet}
+</AlertModal>

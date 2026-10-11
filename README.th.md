@@ -56,6 +56,12 @@ Quiz-AWS/
 │  │  │  │                          #   + "คำอธิบายเพิ่มเติม" — ใช้ซ้ำในหน้า quiz, สรุปผล และหน้าแรก
 │  │  │  ├─ BlockRenderer.svelte    #   render ทุกชนิดของ block ในหน้าสรุป เป็นเจ้าของ typography,
 │  │  │  │                          #   สไตล์ตาราง/callout/checklist และ anchor ของหัวข้อ (ใช้ทำสารบัญ)
+│  │  │  ├─ AlertModal.svelte       #   modal popup แบบ accessible (pop-in, ปิดด้วย Escape/คลิกนอกการ์ด,
+│  │  │  │                          #   ล็อก scroll) — ใช้เป็นแจ้งเตือนต้อนรับครั้งแรกในหน้าแรก
+│  │  │  ├─ stickers/               #   สติกเกอร์ SVG เคลื่อนไหว (CSS keyframes, ปลอดภัยกับ reduced-motion)
+│  │  │  │                          #   — ถ้าอยากใช้ GIF จริง วางไฟล์ใน static/ แล้วเปลี่ยนที่จุดเรียกใช้
+│  │  │  │  ├─ StickerPencil.svelte    #  ดินสอระบายบับเบิลคำตอบ (มาสคอตหน้าแรก/ต้อนรับ)
+│  │  │  │  └─ StickerConfetti.svelte  #  confetti ครั้งเดียวเมื่อทำได้ ≥ 80%
 │  │  │  └─ diagrams/               #   ไดอะแกรม SVG นิ่ง (เส้นสไตล์เดียวกันทั้งเว็บ)
 │  │  │     ├─ DiagramRAG.svelte            # pipeline RAG: Ingestion → Storage → Retrieval → Generation
 │  │  │     ├─ DiagramALB.svelte            # สถาปัตยกรรม ALB Multi-AZ (แทน ASCII เดิม)
@@ -72,7 +78,8 @@ Quiz-AWS/
 │  └─ routes/                       # = หน้าเว็บ (prerender ทุกหน้าผ่าน +layout.js)
 │     ├─ layout.css                 #   DESIGN TOKENS — @theme ของ Tailwind v4 (สี รวมถึง correct/wrong,
 │     │                             #   ฟอนต์), import fontsource (IBM Plex Sans Thai / Mono),
-│     │                             #   สไตล์พื้นฐาน, กฎ reduced-motion — เปลี่ยนลุคเว็บที่นี่
+│     │                             #   สไตล์พื้นฐาน, motion utilities (rise-in/pop-in/float/btn-lift)
+│     │                             #   และกฎ reduced-motion — เปลี่ยนลุคและความรู้สึกตอนกดที่นี่
 │     ├─ +layout.js                 #   export const prerender = true (มีผลทุกหน้า)
 │     ├─ +layout.svelte             #   nav แบบ sticky (จุดบับเบิลบอกหน้าปัจจุบัน), footer, skip link
 │     ├─ +page.svelte               #   หน้าแรก — hero, ข้อตัวอย่างที่ตอบได้จริง 1 ข้อ (ข้อ 82),

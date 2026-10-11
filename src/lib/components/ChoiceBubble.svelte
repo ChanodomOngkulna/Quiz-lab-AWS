@@ -22,8 +22,25 @@
 <span
 	class="flex shrink-0 items-center justify-center rounded-full border-2 font-semibold transition-colors duration-200 {sizes[
 		size
-	]} {states[state]}"
+	]} {states[state]} {state === 'selected' ? 'bubble-pop' : ''}"
 	aria-hidden="true"
 >
 	{letter}
 </span>
+
+<style>
+	.bubble-pop {
+		animation: bubble-pop 240ms ease-out;
+	}
+	@keyframes bubble-pop {
+		0% {
+			transform: scale(1);
+		}
+		45% {
+			transform: scale(1.22);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+</style>

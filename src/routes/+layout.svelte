@@ -35,7 +35,7 @@
 				<circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2" />
 				<circle cx="12" cy="12" r="4.5" fill="var(--color-accent)" />
 			</svg>
-			<span class="text-[15px]">กระดาษคำตอบ</span>
+			<span class="text-[15px]">AWS-Quiz-CPE</span>
 		</a>
 		<nav aria-label="เมนูหลัก">
 			<ul class="flex items-center gap-1 sm:gap-2">
@@ -44,12 +44,14 @@
 						<a
 							href={link.href}
 							aria-current={isActive(link.href) ? 'page' : undefined}
-							class="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[14px] transition-colors
+							class="group flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[14px] transition-colors
 								{isActive(link.href) ? 'font-medium text-ink' : 'text-muted hover:text-ink'}"
 						>
 							<span
-								class="h-1.5 w-1.5 rounded-full transition-colors
-									{isActive(link.href) ? 'bg-accent' : 'bg-transparent'}"
+								class="h-1.5 w-1.5 rounded-full transition-all duration-200
+									{isActive(link.href)
+									? 'animate-dot-in bg-accent'
+									: 'scale-100 bg-transparent group-hover:scale-150 group-hover:bg-accent/60'}"
 							></span>
 							{link.label}
 						</a>

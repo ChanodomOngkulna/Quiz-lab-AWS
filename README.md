@@ -52,10 +52,17 @@ Quiz-AWS/
 │  │  │
 │  │  ├─ components/                # = SHARED UI
 │  │  │  ├─ ChoiceBubble.svelte     #   the ก/ข/ค/ง answer-sheet bubble (default/selected/correct/wrong/dim)
+│  │  │  │                          #   with a pop animation when selected
 │  │  │  ├─ ExplanationPanel.svelte #   post-answer panel: verdict banner + per-choice explanations
 │  │  │  │                          #   + "คำอธิบายเพิ่มเติม" notes. Reused by quiz, results and home sample
+│  │  │  ├─ AlertModal.svelte       #   accessible modal popup (pop-in, Escape/overlay close, scroll lock)
+│  │  │  │                          #   — used for the first-visit welcome alert on the home page
 │  │  │  ├─ BlockRenderer.svelte    #   renders every summary block type; owns summary typography,
 │  │  │  │                          #   table/callout/checklist styles and heading anchors (used by TOC)
+│  │  │  ├─ stickers/               #   animated SVG stickers (CSS keyframes, reduced-motion safe) —
+│  │  │  │                          #   drop real GIF files into static/ and swap here if preferred
+│  │  │  │  ├─ StickerPencil.svelte    #  pencil shading an answer bubble (hero/welcome mascot)
+│  │  │  │  └─ StickerConfetti.svelte  #  one-shot confetti burst for quiz scores ≥ 80%
 │  │  │  └─ diagrams/               #   static SVG diagrams (quiet, consistent stroke style)
 │  │  │     ├─ DiagramRAG.svelte            # RAG pipeline: Ingestion → Storage → Retrieval → Generation
 │  │  │     ├─ DiagramALB.svelte            # Multi-AZ ALB architecture (replaces the ASCII diagram)
@@ -72,7 +79,8 @@ Quiz-AWS/
 │  └─ routes/                       # = PAGES (all prerendered via +layout.js)
 │     ├─ layout.css                 #   DESIGN TOKENS — Tailwind v4 @theme (colors incl. correct/wrong,
 │     │                             #   fonts), fontsource imports (IBM Plex Sans Thai / Mono),
-│     │                             #   base styles, reduced-motion rules. Change the look here.
+│     │                             #   base styles, motion utilities (rise-in/pop-in/float/btn-lift)
+│     │                             #   and reduced-motion rules. Change the look and feel here.
 │     ├─ +layout.js                 #   export const prerender = true (applies to every page)
 │     ├─ +layout.svelte             #   sticky nav (with active-bubble indicator), footer, skip link
 │     ├─ +page.svelte               #   HOME — hero, one interactive sample question (id 82),

@@ -35,16 +35,19 @@
 					{@const topic = bySlug[slug]}
 					{@const num = labNum(slug)}
 					<li>
-						<a href="/summary/{slug}" class="group flex items-baseline gap-4 py-4">
+						<a
+							href="/summary/{slug}"
+							class="group flex items-baseline gap-4 py-5 transition-colors hover:bg-surface/70"
+						>
 							{#if num}
 								<span
-									class="flex h-8 w-8 shrink-0 translate-y-1 items-center justify-center rounded-full border border-accent text-[13px] font-semibold text-accent-deep transition-colors group-hover:bg-accent-soft"
+									class="flex h-8 w-8 shrink-0 translate-y-1 items-center justify-center rounded-full border border-accent text-[13px] font-semibold text-accent-deep transition-all duration-200 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-accent-soft"
 								>
 									{num}
 								</span>
 							{:else}
 								<span
-									class="flex h-8 w-8 shrink-0 translate-y-1 items-center justify-center rounded-full border border-line text-[13px] text-muted"
+									class="flex h-8 w-8 shrink-0 translate-y-1 items-center justify-center rounded-full border border-line text-[13px] text-muted transition-transform duration-200 group-hover:scale-110 group-hover:rotate-6"
 									aria-hidden="true"
 								>
 									★
@@ -52,7 +55,7 @@
 							{/if}
 							<span class="min-w-0">
 								<span
-									class="block text-[16px] leading-snug font-semibold group-hover:text-accent-deep"
+									class="block text-[16px] leading-snug font-semibold transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-accent-deep"
 								>
 									{topic.title}
 								</span>
@@ -76,7 +79,7 @@
 	</p>
 	<a
 		href="/quiz"
-		class="mt-5 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-2.5 text-[14.5px] font-medium text-paper transition-colors hover:bg-accent-deep"
+		class="btn-lift mt-5 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-2.5 text-[14.5px] font-medium text-paper transition-colors hover:bg-accent-deep"
 	>
 		เริ่มทำแบบทดสอบ
 	</a>

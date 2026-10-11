@@ -3,6 +3,7 @@
 	import { categories } from '$lib/data/topics';
 	import ChoiceBubble from '$lib/components/ChoiceBubble.svelte';
 	import ExplanationPanel from '$lib/components/ExplanationPanel.svelte';
+	import StickerConfetti from '$lib/components/stickers/StickerConfetti.svelte';
 
 	const chipClass = {
 		aws: 'bg-accent-soft text-accent-deep',
@@ -82,13 +83,13 @@
 {#if quiz.phase === 'idle'}
 	<!-- ================= start screen ================= -->
 	<section class="pt-12">
-		<h1 class="text-[28px] leading-tight font-bold">แบบทดสอบ 100 ข้อ</h1>
-		<p class="mt-3 max-w-[54ch] text-[15px] leading-[1.9] text-muted">
+		<h1 class="rise-in text-[28px] leading-tight font-bold">แบบทดสอบ 100 ข้อ</h1>
+		<p class="rise-in rise-d1 mt-3 max-w-[54ch] text-[15px] leading-[1.9] text-muted">
 			ทำทั้งชุดต่อเนื่อง — ตอบเสร็จแต่ละข้อจะเห็นเฉลยทันทีพร้อมเหตุผลว่าทำไมแต่ละตัวเลือกถูกหรือผิด
 			ปักธงข้อที่สงสัยไว้ทบทวนตอนจบ และเราจะจำข้อที่คุณพลาดไว้ให้ย้อนทำใหม่
 		</p>
 
-		<ul class="mt-5 flex flex-wrap gap-2" aria-label="หมวดข้อสอบ">
+		<ul class="rise-in rise-d2 mt-5 flex flex-wrap gap-2" aria-label="หมวดข้อสอบ">
 			{#each categories as c (c.id)}
 				<li class="rounded-full px-3.5 py-1.5 text-[13px] font-medium {chipClass[c.id]}">
 					{c.label} · {c.count} ข้อ
@@ -97,7 +98,9 @@
 		</ul>
 
 		{#if quiz.run}
-			<div class="mt-8 rounded-xl border border-accent/50 bg-accent-soft p-5 sm:p-6">
+			<div
+				class="rise-in rise-d3 mt-8 rounded-xl border border-accent/50 bg-accent-soft p-5 sm:p-6"
+			>
 				<p class="text-[15px] font-semibold">คุณมีความคืบหน้าค้างไว้</p>
 				<p class="mt-1 text-[14px] leading-relaxed text-ink/75">
 					ตอบแล้ว {quiz.answeredCount} จาก {quiz.runTotal} ข้อ
@@ -107,7 +110,7 @@
 					<button
 						type="button"
 						onclick={() => quiz.resume()}
-						class="rounded-full bg-accent-deep px-6 py-2.5 text-[14.5px] font-medium text-white transition-colors hover:bg-accent"
+						class="btn-lift rounded-full bg-accent-deep px-6 py-2.5 text-[14.5px] font-medium text-white transition-colors hover:bg-accent"
 					>
 						ทำต่อจากที่ค้างไว้
 					</button>
@@ -121,11 +124,11 @@
 				</div>
 			</div>
 		{:else}
-			<div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+			<div class="rise-in rise-d3 mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
 				<button
 					type="button"
 					onclick={() => quiz.startRun('full')}
-					class="rounded-full bg-ink px-8 py-3 text-[15px] font-medium text-paper transition-colors hover:bg-accent-deep"
+					class="btn-lift rounded-full bg-ink px-8 py-3 text-[15px] font-medium text-paper transition-colors hover:bg-accent-deep"
 				>
 					เริ่มทำ 100 ข้อ
 				</button>
@@ -149,7 +152,7 @@
 			<button
 				type="button"
 				onclick={() => quiz.startRun('wrong-only')}
-				class="mt-4 rounded-full border border-accent-deep/40 px-5 py-2 text-[13.5px] font-medium text-accent-deep transition-colors hover:bg-accent-soft"
+				class="btn-lift mt-4 rounded-full border border-accent-deep/40 px-5 py-2 text-[13.5px] font-medium text-accent-deep transition-colors hover:bg-accent-soft"
 			>
 				ทบทวนเฉพาะข้อที่เคยผิด ({wrongIds.length} ข้อ)
 			</button>
@@ -301,7 +304,7 @@
 						onclick={() => quiz.select(current.q.id, c.key)}
 						disabled={checked}
 						aria-pressed={selectedKey === c.key && !checked}
-						class="flex w-full items-center gap-3.5 rounded-xl border-2 px-4 py-3 text-left transition-colors duration-200
+						class="flex w-full items-center gap-3.5 rounded-xl border-2 px-4 py-3 text-left transition-all duration-200 active:scale-[.99]
 							{state === 'default' ? 'border-line bg-surface hover:border-accent' : ''}
 							{state === 'selected' ? 'border-accent-deep bg-accent-soft' : ''}
 							{state === 'correct' ? 'border-correct bg-correct-soft' : ''}
@@ -344,7 +347,7 @@
 					type="button"
 					onclick={() => quiz.check(current.q.id)}
 					disabled={!selectedKey}
-					class="rounded-full bg-ink px-7 py-2.5 text-[14.5px] font-medium text-paper transition-colors hover:bg-accent-deep disabled:pointer-events-none disabled:opacity-35"
+					class="btn-lift rounded-full bg-ink px-7 py-2.5 text-[14.5px] font-medium text-paper transition-colors hover:bg-accent-deep disabled:pointer-events-none disabled:opacity-35"
 				>
 					ตรวจคำตอบ
 				</button>
@@ -352,7 +355,7 @@
 				<button
 					type="button"
 					onclick={() => quiz.next()}
-					class="rounded-full bg-accent-deep px-7 py-2.5 text-[14.5px] font-medium text-white transition-colors hover:bg-accent"
+					class="btn-lift rounded-full bg-accent-deep px-7 py-2.5 text-[14.5px] font-medium text-white transition-colors hover:bg-accent"
 				>
 					{isLast ? 'ดูสรุปผล' : 'ข้อถัดไป'}
 				</button>
@@ -366,16 +369,21 @@
 {:else if quiz.phase === 'finished' && quiz.result}
 	<!-- ================= results ================= -->
 	<section class="pt-12">
-		{#if quiz.result.mode === 'wrong-only'}
-			<p
-				class="inline-block rounded-full bg-accent-soft px-3.5 py-1.5 text-[12.5px] font-medium text-accent-deep"
-			>
-				โหมดทบทวนข้อที่เคยผิด
-			</p>
-		{/if}
-		<h1 class="mt-3 text-[28px] leading-tight font-bold">
-			ตอบถูก {quiz.result.score} จาก {quiz.result.total} ข้อ
-		</h1>
+		<div class="relative">
+			{#if quiz.result.score / quiz.result.total >= 0.8}
+				<StickerConfetti />
+			{/if}
+			{#if quiz.result.mode === 'wrong-only'}
+				<p
+					class="inline-block rounded-full bg-accent-soft px-3.5 py-1.5 text-[12.5px] font-medium text-accent-deep"
+				>
+					โหมดทบทวนข้อที่เคยผิด
+				</p>
+			{/if}
+			<h1 class="animate-pop-in mt-3 text-[28px] leading-tight font-bold">
+				ตอบถูก {quiz.result.score} จาก {quiz.result.total} ข้อ
+			</h1>
+		</div>
 		<p class="mt-2 text-[15px] text-muted">
 			คิดเป็น {Math.round((quiz.result.score / quiz.result.total) * 100)}% · ใช้เวลา {fmtDuration(
 				quiz.result.endedAt - quiz.result.startedAt
@@ -475,7 +483,7 @@
 				<button
 					type="button"
 					onclick={() => quiz.startRun('wrong-only')}
-					class="rounded-full bg-ink px-6 py-2.5 text-[14.5px] font-medium text-paper transition-colors hover:bg-accent-deep"
+					class="btn-lift rounded-full bg-ink px-6 py-2.5 text-[14.5px] font-medium text-paper transition-colors hover:bg-accent-deep"
 				>
 					ทำเฉพาะข้อที่เคยผิดใหม่ ({wrongIds.length} ข้อ)
 				</button>
