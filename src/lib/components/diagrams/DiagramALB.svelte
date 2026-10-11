@@ -1,126 +1,80 @@
-<svg
-	viewBox="0 0 720 320"
-	class="block w-full min-w-[600px]"
+<div
+	class="rounded-xl border border-line bg-surface p-4 sm:p-5"
 	role="img"
-	aria-label="สถาปัตยกรรมเว็บ Multi-AZ: ผู้ใช้เข้าผ่าน ALB ที่ครอบสอง AZ แต่ละ AZ มี target group ของ EC2"
-	font-size="13"
+	aria-label="สถาปัตยกรรมเว็บ Multi-AZ: ผู้ใช้เข้าผ่าน ALB ที่ครอบสอง Availability Zone แต่ละ Zone มี target group ของ EC2 ที่ผ่าน health check"
 >
-	<!-- user -->
-	<circle
-		cx="360"
-		cy="22"
-		r="9"
-		fill="var(--color-surface)"
-		stroke="var(--color-ink)"
-		stroke-width="1.5"
-	/>
-	<circle cx="360" cy="18" r="3" fill="var(--color-ink)" />
-	<text x="382" y="27" fill="var(--color-muted)" font-size="12"
-		>ผู้ใช้ (เข้าผ่าน DNS name ของ ALB)</text
-	>
-	<path
-		d="M 360 32 L 360 56"
-		stroke="var(--color-ink)"
-		stroke-width="1.5"
-		marker-end="url(#alb-arrow)"
-	/>
+	<div class="flex items-center gap-2.5">
+		<span
+			class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-paper"
+		>
+			<svg class="h-4 w-4 text-ink" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+				<circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="2" />
+				<path
+					d="M5.5 19.5c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+				/>
+			</svg>
+		</span>
+		<p class="text-[12px] text-muted">ผู้ใช้ (เข้าผ่าน DNS name ของ ALB)</p>
+	</div>
 
-	<!-- ALB bar -->
-	<rect
-		x="130"
-		y="60"
-		width="460"
-		height="42"
-		rx="9"
-		fill="var(--color-accent-soft)"
-		stroke="var(--color-accent-deep)"
-		stroke-width="1.5"
-	/>
-	<text
-		x="360"
-		y="86"
-		text-anchor="middle"
-		font-weight="600"
-		font-size="14"
-		fill="var(--color-accent-deep)"
+	<div class="flex justify-center py-1 sm:hidden" aria-hidden="true">
+		<svg class="h-4 w-4 text-ink" viewBox="0 0 24 24" fill="none">
+			<path
+				d="M12 4v14m0 0-5-5m5 5 5-5"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			/>
+		</svg>
+	</div>
+
+	<div
+		class="rounded-xl border-2 border-accent-deep bg-accent-soft px-3 py-2 text-center text-[13px] leading-snug font-semibold text-accent-deep sm:text-[13.5px]"
 	>
 		Application Load Balancer — กระจายอยู่ในอย่างน้อย 2 AZ
-	</text>
+	</div>
 
-	<!-- arrows to AZs -->
-	<path
-		d="M 250 102 L 250 130"
-		stroke="var(--color-ink)"
-		stroke-width="1.5"
-		marker-end="url(#alb-arrow)"
-	/>
-	<path
-		d="M 470 102 L 470 130"
-		stroke="var(--color-ink)"
-		stroke-width="1.5"
-		marker-end="url(#alb-arrow)"
-	/>
-	<defs>
-		<marker
-			id="alb-arrow"
-			viewBox="0 0 8 8"
-			refX="7"
-			refY="4"
-			markerWidth="7"
-			markerHeight="7"
-			orient="auto"
-		>
-			<path d="M0,0 L8,4 L0,8 z" fill="var(--color-ink)" />
-		</marker>
-	</defs>
+	<div class="hidden py-1 sm:grid sm:grid-cols-2" aria-hidden="true">
+		{#each [0, 1] as i (i)}
+			<div class="flex justify-center">
+				<svg class="h-4 w-4 text-ink" viewBox="0 0 24 24" fill="none">
+					<path
+						d="M12 4v14m0 0-5-5m5 5 5-5"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+			</div>
+		{/each}
+	</div>
 
-	<!-- AZ boxes -->
-	{#each [{ x: 50, label: 'Availability Zone A' }, { x: 380, label: 'Availability Zone B' }] as az (az.label)}
-		<g>
-			<rect
-				x={az.x}
-				y="134"
-				width="290"
-				height="128"
-				rx="10"
-				fill="var(--color-surface)"
-				stroke="var(--color-muted)"
-				stroke-width="1.2"
-				stroke-dasharray="5 4"
-			/>
-			<text x={az.x + 14} y="156" fill="var(--color-muted)" font-size="11.5">{az.label}</text>
-			<text x={az.x + 14} y="186" font-size="12.5">Target group</text>
-			<rect
-				x={az.x + 118}
-				y="170"
-				width="72"
-				height="42"
-				rx="7"
-				fill="var(--color-paper)"
-				stroke="var(--color-ink)"
-				stroke-width="1.5"
-			/>
-			<text x={az.x + 154} y="188" text-anchor="middle" font-size="12">EC2</text>
-			<circle cx={az.x + 154} cy="200" r="3.5" fill="var(--color-correct)" />
-			<rect
-				x={az.x + 200}
-				y="170"
-				width="72"
-				height="42"
-				rx="7"
-				fill="var(--color-paper)"
-				stroke="var(--color-ink)"
-				stroke-width="1.5"
-			/>
-			<text x={az.x + 236} y="188" text-anchor="middle" font-size="12">EC2</text>
-			<circle cx={az.x + 236} cy="200" r="3.5" fill="var(--color-correct)" />
-			<text x={az.x + 14} y="238" fill="var(--color-muted)" font-size="10.5">
-				health check ผ่าน → รับ traffic
-			</text>
-		</g>
-	{/each}
+	<div class="grid gap-3 sm:grid-cols-2">
+		{#each [{ label: 'Availability Zone A' }, { label: 'Availability Zone B' }] as az (az.label)}
+			<section class="rounded-xl border border-dashed border-muted bg-surface p-3">
+				<p class="text-[11.5px] text-muted">{az.label}</p>
+				<p class="mt-1 text-[12.5px]">Target group</p>
+				<div class="mt-1.5 flex flex-wrap gap-2">
+					{#each [0, 1] as i (i)}
+						<span
+							class="flex items-center gap-1.5 rounded-lg border-2 border-ink bg-paper px-2.5 py-1.5 text-[12px]"
+						>
+							EC2
+							<span class="h-2 w-2 rounded-full bg-correct" aria-hidden="true"></span>
+						</span>
+					{/each}
+				</div>
+				<p class="mt-1.5 text-[10.5px] text-muted">health check ผ่าน → รับ traffic</p>
+			</section>
+		{/each}
+	</div>
 
-	<text x="360" y="292" text-anchor="middle" fill="var(--color-muted)" font-size="11.5">
+	<p class="mt-3 text-center text-[11.5px] leading-relaxed text-muted">
 		ALB หลีกเลี่ยงเครื่องที่ health check ไม่ผ่าน — ถ้า AZ ใดล่ม อีก AZ ยังให้บริการต่อ
-	</text>
-</svg>
+	</p>
+</div>

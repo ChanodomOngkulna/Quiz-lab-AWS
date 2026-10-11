@@ -23,7 +23,7 @@
 </script>
 
 <svelte:head>
-	<title>{topic.title} · กระดาษคำตอบ</title>
+	<title>{topic.title} · AWS-Quiz-CPE</title>
 	<meta name="description" content={topic.desc} />
 </svelte:head>
 

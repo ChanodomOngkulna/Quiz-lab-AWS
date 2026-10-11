@@ -63,7 +63,8 @@ Quiz-AWS/
 │  │  │  │                          #   drop real GIF files into static/ and swap here if preferred
 │  │  │  │  ├─ StickerPencil.svelte    #  pencil shading an answer bubble (hero/welcome mascot)
 │  │  │  │  └─ StickerConfetti.svelte  #  one-shot confetti burst for quiz scores ≥ 80%
-│  │  │  └─ diagrams/               #   static SVG diagrams (quiet, consistent stroke style)
+│  │  │  └─ diagrams/               #   responsive HTML/CSS diagrams (reflow on every screen size:
+│  │  │                             #   vertical on phones, grid/columns on tablets and up)
 │  │  │     ├─ DiagramRAG.svelte            # RAG pipeline: Ingestion → Storage → Retrieval → Generation
 │  │  │     ├─ DiagramALB.svelte            # Multi-AZ ALB architecture (replaces the ASCII diagram)
 │  │  │     ├─ DiagramSubnetBlocks.svelte   # /26 block chart with Network ID / usable / broadcast

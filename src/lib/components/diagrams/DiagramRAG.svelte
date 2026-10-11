@@ -1,90 +1,41 @@
-<svg
-	viewBox="0 0 760 200"
-	class="block w-full min-w-[640px]"
+<div
+	class="rounded-xl border border-line bg-surface p-4 sm:p-5"
 	role="img"
-	aria-label="ไดอะแกรมขั้นตอนของ RAG: Ingestion ไป Storage ไป Retrieval ไป Generation"
-	font-size="13"
+	aria-label="ไดอะแกรมขั้นตอนของ RAG: Ingestion ไป Storage ไป Retrieval ไป Generation โดยรับเอกสารจริงเข้ามาแล้วส่งออกคำตอบที่อ้างอิงเอกสาร"
 >
-	<!-- stage boxes -->
-	{#each [{ x: 20, n: '1', title: 'Ingestion', sub: ['อ่านเอกสาร → ตัด chunk', '→ แปลงเป็นเวกเตอร์'] }, { x: 200, n: '2', title: 'Storage', sub: ['เก็บเวกเตอร์', 'ลง Vector Database'] }, { x: 380, n: '3', title: 'Retrieval', sub: ['ค้นข้อความที่ความหมาย', 'ใกล้คำถามที่สุด'] }, { x: 560, n: '4', title: 'Generation', sub: ['LLM เรียบเรียงคำตอบ', 'จาก context ที่ดึงมา'] }] as stage (stage.title)}
-		<g>
-			<rect
-				x={stage.x}
-				y="48"
-				width="170"
-				height="92"
-				rx="10"
-				fill="var(--color-surface)"
-				stroke="var(--color-ink)"
-				stroke-width="1.5"
-			/>
-			<circle cx={stage.x + 24} cy="48" r="13" fill="var(--color-accent)" />
-			<text
-				x={stage.x + 24}
-				y="52.5"
-				text-anchor="middle"
-				fill="#fff"
-				font-weight="600"
-				font-size="12.5"
-			>
-				{stage.n}
-			</text>
-			<text x={stage.x + 85} y="84" text-anchor="middle" font-weight="600" font-size="14.5">
-				{stage.title}
-			</text>
-			<text x={stage.x + 85} y="106" text-anchor="middle" fill="var(--color-muted)" font-size="11">
-				{stage.sub[0]}
-			</text>
-			<text x={stage.x + 85} y="123" text-anchor="middle" fill="var(--color-muted)" font-size="11">
-				{stage.sub[1]}
-			</text>
-		</g>
-	{/each}
+	<p class="text-center text-[11.5px] text-muted">อินพุต: เอกสาร PDF กรมธรรม์ / คู่มือองค์กร</p>
 
-	<!-- arrows -->
-	{#each [190, 370, 550] as ax (ax)}
-		<path
-			d="M {ax} 94 L {ax + 10} 94"
-			stroke="var(--color-ink)"
-			stroke-width="1.5"
-			marker-end="url(#rag-arrow)"
-		/>
-	{/each}
-	<defs>
-		<marker
-			id="rag-arrow"
-			viewBox="0 0 8 8"
-			refX="7"
-			refY="4"
-			markerWidth="7"
-			markerHeight="7"
-			orient="auto"
-		>
-			<path d="M0,0 L8,4 L0,8 z" fill="var(--color-ink)" />
-		</marker>
-	</defs>
+	<div class="mt-2 flex flex-col sm:flex-row sm:items-stretch">
+		{#each [{ n: '1', title: 'Ingestion', sub: 'อ่านเอกสาร → ตัด chunk → แปลงเป็นเวกเตอร์' }, { n: '2', title: 'Storage', sub: 'เก็บเวกเตอร์ลง Vector Database' }, { n: '3', title: 'Retrieval', sub: 'ค้นข้อความที่ความหมายใกล้คำถามที่สุด' }, { n: '4', title: 'Generation', sub: 'LLM เรียบเรียงคำตอบจาก context ที่ดึงมา' }] as stage, i (stage.title)}
+			{#if i > 0}
+				<div class="flex items-center justify-center py-1 sm:justify-start" aria-hidden="true">
+					<svg class="h-4 w-4 rotate-90 text-muted sm:rotate-0" viewBox="0 0 24 24" fill="none">
+						<path
+							d="M4 12h14m0 0-5-5m5 5-5 5"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+				</div>
+			{/if}
+			<div class="flex-1 rounded-xl border-2 border-ink px-3 py-2.5">
+				<div class="flex items-center gap-2">
+					<span
+						class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent text-[12px] font-semibold text-white"
+					>
+						{stage.n}
+					</span>
+					<p class="text-[14px] font-semibold">{stage.title}</p>
+				</div>
+				<p class="mt-1.5 text-[12px] leading-relaxed text-muted">{stage.sub}</p>
+			</div>
+		{/each}
+	</div>
 
-	<!-- input / output labels -->
-	<text x="105" y="30" text-anchor="middle" fill="var(--color-muted)" font-size="11.5">
-		เอกสาร PDF กรมธรรม์ / คู่มือ
-	</text>
-	<path
-		d="M 105 34 L 105 46"
-		stroke="var(--color-muted)"
-		stroke-width="1.2"
-		stroke-dasharray="3 3"
-	/>
-	<text x="645" y="30" text-anchor="middle" fill="var(--color-muted)" font-size="11.5">
-		คำตอบที่อ้างอิงเอกสารจริง
-	</text>
-	<path
-		d="M 645 34 L 645 46"
-		stroke="var(--color-muted)"
-		stroke-width="1.2"
-		stroke-dasharray="3 3"
-	/>
-
-	<text x="380" y="176" text-anchor="middle" fill="var(--color-muted)" font-size="11.5">
-		คำถามของผู้ใช้เข้าที่ขั้น Retrieval — ระบบจับคู่ความหมายแทนการเทียบคำตรงตัว
-	</text>
-</svg>
+	<p class="mt-3 text-center text-[11.5px] leading-relaxed text-muted">
+		เอาต์พุต: คำตอบที่อ้างอิงเอกสารจริง — คำถามของผู้ใช้เข้าที่ขั้น Retrieval ซึ่งจับคู่ด้วยความหมาย
+		แทนการเทียบคำตรงตัว
+	</p>
+</div>

@@ -62,7 +62,8 @@ Quiz-AWS/
 │  │  │  │                          #   — ถ้าอยากใช้ GIF จริง วางไฟล์ใน static/ แล้วเปลี่ยนที่จุดเรียกใช้
 │  │  │  │  ├─ StickerPencil.svelte    #  ดินสอระบายบับเบิลคำตอบ (มาสคอตหน้าแรก/ต้อนรับ)
 │  │  │  │  └─ StickerConfetti.svelte  #  confetti ครั้งเดียวเมื่อทำได้ ≥ 80%
-│  │  │  └─ diagrams/               #   ไดอะแกรม SVG นิ่ง (เส้นสไตล์เดียวกันทั้งเว็บ)
+│  │  │  └─ diagrams/               #   ไดอะแกรม HTML/CSS แบบ responsive (จัดใหม่ตามขนาดจอ:
+│  │  │                             #   แนวตั้งบนมือถือ, grid/คอลัมน์บนแท็บเล็ตขึ้นไป)
 │  │  │     ├─ DiagramRAG.svelte            # pipeline RAG: Ingestion → Storage → Retrieval → Generation
 │  │  │     ├─ DiagramALB.svelte            # สถาปัตยกรรม ALB Multi-AZ (แทน ASCII เดิม)
 │  │  │     ├─ DiagramSubnetBlocks.svelte   # แผนภาพบล็อก /26 พร้อม Network ID / usable / broadcast

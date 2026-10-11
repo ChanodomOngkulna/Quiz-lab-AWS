@@ -37,7 +37,7 @@
 			aria-modal="true"
 			aria-labelledby="alert-modal-title"
 			tabindex="-1"
-			class="animate-pop-in relative w-full max-w-md rounded-2xl border border-line bg-surface p-6 shadow-xl outline-none"
+			class="animate-pop-in relative max-h-[85dvh] w-full max-w-md overflow-y-auto rounded-2xl border border-line bg-surface p-5 shadow-xl outline-none sm:p-6"
 		>
 			<div class="flex items-start justify-between gap-4">
 				<h2 id="alert-modal-title" class="text-[18px] leading-snug font-semibold">

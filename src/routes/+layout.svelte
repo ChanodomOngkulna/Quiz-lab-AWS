@@ -29,22 +29,22 @@
 		<a
 			href="/"
 			class="flex items-center gap-2.5 font-semibold text-ink"
-			aria-label="กระดาษคำตอบ — หน้าหลัก"
+			aria-label="AWS-Quiz-CPE — หน้าหลัก"
 		>
-			<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+			<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" class="shrink-0">
 				<circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2" />
 				<circle cx="12" cy="12" r="4.5" fill="var(--color-accent)" />
 			</svg>
-			<span class="text-[15px]">AWS-Quiz-CPE</span>
+			<span class="hidden text-[15px] min-[420px]:inline">AWS-Quiz-CPE</span>
 		</a>
 		<nav aria-label="เมนูหลัก">
-			<ul class="flex items-center gap-1 sm:gap-2">
+			<ul class="flex items-center gap-0.5 min-[420px]:gap-1 sm:gap-2">
 				{#each links as link (link.href)}
 					<li>
 						<a
 							href={link.href}
 							aria-current={isActive(link.href) ? 'page' : undefined}
-							class="group flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[14px] transition-colors
+							class="group flex items-center gap-1.5 rounded-full px-2 py-1.5 text-[13.5px] transition-colors min-[420px]:px-3 min-[420px]:text-[14px]
 								{isActive(link.href) ? 'font-medium text-ink' : 'text-muted hover:text-ink'}"
 						>
 							<span

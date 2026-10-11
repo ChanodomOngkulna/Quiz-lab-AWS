@@ -73,7 +73,7 @@
 <svelte:window onkeydown={handleKey} />
 
 <svelte:head>
-	<title>แบบทดสอบ 100 ข้อ · กระดาษคำตอบ</title>
+	<title>แบบทดสอบ 100 ข้อ · AWS-Quiz-CPE</title>
 	<meta
 		name="description"
 		content="แบบทดสอบ 100 ข้อ AWS Cloud, RAG/LangChain และ IP Subnetting — ตอบแล้วเห็นเฉลยพร้อมเหตุผลของทุกตัวเลือกทันที"
@@ -174,10 +174,10 @@
 {:else if quiz.phase === 'running' && current}
 	<!-- ================= runner ================= -->
 	<div
-		class="sticky top-14 z-30 -mx-4 border-b border-line bg-paper/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6"
+		class="sticky top-14 z-30 -mx-4 border-b border-line bg-paper/95 px-4 py-2.5 backdrop-blur sm:-mx-6 sm:px-6 sm:py-3"
 	>
-		<div class="flex items-center gap-3">
-			<p class="text-[13px] font-medium whitespace-nowrap tabular-nums">
+		<div class="flex items-center gap-2 sm:gap-3">
+			<p class="text-[12.5px] font-medium whitespace-nowrap tabular-nums sm:text-[13px]">
 				ข้อ {quiz.run.index + 1} / {quiz.runTotal}
 			</p>
 			<div class="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-line">
@@ -191,7 +191,7 @@
 				onclick={() => quiz.toggleFlag(current.q.id)}
 				aria-pressed={quiz.isFlagged(current.q.id)}
 				title="ปักธงข้อนี้ (F)"
-				class="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-accent-soft {quiz.isFlagged(
+				class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-accent-soft {quiz.isFlagged(
 					current.q.id
 				)
 					? 'text-accent-deep'
@@ -213,14 +213,15 @@
 				type="button"
 				onclick={() => (quiz.gridOpen = !quiz.gridOpen)}
 				aria-expanded={quiz.gridOpen}
-				class="rounded-full px-3 py-1.5 text-[12.5px] font-medium text-muted transition-colors hover:bg-accent-soft hover:text-ink"
+				class="rounded-full px-2.5 py-1.5 text-[12px] font-medium text-muted transition-colors hover:bg-accent-soft hover:text-ink sm:px-3 sm:text-[12.5px]"
 			>
-				แผนที่ข้อ
+				<span class="sm:hidden">แผนที่</span>
+				<span class="hidden sm:inline">แผนที่ข้อ</span>
 			</button>
 			<button
 				type="button"
 				onclick={() => quiz.pause()}
-				class="rounded-full px-3 py-1.5 text-[12.5px] font-medium text-muted transition-colors hover:bg-accent-soft hover:text-ink"
+				class="rounded-full px-2.5 py-1.5 text-[12px] font-medium text-muted transition-colors hover:bg-accent-soft hover:text-ink sm:px-3 sm:text-[12.5px]"
 			>
 				พัก
 			</button>
@@ -363,7 +364,7 @@
 		</div>
 	</article>
 
-	<p class="mt-4 text-center text-[12px] text-muted/80">
+	<p class="mt-4 hidden text-center text-[12px] text-muted/80 sm:block">
 		คีย์ลัด: กด 1–4 เลือกตัวเลือก · Enter ตรวจคำตอบและไปต่อ · F ปักธง
 	</p>
 {:else if quiz.phase === 'finished' && quiz.result}

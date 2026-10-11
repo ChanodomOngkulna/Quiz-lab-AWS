@@ -140,7 +140,7 @@
 		{:else if block.type === 'diagram'}
 			{@const Diagram = diagrams[block.id]}
 			{#if Diagram}
-				<figure class="mt-8 overflow-x-auto">
+				<figure class="mt-8">
 					<Diagram />
 				</figure>
 			{/if}
@@ -154,5 +154,11 @@
 	}
 	.summary-blocks :global(strong) {
 		font-weight: 600;
+	}
+	.summary-blocks :global(a) {
+		overflow-wrap: anywhere;
+	}
+	.summary-blocks :global(code) {
+		overflow-wrap: anywhere;
 	}
 </style>

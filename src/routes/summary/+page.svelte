@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-	<title>สรุปเนื้อหา · กระดาษคำตอบ</title>
+	<title>สรุปเนื้อหา · AWS-Quiz-CPE</title>
 	<meta
 		name="description"
 		content="สรุปทบทวน 8 หัวข้อ: AWS Cloud Quest 5 แลป, RAG/LangChain, IP Subnetting และตารางเปรียบเทียบก่อนสอบ"

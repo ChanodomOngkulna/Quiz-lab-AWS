@@ -45,7 +45,7 @@
 </script>
 
 <svelte:head>
-	<title>กระดาษคำตอบ — ทบทวนสอบ AWS · RAG · Subnetting</title>
+	<title>AWS-Quiz-CPE — ทบทวนสอบ AWS · RAG · Subnetting</title>
 	<meta
 		name="description"
 		content="สรุปเนื้อหา 8 หัวข้อและแบบทดสอบ 100 ข้อ พร้อมเฉลยละเอียดทุกตัวเลือก — ทบทวนก่อนสอบ AWS Cloud, RAG/LangChain และ IP Subnetting"
