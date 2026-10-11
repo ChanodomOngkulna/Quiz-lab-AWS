@@ -24,7 +24,7 @@
 <svelte:window onkeydown={handleKey} />
 
 {#if open}
-	<div class="fixed inset-0 z-50 flex items-end justify-center p-4 sm:items-center">
+	<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
 		<button
 			type="button"
 			class="animate-fade-in absolute inset-0 cursor-default bg-ink/45 backdrop-blur-[2px]"
