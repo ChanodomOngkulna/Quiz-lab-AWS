@@ -63,23 +63,25 @@
 			</span>
 		{/each}
 	</div>
-	<h1 class="rise-in rise-d1 mt-6 max-w-[18ch] text-[34px] leading-[1.25] font-bold sm:text-[40px]">
+	<h1 class="rise-in rise-d1 mt-6 max-w-[18ch] text-[34px] leading-[1.4] font-bold sm:text-[40px]">
 		ทบทวนก่อนเข้าห้องสอบ
 	</h1>
 	<p class="rise-in rise-d2 mt-4 max-w-[56ch] text-[15.5px] leading-[1.95] text-muted">
 		สรุปทั้ง 8 หัวข้อและข้อสอบ 100 ข้อในที่เดียว — ตอบข้อไหนเสร็จ
 		เห็นเฉลยทันทีพร้อมเหตุผลของทุกตัวเลือก ว่าทำไมถึงถูกและทำไมถึงผิด
 	</p>
-	<div class="rise-in rise-d3 mt-7 flex flex-wrap gap-3">
+	<div
+		class="rise-in rise-d3 mt-7 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center lg:justify-start"
+	>
 		<a
 			href="/quiz"
-			class="btn-lift rounded-full bg-ink px-7 py-3 text-[15px] font-medium text-paper transition-colors hover:bg-accent-deep"
+			class="btn-lift flex items-center justify-center rounded-full bg-ink px-8 py-3.5 text-[15.5px] font-medium text-paper transition-colors hover:bg-accent-deep sm:min-w-[15rem] sm:px-10 sm:text-[16.5px]"
 		>
 			เริ่มทำแบบทดสอบ
 		</a>
 		<a
 			href="/summary"
-			class="btn-lift rounded-full border border-ink/25 px-6 py-3 text-[14.5px] transition-colors hover:border-ink"
+			class="btn-lift flex items-center justify-center rounded-full border-2 border-ink/25 px-8 py-3.5 text-[15.5px] font-medium transition-colors hover:border-ink sm:min-w-[15rem] sm:px-10 sm:text-[16.5px]"
 		>
 			อ่านสรุปก่อนก็ได้
 		</a>
@@ -200,7 +202,7 @@
 		<span class="animate-float"><StickerPencil /></span>
 	</div>
 	<ul class="mt-2 space-y-2.5">
-		{#each ['อ่านสรุป 8 หัวข้อก่อน — แต่ละหน้ามี "จำก่อนสอบ" ให้กลับมาอ่านเร็ว ๆ', 'ทำแบบทดสอบ 100 ข้อ ตอบเสร็จเห็นเฉลยทันทีพร้อมเหตุผลของทุกตัวเลือก', 'เว็บจำข้อที่คุณพลาดไว้ให้ กลับมาทบทวนเฉพาะข้อที่ผิดได้ตลอด', 'สรุปจาก PDF อาจารย์ และจาก AI บางส่วน', 'ผู้จัดทำไม่รับประกันว่าจะถูกต้อง 100%' , 'ถ้าผู้สอบได้คะแนนไม่ตรงตามต้องการผู้จัดทำไม่มีส่วนเกี่ยวข้อง','จัดทำขึ้นเพื่อการทบทวนเท่านั้น ไม่ได้เป็นข้อสอบจริง','ข้อมูลอาจผิดพลาดได้โปรดระวัง!!!'] as tip, i (tip)}
+		{#each ['อ่านสรุป 8 หัวข้อก่อน — แต่ละหน้ามี "จำก่อนสอบ" ให้กลับมาอ่านเร็ว ๆ', 'ทำแบบทดสอบ 100 ข้อ ตอบเสร็จเห็นเฉลยทันทีพร้อมเหตุผลของทุกตัวเลือก', 'เว็บจำข้อที่คุณพลาดไว้ให้ กลับมาทบทวนเฉพาะข้อที่ผิดได้ตลอด', 'สรุปจาก PDF อาจารย์ และจาก AI บางส่วน', 'ผู้จัดทำไม่รับประกันว่าจะถูกต้อง 100%', 'ถ้าผู้สอบได้คะแนนไม่ตรงตามต้องการผู้จัดทำไม่มีส่วนเกี่ยวข้อง', 'จัดทำขึ้นเพื่อการทบทวนเท่านั้น ไม่ได้เป็นข้อสอบจริง', 'ข้อมูลอาจผิดพลาดได้โปรดระวัง!!!'] as tip, i (tip)}
 			<li class="flex items-start gap-2.5 text-[14px] leading-[1.85]">
 				<span class="mt-[.55em]"><ChoiceBubble letter={i + 1} state="selected" size="xs" /></span>
 				<span>{tip}</span>
@@ -214,14 +216,14 @@
 		<a
 			href="/quiz"
 			onclick={closeWelcome}
-			class="btn-lift rounded-full bg-ink px-5 py-2 text-[13.5px] font-medium text-paper transition-colors hover:bg-accent-deep"
+			class="btn-lift flex w-full items-center justify-center rounded-full bg-ink px-8 py-3 text-[15.5px] font-medium text-paper transition-colors hover:bg-accent-deep sm:w-auto sm:min-w-[15rem]"
 		>
 			เริ่มทำแบบทดสอบ
 		</a>
 		<a
 			href="/summary"
 			onclick={closeWelcome}
-			class="btn-lift rounded-full border border-ink/25 px-5 py-2 text-[13.5px] transition-colors hover:border-ink"
+			class="btn-lift flex w-full items-center justify-center rounded-full border-2 border-ink/25 px-8 py-3 text-[15.5px] font-medium transition-colors hover:border-ink sm:w-auto sm:min-w-[15rem]"
 		>
 			อ่านสรุปก่อน
 		</a>

@@ -32,7 +32,7 @@
 
 <article class="pt-12">
 	<p class="text-[13px] font-medium text-accent-deep">{topic.kicker}</p>
-	<h1 class="mt-2 max-w-[22ch] text-[27px] leading-snug font-bold">{topic.title}</h1>
+	<h1 class="mt-2 max-w-[22ch] text-[27px] leading-[1.45] font-bold">{topic.title}</h1>
 
 	{#if toc.length > 2}
 		<nav aria-label="สารบัญหน้านี้" class="mt-6 rounded-xl border border-line bg-surface px-5 py-4">

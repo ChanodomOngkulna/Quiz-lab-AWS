@@ -27,7 +27,7 @@
 	<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
 		<button
 			type="button"
-			class="animate-fade-in absolute inset-0 cursor-default bg-ink/45 backdrop-blur-[2px]"
+			class="animate-fade-in absolute inset-0 cursor-default bg-ink/60 backdrop-blur-[2px]"
 			aria-label="ปิดหน้าต่างแจ้งเตือน"
 			onclick={onClose}
 		></button>
@@ -65,7 +65,7 @@
 				</div>
 			{/if}
 			{#if actions}
-				<div class="mt-6 flex flex-wrap justify-end gap-2.5">
+				<div class="mt-6 flex flex-col justify-center gap-2.5 sm:flex-row sm:items-center">
 					{@render actions()}
 				</div>
 			{/if}
