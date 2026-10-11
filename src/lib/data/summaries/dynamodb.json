@@ -1,0 +1,235 @@
+{
+	"slug": "dynamodb",
+	"title": "First NoSQL Database — Amazon DynamoDB",
+	"blocks": [
+		{
+			"type": "callout",
+			"text": "<strong>สถานะเอกสาร:</strong> ปรับปรุงสำหรับทบทวน ณ วันที่ 11 ตุลาคม 2026 โดยใช้เอกสาร AWS และข้อมูล AWS Cloud Quest ที่เผยแพร่ให้ตรวจสอบได้\n\n\n<strong>ข้อควรทราบ:</strong> รายละเอียดชื่อ resource, ค่า key, จำนวน instance, VPC, subnet และขั้นตอนในหน้าจออาจต่างกันตามเวอร์ชันหรือโจทย์ที่ระบบ Skill Builder มอบให้ ให้ยึดค่าที่โจทย์ในแล็บระบุเป็นหลัก ส่วนหลักการของบริการด้านล่างใช้ทบทวนสอบได้"
+		},
+		{
+			"type": "h3",
+			"text": "เป้าหมายของแล็บ"
+		},
+		{
+			"type": "p",
+			"text": "ฝึกทำความเข้าใจและใช้งานฐานข้อมูล NoSQL แบบ managed service ของ AWS โดยสร้างหรือใช้งานตาราง เพิ่มข้อมูล (item) และเข้าใจ primary key ที่ใช้ระบุและค้นหาข้อมูล"
+		},
+		{
+			"type": "h3",
+			"text": "Amazon DynamoDB คืออะไร"
+		},
+		{
+			"type": "p",
+			"text": "<strong>Amazon DynamoDB</strong> เป็นฐานข้อมูล NoSQL แบบ fully managed ที่รองรับรูปแบบข้อมูล key-value และ document สามารถขยายตามความต้องการและออกแบบให้ตอบสนองได้รวดเร็ว โดย AWS ดูแลโครงสร้างพื้นฐานของฐานข้อมูลให้"
+		},
+		{
+			"type": "p",
+			"text": "เหมาะกับงาน เช่น ประวัติการใช้งานของผู้ใช้ ตะกร้าสินค้า session เกม และแอปพลิเคชันที่ต้องรองรับการอ่าน/เขียนจำนวนมาก ไม่ใช่ฐานข้อมูลเชิงสัมพันธ์แบบตารางที่ต้องออกแบบ JOIN เป็นหลัก"
+		},
+		{
+			"type": "h3",
+			"text": "คำศัพท์ที่ต้องจำ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>Table:</strong> กลุ่มข้อมูลที่เก็บรายการประเภทเดียวกัน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Item:</strong> รายการข้อมูลหนึ่งรายการ คล้าย record แต่ไม่จำเป็นต้องมีชุด attribute เหมือนกันทุก item",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Attribute:</strong> ฟิลด์หรือคุณสมบัติของ item เช่น <code>userId</code>, <code>rating</code>, <code>lastDateWatched</code>",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Primary key:</strong> คีย์หลักที่ใช้ระบุ item อย่างเป็นเอกลักษณ์",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Partition key:</strong> คีย์ที่ DynamoDB ใช้กระจายข้อมูลไปยังพาร์ทิชันภายใน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Sort key:</strong> คีย์เพิ่มเติมที่ช่วยจัดเรียงและค้นหารายการภายใต้ partition key เดียวกัน",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "p",
+			"text": "Primary key มีรูปแบบหลัก 2 แบบ:"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": true,
+				"items": [
+					{
+						"text": "<strong>Partition key อย่างเดียว (simple primary key):</strong> ค่า partition key ต้องไม่ซ้ำกันในแต่ละ item ของตาราง",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Partition key + sort key (composite primary key):</strong> สามารถมีหลาย item ที่ใช้ partition key เดียวกันได้ แต่คู่ค่าของ partition key และ sort key ต้องไม่ซ้ำกัน",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "diagram",
+			"id": "dynamodb-keys"
+		},
+		{
+			"type": "p",
+			"text": "ชนิดข้อมูลที่ใช้เป็น primary key ได้ ได้แก่ <strong>String (S), Number (N), Binary (B)</strong> ส่วน attribute ทั่วไปใช้ชนิดข้อมูลอื่นที่ DynamoDB รองรับได้ตามความเหมาะสม"
+		},
+		{
+			"type": "h3",
+			"text": "แนวทางทำแล็บ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": true,
+				"items": [
+					{
+						"text": "เปิด AWS Console จากหน้าของ Cloud Quest และเข้า <strong>Amazon DynamoDB</strong>",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตรวจสอบว่าต้องสร้าง table ใหม่หรือใช้ table ที่โจทย์เตรียมไว้",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "หากโจทย์ให้สร้าง table ให้กรอกชื่อตารางและ key ตามที่ระบุอย่างตรงตัว",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "หากมี partition key และ sort key ให้เลือกชนิดข้อมูลให้ถูกต้อง เช่น String หรือ Number",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "สร้าง table แล้วเข้า <strong>Explore table items</strong> หรือหน้าจอสำหรับเพิ่ม/ดู item",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "เพิ่ม item พร้อม attribute และชนิดข้อมูลที่ตรงกับโจทย์",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตรวจสอบข้อมูลที่บันทึก และกลับไปให้ Cloud Quest ตรวจสอบภารกิจ",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "p",
+			"text": "<strong>ตัวอย่างเพื่อเข้าใจแนวคิด:</strong> ตาราง <code>UserVideoHistory</code> อาจใช้ <code>userId</code> เป็น partition key และ <code>lastDateWatched</code> เป็น sort key ได้ในตัวอย่างหนึ่ง แต่ชื่อและชนิดข้อมูลจริงต้องตรวจจากโจทย์ในแล็บ อย่าคัดลอกตัวอย่างนี้ไปใช้โดยไม่ตรวจสอบ"
+		},
+		{
+			"type": "h3",
+			"text": "จุดที่มักผิด"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "สะกดชื่อ table หรือ attribute ไม่ตรงตามโจทย์",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "เลือกชนิดข้อมูลผิด เช่น ต้องการ Number แต่บันทึกเป็น String",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "เข้าใจว่า partition key ต้องไม่ซ้ำแม้มี sort key: จริง ๆ แล้วเมื่อใช้ composite key ค่า partition key ซ้ำได้ แต่คู่ key ต้องไม่ซ้ำ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "คิดว่า DynamoDB เป็น SQL database หรือรองรับการ JOIN แบบ relational database โดยตรง",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "คิดว่า NoSQL หมายถึงไม่มี schema เลย: DynamoDB มีข้อกำหนดเรื่อง key และชนิดข้อมูลของ key แม้ attribute ทั่วไปจะยืดหยุ่นกว่า",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "แนวคิดการอ่าน/เขียนและค่าใช้จ่าย"
+		},
+		{
+			"type": "p",
+			"text": "DynamoDB มีโหมด capacity ที่สำคัญ ได้แก่ <strong>On-demand</strong> ซึ่งเหมาะเมื่อรูปแบบการใช้งานไม่แน่นอนและต้องการให้ระบบจัดการ capacity และ <strong>Provisioned</strong> ซึ่งกำหนด read/write capacity และอาจใช้ Auto Scaling ปรับ capacity ตาม workload ได้ ค่าใช้จ่ายจริงขึ้นกับโหมด capacity, ขนาดข้อมูล, รูปแบบการอ่าน/เขียน และคุณสมบัติที่เปิดใช้ ควรตรวจราคา AWS ปัจจุบันก่อนประมาณการ"
+		},
+		{
+			"type": "h3",
+			"text": "จำก่อนสอบ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "DynamoDB = managed NoSQL แบบ key-value/document",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "Table ประกอบด้วย items และ attributes",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "Partition key ช่วยระบุตำแหน่งการกระจายข้อมูล",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "Composite key = partition key + sort key",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ชื่อ attribute และชนิดข้อมูลต้องตรงกับโจทย์",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		}
+	]
+}

@@ -25,6 +25,12 @@ export default defineConfig([
 	{
 		// Override or add rule settings here, such as:
 		// 'svelte/button-has-type': 'error'
-		rules: {}
+		rules: {
+			// All {@html} content is generated at build time by scripts/build-data.mjs
+			// from local markdown files — no user input is ever rendered as HTML.
+			'svelte/no-at-html-tags': 'off',
+			// This site is deployed at the domain root (Vercel), so plain hrefs are safe.
+			'svelte/no-navigation-without-resolve': 'off'
+		}
 	}
 ]);

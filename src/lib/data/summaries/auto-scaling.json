@@ -1,0 +1,266 @@
+{
+	"slug": "auto-scaling",
+	"title": "Auto-Healing and Scaling Applications — EC2 Auto Scaling",
+	"blocks": [
+		{
+			"type": "callout",
+			"text": "<strong>สถานะเอกสาร:</strong> ปรับปรุงสำหรับทบทวน ณ วันที่ 11 ตุลาคม 2026 โดยใช้เอกสาร AWS และข้อมูล AWS Cloud Quest ที่เผยแพร่ให้ตรวจสอบได้\n\n\n<strong>ข้อควรทราบ:</strong> รายละเอียดชื่อ resource, ค่า key, จำนวน instance, VPC, subnet และขั้นตอนในหน้าจออาจต่างกันตามเวอร์ชันหรือโจทย์ที่ระบบ Skill Builder มอบให้ ให้ยึดค่าที่โจทย์ในแล็บระบุเป็นหลัก ส่วนหลักการของบริการด้านล่างใช้ทบทวนสอบได้"
+		},
+		{
+			"type": "h3",
+			"text": "เป้าหมายของแล็บ"
+		},
+		{
+			"type": "p",
+			"text": "ตั้งค่าแอปพลิเคชันบน EC2 ให้รักษาจำนวน instance ที่ต้องการ ทดแทน instance ที่เสีย และเพิ่ม/ลดจำนวน instance ตาม workload โดยลดการจัดการด้วยมือ"
+		},
+		{
+			"type": "h3",
+			"text": "คำศัพท์หลัก"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>Amazon EC2:</strong> virtual server สำหรับรันแอปพลิเคชัน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Amazon Machine Image (AMI):</strong> image/template ที่ใช้เปิด EC2 instance",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Launch template:</strong> กำหนดค่าที่ใช้เปิด instance เช่น AMI, instance type, security group, IAM instance profile และ storage",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Auto Scaling group (ASG):</strong> กลุ่ม EC2 ที่ Amazon EC2 Auto Scaling จัดการร่วมกัน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Minimum capacity:</strong> จำนวน instance ต่ำสุดที่ ASG รักษาไว้",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Desired capacity:</strong> จำนวน instance เป้าหมายที่ ASG พยายามรักษา",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Maximum capacity:</strong> จำนวน instance สูงสุดที่ ASG สามารถขยายได้",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Health check:</strong> การตรวจสถานะว่า instance ยังพร้อมใช้งานหรือไม่",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Scaling policy:</strong> กฎเพิ่ม/ลด capacity ตามตัวชี้วัดหรือกำหนดเวลา",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "Auto-healing กับ Auto Scaling ไม่เหมือนกัน"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>Auto-healing:</strong> เมื่อ instance ที่อยู่ใน ASG ไม่ healthy หรือถูก terminate ระบบจะเปิด instance ใหม่เพื่อทดแทนและรักษา desired capacity",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Auto Scaling:</strong> เปลี่ยนจำนวน instance ตามความต้องการ เช่น เพิ่มเมื่อ CPU หรือ request load สูง และลดเมื่อความต้องการลดลง โดยไม่ต่ำกว่า minimum หรือสูงกว่า maximum",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "p",
+			"text": "ดังนั้น การมี ASG ช่วยทดแทนเครื่องเสียได้ แม้ยังไม่ได้ตั้ง scaling policy เพื่อเพิ่ม/ลดตามโหลด ส่วนการ scale ตามโหลดต้องมี policy หรือการตั้งค่าที่เกี่ยวข้อง"
+		},
+		{
+			"type": "h3",
+			"text": "แนวทางทำแล็บ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": true,
+				"items": [
+					{
+						"text": "ตรวจสอบ EC2 instance, AMI, VPC, subnet และ security group ที่โจทย์เตรียมไว้",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "สร้างหรือเลือก launch template ตามที่โจทย์กำหนด",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "สร้าง Auto Scaling group และเลือก VPC/subnets ที่เหมาะสม",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตั้งค่า minimum, desired และ maximum capacity ตามโจทย์",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "กำหนด health check ที่เหมาะสม หากเชื่อมกับ load balancer ให้ตรวจ health check type และ grace period ตามสถานการณ์",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตั้ง scaling policy ตามโจทย์ เช่น target tracking จาก average CPU utilization หรือ request count per target",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตรวจ Activity history, instance health และ CloudWatch metrics",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ทดสอบ auto-healing โดยจำลองเหตุการณ์ที่โจทย์อนุญาต เช่น terminate instance ใน ASG แล้วสังเกตการสร้าง instance ทดแทน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "หากเป็นการทดสอบ scaling ให้สร้างโหลดตามคำแนะนำของแล็บและสังเกตจำนวน instance",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตรวจว่าจำนวน instance อยู่ภายใน min/max และกลับไปให้ Cloud Quest ตรวจภารกิจ",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "วิธีคิดเรื่อง scaling"
+		},
+		{
+			"type": "p",
+			"text": "ตัวอย่างเชิงแนวคิด: หากตั้ง minimum = 2, desired = 2 และ maximum = 4 ระบบควรเริ่มจากจำนวนเป้าหมาย 2 เครื่อง หากเครื่องหนึ่งเสีย ASG จะพยายามทดแทนเพื่อรักษา desired capacity หากมี scaling policy และ workload สูงขึ้น ระบบอาจเพิ่มได้ถึง 4 เครื่อง เมื่อโหลดลดลงก็ลดจำนวนได้ แต่ไม่ต่ำกว่า minimum"
+		},
+		{
+			"type": "p",
+			"text": "ตัวเลขนี้เป็นตัวอย่างประกอบ ไม่ใช่ค่าที่ต้องใช้ในแล็บทุกครั้ง"
+		},
+		{
+			"type": "h3",
+			"text": "CloudWatch มีบทบาทอย่างไร"
+		},
+		{
+			"type": "p",
+			"text": "CloudWatch ใช้ดู metrics เช่น CPU utilization, สร้าง dashboard, logs และ alarms โดย scaling policy สามารถใช้ metrics ที่เหมาะสมเพื่อเปลี่ยน capacity ได้ ตัวอย่างเช่น <strong>Target tracking scaling</strong> ตั้งเป้าค่า metric แล้วให้ระบบปรับจำนวน instance เพื่อพยายามรักษาค่าเป้าหมาย"
+		},
+		{
+			"type": "p",
+			"text": "อย่าจำว่า CPU เป็น metric เดียวที่ใช้ได้ ต้องเลือก metric ให้สัมพันธ์กับ workload และการเพิ่ม capacity จริง"
+		},
+		{
+			"type": "h3",
+			"text": "จุดที่มักผิด"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "ตั้ง desired capacity สูงกว่า maximum หรือ minimum สูงกว่า desired โดยไม่สอดคล้องกัน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "สร้าง launch template ผิด AMI, security group หรือ subnet",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "คิดว่า scaling จะเกิดขึ้นเองทุกกรณีเพียงเพราะสร้าง ASG: ต้องมี scaling policy หรือ scheduled action หากต้องการให้ปรับตามโหลด/เวลา",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "คิดว่า health check ผ่านหมายความว่าแอปพลิเคชันทำงานถูกต้องทุกฟังก์ชัน: health check มีขอบเขตตามวิธีตรวจที่กำหนด",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ลบ instance นอก ASG แล้วสรุปว่าเป็นการทดสอบ auto-healing ที่ถูกต้อง: ควรตรวจว่า instance เป็นสมาชิก ASG และดู Activity history",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ไม่กระจาย ASG ไปหลาย Availability Zones ทำให้ความทนทานต่อความขัดข้องของ AZ ลดลง",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "จำก่อนสอบ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "ASG รักษา desired capacity และแทนที่ instance ที่ unhealthy",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "Scaling policy ปรับ capacity ตามโหลด/เงื่อนไข",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "Launch template เป็นแม่แบบการสร้าง EC2",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "CloudWatch ใช้ติดตาม metrics และ alarms",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ใช้หลาย AZ เพื่อเพิ่มความทนทาน ไม่ใช่แค่เพิ่มจำนวน instance ใน AZ เดียว",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		}
+	]
+}

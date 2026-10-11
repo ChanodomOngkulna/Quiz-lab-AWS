@@ -1,1 +1,84 @@
 @import 'tailwindcss';
+@import '@fontsource/ibm-plex-sans-thai/400.css';
+@import '@fontsource/ibm-plex-sans-thai/500.css';
+@import '@fontsource/ibm-plex-sans-thai/600.css';
+@import '@fontsource/ibm-plex-sans-thai/700.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+@theme {
+	--font-sans:
+		'IBM Plex Sans Thai', 'Noto Sans Thai', 'Sarabun', system-ui, -apple-system, sans-serif;
+	--font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', 'SFMono-Regular', monospace;
+
+	--color-paper: #fbfaf6;
+	--color-surface: #ffffff;
+	--color-ink: #26282e;
+	--color-muted: #6f6a5c;
+	--color-line: #e6e2d4;
+	--color-accent: #d9700a;
+	--color-accent-deep: #9a4d03;
+	--color-accent-soft: #fcebd3;
+	--color-correct: #197a42;
+	--color-correct-soft: #e5f3ea;
+	--color-wrong: #b3261e;
+	--color-wrong-soft: #fae8e5;
+}
+
+@layer base {
+	body {
+		background-color: var(--color-paper);
+		color: var(--color-ink);
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+
+	::selection {
+		background-color: var(--color-accent-soft);
+	}
+
+	:not(pre) > code {
+		font-family: var(--font-mono);
+		font-size: 0.85em;
+		background-color: #f2eedf;
+		padding: 0.08em 0.35em;
+		border-radius: 0.375rem;
+		white-space: nowrap;
+	}
+
+	pre code {
+		font-family: var(--font-mono);
+		white-space: pre;
+	}
+
+	sup {
+		line-height: 0;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+
+	details > summary {
+		cursor: pointer;
+		list-style: none;
+	}
+	details > summary::-webkit-details-marker {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+	html {
+		scroll-behavior: auto !important;
+	}
+}

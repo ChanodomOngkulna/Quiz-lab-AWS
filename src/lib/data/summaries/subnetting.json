@@ -1,0 +1,189 @@
+{
+	"slug": "subnetting",
+	"title": "คู่มือการคำนวณ Subnetting",
+	"kicker": "พื้นฐานเครือข่าย",
+	"blocks": [
+		{
+			"type": "p",
+			"text": "การคำนวณ Subnetting เป็นพื้นฐานสำคัญทางเน็ตเวิร์กที่มักออกข้อสอบในส่วนของการคำนวณหา Network ID, Broadcast IP, และจำนวนโฮสต์ที่ใช้งานได้"
+		},
+		{
+			"type": "h2",
+			"text": "พื้นฐานที่ต้องรู้"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>IPv4 Address:</strong> ประกอบด้วยตัวเลข 4 ชุด (Octets) คั่นด้วยจุด (เช่น <code>192.168.1.0</code>) แต่ละชุดมีค่าตั้งแต่ 0 ถึง 255 (รวมเป็น 32 บิต)",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>CIDR Notation (Classless Inter-Domain Routing):</strong> ตัวเลขหลัง slash (เช่น <code>/24</code>) บอกจำนวนบิตที่เป็น Network Portion",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>สูตรสำคัญ:</strong>",
+						"plain": [],
+						"children": {
+							"ordered": false,
+							"items": [
+								{
+									"text": "จำนวน Subnet ทั้งหมด: 2<sup>s</sup> (เมื่อ s คือจำนวนบิตที่ยืมมาเป็น Subnet)",
+									"plain": [],
+									"children": null
+								},
+								{
+									"text": "จำนวน Host ต่อ 1 Subnet: 2<sup>h</sup> - 2 (เมื่อ h คือจำนวนบิตที่เหลือสำหรับ Host โดยลบ 2 สำหรับ Network ID และ Broadcast IP)",
+									"plain": [],
+									"children": null
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"type": "h2",
+			"text": "ตารางเทียบ CIDR กับ Subnet Mask และจำนวน Host"
+		},
+		{
+			"type": "table",
+			"header": [
+				"CIDR",
+				"Subnet Mask",
+				"จำนวนบิต Host (h)",
+				"จำนวน Host ทั้งหมด (2<sup>h</sup>)",
+				"จำนวน Host ที่ใช้งานได้ (2<sup>h</sup> - 2)"
+			],
+			"rows": [
+				["<code>/24</code>", "<code>255.255.255.0</code>", "8", "256", "<strong>254</strong>"],
+				["<code>/25</code>", "<code>255.255.255.128</code>", "7", "128", "<strong>126</strong>"],
+				["<code>/26</code>", "<code>255.255.255.192</code>", "6", "64", "<strong>62</strong>"],
+				["<code>/27</code>", "<code>255.255.255.224</code>", "5", "32", "<strong>30</strong>"],
+				["<code>/28</code>", "<code>255.255.255.240</code>", "4", "16", "<strong>14</strong>"],
+				["<code>/29</code>", "<code>255.255.255.248</code>", "3", "8", "<strong>6</strong>"],
+				["<code>/30</code>", "<code>255.255.255.252</code>", "2", "4", "<strong>2</strong>"]
+			]
+		},
+		{
+			"type": "diagram",
+			"id": "subnet-blocks"
+		},
+		{
+			"type": "h2",
+			"text": "ตัวอย่างโจทย์และวิธีคำนวณแบบง่าย"
+		},
+		{
+			"type": "h3",
+			"text": "ตัวอย่างที่ 1: กำหนด IP มาให้คือ `192.168.10.0 /26` จงหา Network ID, Broadcast IP และช่วงของ Usable IP"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>วิธีคิด:</strong>",
+						"plain": [],
+						"children": {
+							"ordered": false,
+							"items": [
+								{
+									"text": "<code>/26</code> หมายถึง Subnet Mask คือ <code>255.255.255.192</code>",
+									"plain": [],
+									"children": null
+								},
+								{
+									"text": "Block Size (ขนาดของแต่ละบล็อก): คิดจาก 256 - 192 = 64",
+									"plain": [],
+									"children": null
+								},
+								{
+									"text": "ดังนั้น ช่วงของ Subnet จะเพิ่มทีละ 64 ได้แก่:",
+									"plain": [],
+									"children": {
+										"ordered": true,
+										"items": [
+											{
+												"text": "Block ที่ 1: <code>192.168.10.0</code> ถึง <code>192.168.10.63</code>",
+												"plain": [],
+												"children": null
+											},
+											{
+												"text": "Block ที่ 2: <code>192.168.10.64</code> ถึง <code>192.168.10.127</code>",
+												"plain": [],
+												"children": null
+											},
+											{
+												"text": "...",
+												"plain": [],
+												"children": null
+											}
+										]
+									}
+								},
+								{
+									"text": "สำหรับบล็อกแรก (<code>192.168.10.0 /26</code>):",
+									"plain": [],
+									"children": {
+										"ordered": true,
+										"items": [
+											{
+												"text": "<strong>Network ID:</strong> <code>192.168.10.0</code> (ตัวแรกสุดของบล็อก)",
+												"plain": [],
+												"children": null
+											},
+											{
+												"text": "<strong>Broadcast IP:</strong> <code>192.168.10.63</code> (ตัวสุดท้ายของบล็อก)",
+												"plain": [],
+												"children": null
+											},
+											{
+												"text": "<strong>Usable IP Range:</strong> <code>192.168.10.1</code> ถึง <code>192.168.10.62</code> (ระหว่าง Network และ Broadcast)",
+												"plain": [],
+												"children": null
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"type": "h2",
+			"text": "สิ่งที่ต้องจำเข้าห้องสอบ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": true,
+				"items": [
+					{
+						"text": "จำสูตรจำนวน Host ที่ใช้ได้: 2<sup>h</sup> - 2 (อย่าลืมลบ 2 เสมอสำหรับ Network ID และ Broadcast IP)",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "จำเทคนิคคำนวณ Block Size จากเลข Subnet Mask Octet สุดท้าย (256 - Subnet Mask Value)",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ระวังโจทย์ถามหา \"Broadcast IP\" (คือ IP ตัวสุดท้ายในบล็อกนั้น) กับ \"Network ID\" (คือ IP ตัวแรกในบล็อกนั้น)",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		}
+	]
+}

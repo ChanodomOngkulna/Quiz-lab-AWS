@@ -1,0 +1,193 @@
+{
+	"slug": "rag-langchain",
+	"title": "Google Skill (RAG) และ LangChain Lab",
+	"kicker": "สรุปสอบ",
+	"blocks": [
+		{
+			"type": "p",
+			"text": "เอกสารฉบับนี้อธิบายแนวคิดเรื่อง RAG, สถาปัตยกรรม Google Cloud และ LangChain Lab โดยเน้นกรณีศึกษาการตอบคำถามนโยบายกรมธรรม์ (Insurance Policy Q&amp;A) ตามที่อาจารย์ออกสอบ"
+		},
+		{
+			"type": "h2",
+			"text": "แนวคิด RAG (Retrieval-Augmented Generation)"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>ความหมาย:</strong> เทคนิคที่ผสานระหว่างระบบค้นหาข้อมูล (Retrieval) และโมเดลภาษาขนาดใหญ่ (Generative AI / LLM)",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>ทำไมต้องใช้ RAG?</strong>",
+						"plain": [],
+						"children": {
+							"ordered": false,
+							"items": [
+								{
+									"text": "<strong>แก้ปัญหา Hallucination (การกุข้อมูลของ AI):</strong> LLM มักแต่งคำตอบขึ้นมาเองเมื่อไม่รู้ข้อมูลเฉพาะทาง RAG จะดึงเอกสารจริงมาให้ LLM อ่านก่อนตอบ",
+									"plain": [],
+									"children": null
+								},
+								{
+									"text": "<strong>ข้อมูลปัจจุบันและเฉพาะเจาะจง:</strong> ช่วยให้ AI สามารถตอบคำถามจากเอกสารภายในองค์กร เช่น กรมธรรม์บริษัท, คู่มือพนักงาน ซึ่งไม่มีอยู่บนอินเทอร์เน็ตทั่วไป",
+									"plain": [],
+									"children": null
+								}
+							]
+						}
+					},
+					{
+						"text": "<strong>ขั้นตอนการทำงาน (Workflow):</strong>",
+						"plain": [],
+						"children": {
+							"ordered": false,
+							"items": [
+								{
+									"text": "<em>Ingestion:</em> แปลงเอกสาร (PDF กรมธรรม์) เป็นข้อความ -&gt; ทำการ Chunking (ตัดแบ่งเป็นท่อนย่อย) -&gt; แปลงเป็น Vector Embeddings",
+									"plain": [],
+									"children": null
+								},
+								{
+									"text": "<em>Storage:</em> เก็บ Vector ลงใน Vector Database",
+									"plain": [],
+									"children": null
+								},
+								{
+									"text": "<em>Retrieval:</em> เมื่อผู้ใช้ถามคำถาม ระบบจะแปลงคำถามเป็น Vector แล้วค้นหาข้อความในเอกสารที่ใกล้เคียงที่สุด (Semantic Search)",
+									"plain": [],
+									"children": null
+								},
+								{
+									"text": "<em>Generation:</em> ส่งคำถามร่วมกับข้อมูลที่ดึงมาได้ (Context) ให้ LLM สรุปคำตอบออกมาเป็นภาษาพูดที่เข้าใจง่าย",
+									"plain": [],
+									"children": null
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"type": "diagram",
+			"id": "rag-pipeline"
+		},
+		{
+			"type": "h2",
+			"text": "LangChain Framework & Insurance Policy Lab"
+		},
+		{
+			"type": "p",
+			"text": "ในแลปที่เกี่ยวกับนโยบายกรมธรรม์ (Insurance Policy Lab) อาจารย์มักออกข้อสอบเกี่ยวกับ <strong>ความหมาย, บทบาทของแต่ละ Component ใน LangChain</strong> และวิธีที่ระบบดึงข้อมูลเงื่อนไขความคุ้มครองมาตอบ"
+		},
+		{
+			"type": "h3",
+			"text": "Component หลักใน LangChain ที่ต้องรู้:"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": true,
+				"items": [
+					{
+						"text": "<strong>Document Loaders:</strong> เครื่องมือสำหรับโหลดไฟล์เอกสารเข้าสู่ระบบ (เช่น <code>PyPDFLoader</code> สำหรับอ่านไฟล์ PDF กรมธรรม์ประกันภัย)",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Text Splitters (Chunking):</strong> เนื่องจากเอกสารกรมธรรม์มีความยาวมากและเกิน Context Window ของ LLM จึงต้องตัดแบ่งข้อความออกเป็นส่วนย่อยๆ (Chunks) เพื่อให้ค้นหาความหมายเฉพาะจุดได้แม่นยำ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Embeddings:</strong> โมเดลที่แปลงข้อความให้อยู่ในรูปของชุดตัวเลข (Vector Array) เพื่อให้คอมพิวเตอร์เปรียบเทียบความคล้ายคลึงทางความหมายได้",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Vector Stores:</strong> ฐานข้อมูลที่จัดเก็บ Vector Embeddings (เช่น Chroma, FAISS, Pinecone) เพื่อทำหน้าที่ค้นหาข้อมูล (Retriever)",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Retrieval Chain / QA Chain:</strong> ตัวประสานงานระหว่าง Retriever และ LLM เพื่อนำข้อมูลดิบที่ค้นพบมาสังเคราะห์เป็นคำตอบที่ถูกต้องตามเงื่อนไขกรมธรรม์",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "ตัวอย่างข้อสอบแลปประกันภัย (Insurance Policy RAG):"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>โจทย์:</strong> ลูกค้าถามว่า <em>\"ประกันสุขภาพเล่มนี้คุ้มครองอุบัติเหตุทางรถยนต์หรือไม่ และมีเงื่อนไขยกเว้นอย่างไร?\"</em>",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>การทำงานของระบบ:</strong>",
+						"plain": [],
+						"children": {
+							"ordered": false,
+							"items": [
+								{
+									"text": "ระบบ Retriever จะค้นหาหมวดหมู่ \"ความคุ้มครองอุบัติเหตุ\" และ \"ข้อยกเว้น\" จากไฟล์ PDF กรมธรรม์",
+									"plain": [],
+									"children": null
+								},
+								{
+									"text": "ระบบส่งข้อความมาตราที่เกี่ยวข้องให้ LLM",
+									"plain": [],
+									"children": null
+								},
+								{
+									"text": "LLM ทำหน้าที่สังเคราะห์คำตอบโดยยึดข้อมูลจากเอกสารนั้นเท่านั้น ห้ามคิดเอง เพื่อป้องกันการให้ข้อมูลผิดพลาดทางกฎหมายหรือสัญญาประกันภัย",
+									"plain": [],
+									"children": null
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"type": "h2",
+			"text": "สรุปจุดสำคัญที่ต้องจำสำหรับสอบ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "ความหมายของ RAG และประโยชน์ในการลดความผิดพลาดของ AI",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ความสำคัญของการทำ Chunking และ Vectorization",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "บทบาทของ LangChain ในฐานะตัวเชื่อมต่อ (Orchestrator) ระหว่างแหล่งข้อมูลภายนอกและ LLM",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		}
+	]
+}

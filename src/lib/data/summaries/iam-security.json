@@ -1,0 +1,335 @@
+{
+	"slug": "iam-security",
+	"title": "Core Security Concepts — AWS IAM และความปลอดภัย",
+	"blocks": [
+		{
+			"type": "callout",
+			"text": "<strong>สถานะเอกสาร:</strong> ปรับปรุงสำหรับทบทวน ณ วันที่ 11 ตุลาคม 2026 โดยใช้เอกสาร AWS และข้อมูล AWS Cloud Quest ที่เผยแพร่ให้ตรวจสอบได้\n\n\n<strong>ข้อควรทราบ:</strong> รายละเอียดชื่อ resource, ค่า key, จำนวน instance, VPC, subnet และขั้นตอนในหน้าจออาจต่างกันตามเวอร์ชันหรือโจทย์ที่ระบบ Skill Builder มอบให้ ให้ยึดค่าที่โจทย์ในแล็บระบุเป็นหลัก ส่วนหลักการของบริการด้านล่างใช้ทบทวนสอบได้"
+		},
+		{
+			"type": "h3",
+			"text": "เป้าหมายของแล็บ"
+		},
+		{
+			"type": "p",
+			"text": "เรียนรู้การกำหนดว่าใครหรือบริการใดเข้าถึง AWS resource ได้ และทำอะไรได้บ้าง โดยใช้ IAM users, groups, roles และ policies พร้อมหลักการให้สิทธิ์เท่าที่จำเป็น"
+		},
+		{
+			"type": "h3",
+			"text": "Shared Responsibility Model"
+		},
+		{
+			"type": "p",
+			"text": "AWS แบ่งความรับผิดชอบด้านความปลอดภัยเป็นสองส่วน:"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "*<em>Security </em>of<em> the Cloud:</em>* AWS รับผิดชอบความปลอดภัยของโครงสร้างพื้นฐานคลาวด์ เช่น ศูนย์ข้อมูล ฮาร์ดแวร์ และโครงสร้างพื้นฐานของบริการ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "*<em>Security </em>in<em> the Cloud:</em>* ลูกค้ารับผิดชอบการตั้งค่าตามบริการที่ใช้ เช่น IAM permissions, ข้อมูล, การตั้งค่าเครือข่าย, การจัดการ credentials และการ patch ระบบปฏิบัติการบน EC2",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "p",
+			"text": "ระดับความรับผิดชอบขึ้นกับบริการ ตัวอย่างเช่น EC2 ลูกค้าจัดการ OS ภายใน instance มากกว่าใช้บริการฐานข้อมูลแบบ managed ที่ AWS ดูแลส่วนระบบฐานข้อมูลให้มากขึ้น"
+		},
+		{
+			"type": "h3",
+			"text": "IAM components"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>IAM User:</strong> identity สำหรับบุคคลหรือ workload บางรูปแบบ แต่แนวทางปัจจุบันควรใช้ temporary credentials และ federation/roles เมื่อเหมาะสม แทนการสร้าง long-term access keys โดยไม่จำเป็น",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>IAM Group:</strong> กลุ่มผู้ใช้ที่ช่วยจัดการ permissions ร่วมกัน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>IAM Role:</strong> identity ที่มี permissions ซึ่ง principal ที่ได้รับอนุญาตสามารถ assume เพื่อรับ temporary credentials; ใช้ได้กับ AWS services และการเข้าถึงข้ามบัญชี",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>IAM Policy:</strong> เอกสาร JSON ที่กำหนด permissions เช่น <code>Effect</code>, <code>Action</code>, <code>Resource</code> และอาจมี <code>Condition</code>",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Root user:</strong> identity เจ้าของบัญชีที่มีสิทธิ์ระดับสูงมาก ควรปกป้องอย่างเข้มงวดและไม่ใช้ทำงานประจำวัน",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "หลักการสำคัญ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": true,
+				"items": [
+					{
+						"text": "<strong>Least privilege:</strong> ให้สิทธิ์เฉพาะที่จำเป็นต่อหน้าที่ ไม่ใช้ <code>AdministratorAccess</code> เป็นคำตอบเริ่มต้นสำหรับทุกคน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>MFA:</strong> เปิด multi-factor authentication โดยเฉพาะบัญชีที่มีสิทธิ์สูง และปกป้อง root user",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Temporary credentials:</strong> ใช้ IAM roles/STS หรือระบบ federation เมื่อเหมาะสม ลดการพึ่งพา access keys แบบถาวร",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Protect credentials:</strong> ห้ามฝัง access keys หรือรหัสผ่านไว้ใน source code, repository หรือ AMI โดยไม่จำเป็น",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Review permissions:</strong> ตรวจและลบผู้ใช้ access keys และ permissions ที่ไม่ใช้งาน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Explicit deny:</strong> ในการประเมิน policy การปฏิเสธอย่างชัดเจนมีผลเหนือการอนุญาตที่ขัดแย้งกัน ส่วนการอนุญาตต้องมี policy ที่ให้สิทธิ์และไม่มี explicit deny ที่มีผลบังคับ",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "วิธีอ่าน IAM policy เบื้องต้น"
+		},
+		{
+			"type": "p",
+			"text": "ตัวอย่างโครงสร้าง policy (เป็นเพียงตัวอย่างเพื่อเรียนรู้ ไม่ใช่ policy ที่ควรนำไปใช้จริงโดยไม่ตรวจ resource และเงื่อนไข):"
+		},
+		{
+			"type": "code",
+			"lang": "json",
+			"text": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": [\"s3:ListBucket\"],\n      \"Resource\": \"arn:aws:s3:::example-bucket\"\n    }\n  ]\n}"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<code>Effect</code>: <code>Allow</code> หรือ <code>Deny</code>",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<code>Action</code>: API action ที่อนุญาต/ปฏิเสธ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<code>Resource</code>: ARN ของ resource ที่ policy มีผล",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<code>Condition</code>: เงื่อนไขเพิ่มเติม เช่น IP, tag หรือค่า context อื่น",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "p",
+			"text": "หลักการจำ: <strong>ใคร (Principal) ทำอะไร (Action) กับอะไร (Resource) ภายใต้เงื่อนไขใด (Condition)</strong>"
+		},
+		{
+			"type": "h3",
+			"text": "Identity-based และ resource-based policy"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>Identity-based policy:</strong> ผูกกับ user, group หรือ role เพื่อกำหนดว่าตัวตนนั้นทำอะไรได้",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Resource-based policy:</strong> ผูกกับ resource เพื่อกำหนดว่าใครเข้าถึง resource ได้ เช่น S3 bucket policy",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>IAM role:</strong> เหมาะเมื่อ EC2 หรือ AWS service ต้องเรียกบริการอื่น เช่น ให้ EC2 อ่าน S3 โดยไม่เก็บ access key ไว้ในเครื่อง",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "บริการด้านความปลอดภัยที่ควรรู้"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>AWS IAM:</strong> identity และ permissions",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>AWS KMS:</strong> สร้างและจัดการ cryptographic keys สำหรับการเข้ารหัสที่บริการต่าง ๆ ใช้งาน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>AWS Secrets Manager:</strong> เก็บและจัดการ secrets เช่น database credentials และช่วยจัดการ rotation ในกรณีที่รองรับ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>AWS CloudTrail:</strong> บันทึกกิจกรรม API และเหตุการณ์ที่เกิดในบัญชี เพื่อใช้ตรวจสอบย้อนหลัง",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Amazon CloudWatch:</strong> metrics, logs และ alarms สำหรับ monitoring; ไม่ใช่บริการเดียวกับ CloudTrail",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Amazon GuardDuty:</strong> ตรวจจับภัยคุกคามจากสัญญาณและ log sources ที่รองรับ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>AWS WAF:</strong> ช่วยกรอง/ควบคุม HTTP(S) requests ต่อ web applications",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>AWS Shield:</strong> การป้องกัน DDoS ตามระดับบริการที่ใช้",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "สถานการณ์ที่ออกสอบได้"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "ต้องให้ EC2 เข้าถึง S3 โดยไม่เก็บ access key ในโค้ด → <strong>IAM Role สำหรับ EC2</strong>",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ต้องให้พนักงานหลายคนมี permissions ชุดเดียวกัน → พิจารณา IAM Group หรือแนวทาง workforce identity ที่เหมาะสม",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ต้องเก็บรหัสผ่านฐานข้อมูลอย่างปลอดภัย → <strong>Secrets Manager</strong> หรือบริการจัดการ secret ที่เหมาะสม ไม่ใส่ไว้ใน source code",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ต้องเข้ารหัสข้อมูลด้วย key ที่จัดการได้ → <strong>AWS KMS</strong> (ขึ้นกับบริการและรูปแบบการเข้ารหัส)",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ต้องตรวจสอบว่าใครเรียก API ของ AWS → <strong>CloudTrail</strong>",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ต้องตรวจ metrics และตั้ง alarm เมื่อ CPU สูง → <strong>CloudWatch</strong>",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ต้องปฏิบัติตาม least privilege → ลด Action/Resource ให้เหลือเฉพาะที่ต้องใช้ และตรวจทาน policy",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "จำก่อนสอบ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "IAM = authentication/authorization และ permissions",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "Role ใช้ temporary credentials; เหมาะกับ workload บน AWS",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "Least privilege และ MFA เป็นแนวปฏิบัติสำคัญ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "AWS ดูแล cloud infrastructure ส่วนลูกค้าต้องตั้งค่าทรัพยากรและข้อมูลให้ปลอดภัยตามบริการที่ใช้",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "CloudTrail = audit API activity; CloudWatch = metrics/logs/alarms; KMS = keys; Secrets Manager = secrets",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		}
+	]
+}

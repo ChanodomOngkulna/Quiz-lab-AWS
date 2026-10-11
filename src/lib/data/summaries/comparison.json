@@ -1,0 +1,241 @@
+{
+	"slug": "comparison",
+	"title": "ตารางเปรียบเทียบและแนวข้อสอบ",
+	"blocks": [
+		{
+			"type": "h3",
+			"text": "เลือกบริการจากสถานการณ์"
+		},
+		{
+			"type": "table",
+			"header": ["สถานการณ์", "บริการ/แนวคิดที่ควรนึกถึง", "เหตุผล"],
+			"rows": [
+				["เก็บข้อมูลแบบ key-value/document โดยไม่ต้องดูแล DB server", "DynamoDB", "Managed NoSQL"],
+				["EC2 หลายเครื่องต้องอ่าน/เขียนไฟล์ชุดเดียวกัน", "EFS", "Shared file system ผ่าน NFS"],
+				[
+					"ให้ EC2 เรียก S3 โดยไม่ฝัง access key",
+					"IAM Role",
+					"Temporary credentials และ permissions"
+				],
+				["จำกัดผู้ใช้ให้ทำได้เท่าที่จำเป็น", "IAM policy + least privilege", "ลดสิทธิ์ส่วนเกิน"],
+				["ตรวจสอบว่าใครเรียก AWS API", "CloudTrail", "บันทึกกิจกรรม API"],
+				["ดู CPU และตั้ง alarm", "CloudWatch", "Metrics, logs, alarms"],
+				[
+					"EC2 เสียแล้วต้องเปิดเครื่องใหม่ทดแทน",
+					"EC2 Auto Scaling group",
+					"Health checks และ replacement"
+				],
+				["เพิ่ม/ลด EC2 ตาม workload", "ASG + scaling policy", "ปรับ desired capacity"],
+				[
+					"กระจาย HTTP/HTTPS ไปยังหลาย web servers",
+					"Application Load Balancer",
+					"Layer 7 load balancing"
+				],
+				["ต้องทนต่อความขัดข้องของ AZ", "Multi-AZ design", "ลด single point of failure"],
+				["เก็บ object เช่น รูปภาพ/backup", "Amazon S3", "Object storage"],
+				["จัดการ encryption keys", "AWS KMS", "Key management"],
+				[
+					"เก็บ database password/API secret",
+					"AWS Secrets Manager",
+					"Secret storage และ rotation เมื่อรองรับ"
+				]
+			]
+		},
+		{
+			"type": "h3",
+			"text": "คำถามทบทวนแบบสั้น"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": true,
+				"items": [
+					{
+						"text": "<strong>DynamoDB ต่างจาก RDS อย่างไร?</strong>  ",
+						"plain": [
+							"DynamoDB เป็น NoSQL แบบ key-value/document; RDS เป็น managed relational database ที่ใช้ฐานข้อมูลเชิงสัมพันธ์และ SQL"
+						],
+						"children": null
+					},
+					{
+						"text": "<strong>DynamoDB table มี partition key และ sort key ได้หรือไม่?</strong>  ",
+						"plain": [
+							"ได้ เรียกว่า composite primary key โดย item หลายรายการใช้ partition key เดียวกันได้ แต่คู่ partition key + sort key ต้องไม่ซ้ำกัน"
+						],
+						"children": null
+					},
+					{
+						"text": "<strong>ทำไม EC2 สองเครื่องเห็นไฟล์ชุดเดียวกันเมื่อใช้ EFS?</strong>  ",
+						"plain": [
+							"เพราะทั้งสองเครื่อง mount file system เดียวกันผ่าน NFS ไม่ใช่เก็บไฟล์แยกกันใน local disk"
+						],
+						"children": null
+					},
+					{
+						"text": "<strong>พอร์ตหลักของ NFS ที่ EFS ใช้คืออะไร?</strong>  ",
+						"plain": ["TCP 2049"],
+						"children": null
+					},
+					{
+						"text": "<strong>IAM Role ใช้ทำอะไร?</strong>  ",
+						"plain": [
+							"ให้ identity ที่ได้รับอนุญาต assume role และใช้ temporary credentials เพื่อเรียก AWS services ตาม permissions ของ role"
+						],
+						"children": null
+					},
+					{
+						"text": "<strong>Least privilege หมายถึงอะไร?</strong>  ",
+						"plain": ["ให้สิทธิ์เฉพาะที่จำเป็นต่อการทำงาน ไม่ให้สิทธิ์กว้างเกินความจำเป็น"],
+						"children": null
+					},
+					{
+						"text": "<strong>Auto-healing กับ scaling ต่างกันอย่างไร?</strong>  ",
+						"plain": [
+							"Auto-healing ทดแทน instance ที่ไม่ healthy; scaling เปลี่ยนจำนวน instance ตาม workload/เงื่อนไข"
+						],
+						"children": null
+					},
+					{
+						"text": "<strong>Minimum, desired และ maximum capacity ต่างกันอย่างไร?</strong>  ",
+						"plain": ["Minimum คือขอบล่าง, desired คือจำนวนเป้าหมาย, maximum คือขอบบนของ ASG"],
+						"children": null
+					},
+					{
+						"text": "<strong>CloudWatch กับ CloudTrail ต่างกันอย่างไร?</strong>  ",
+						"plain": [
+							"CloudWatch ใช้ monitor metrics/logs/alarms; CloudTrail ใช้บันทึกกิจกรรม API และเหตุการณ์เพื่อ audit"
+						],
+						"children": null
+					},
+					{
+						"text": "<strong>ทำไมต้องใช้ ALB และหลาย AZ?</strong>  ",
+						"plain": [
+							"ALB กระจาย traffic ไปยัง targets ที่ healthy และหลาย AZ ช่วยลดผลกระทบเมื่อ AZ ใด AZ หนึ่งขัดข้อง"
+						],
+						"children": null
+					},
+					{
+						"text": "<strong>ALB สร้าง EC2 เพิ่มเองหรือไม่?</strong>  ",
+						"plain": [
+							"ไม่ใช่หน้าที่โดยตรงของ ALB; ใช้ร่วมกับ Auto Scaling group หากต้องการปรับจำนวน EC2"
+						],
+						"children": null
+					},
+					{
+						"text": "<strong>สร้าง ALB แล้วเว็บจะ Highly Available ทันทีทุกส่วนหรือไม่?</strong>  ",
+						"plain": [
+							"ไม่ เพราะ application instances, data layer, storage, networking และ dependency อื่นต้องออกแบบให้ทนต่อความขัดข้องด้วย"
+						],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "เช็กลิสต์ก่อนส่งแล็บ"
+		},
+		{
+			"type": "checklist",
+			"items": [
+				"ชื่อ resource และค่าที่กรอกตรงกับโจทย์",
+				"เลือก Region/VPC/subnet/AZ ที่ถูกต้อง",
+				"Security groups อนุญาตเฉพาะ traffic ที่จำเป็น",
+				"DynamoDB key และชนิดข้อมูลถูกต้อง",
+				"EFS mount target และ TCP 2049 ตั้งค่าถูกต้อง",
+				"IAM permissions ใช้หลัก least privilege ตามโจทย์",
+				"ASG มี min/desired/max ที่สอดคล้องกัน",
+				"Health checks และ scaling policy ตั้งค่าตรงตามภารกิจ",
+				"ALB มี subnets/AZ, listener, target group และ health check ถูกต้อง",
+				"ตรวจสถานะหลังสร้าง ไม่สรุปว่าสำเร็จเพียงเพราะกด Create แล้ว",
+				"กดตรวจสอบ/ส่งงานใน Cloud Quest ตามขั้นตอน"
+			]
+		},
+		{
+			"type": "p",
+			"text": "แหล่งอ้างอิง AWS"
+		},
+		{
+			"type": "p",
+			"text": "แหล่งข้อมูลหลักสำหรับตรวจสอบหลักการและรายละเอียดบริการ (เอกสารออนไลน์อาจมีการปรับปรุงต่อเนื่อง):"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": true,
+				"items": [
+					{
+						"text": "AWS Cloud Quest: Cloud Practitioner — รายการภารกิจ  ",
+						"plain": [
+							"<a href=\"https://docs.cloudquest.skillbuilder.aws/coming-soon/index.html\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.cloudquest.skillbuilder.aws/coming-soon/index.html</a>"
+						],
+						"children": null
+					},
+					{
+						"text": "Amazon DynamoDB — Core components  ",
+						"plain": [
+							"<a href=\"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html</a>"
+						],
+						"children": null
+					},
+					{
+						"text": "Amazon EFS — What is Amazon EFS?  ",
+						"plain": [
+							"<a href=\"https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.aws.amazon.com/efs/latest/ug/whatisefs.html</a>"
+						],
+						"children": null
+					},
+					{
+						"text": "Amazon EFS — คู่มือและข้อกำหนดการเชื่อมต่อ NFS  ",
+						"plain": [
+							"<a href=\"https://docs.aws.amazon.com/efs/latest/ug/network-access.html\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.aws.amazon.com/efs/latest/ug/network-access.html</a>"
+						],
+						"children": null
+					},
+					{
+						"text": "IAM — Security best practices  ",
+						"plain": [
+							"<a href=\"https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html</a>"
+						],
+						"children": null
+					},
+					{
+						"text": "EC2 Auto Scaling — What is Amazon EC2 Auto Scaling?  ",
+						"plain": [
+							"<a href=\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html</a>"
+						],
+						"children": null
+					},
+					{
+						"text": "EC2 Auto Scaling — Health checks  ",
+						"plain": [
+							"<a href=\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html</a>"
+						],
+						"children": null
+					},
+					{
+						"text": "EC2 Auto Scaling — Dynamic scaling  ",
+						"plain": [
+							"<a href=\"https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html</a>"
+						],
+						"children": null
+					},
+					{
+						"text": "Application Load Balancer  ",
+						"plain": [
+							"<a href=\"https://docs.aws.amazon.com/elasticloadbalancing/latest/application/\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.aws.amazon.com/elasticloadbalancing/latest/application/</a>"
+						],
+						"children": null
+					},
+					{
+						"text": "AWS Certified Cloud Practitioner — Exam guide / in-scope services  ",
+						"plain": [
+							"<a href=\"https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/clf-02-in-scope-services.html\" target=\"_blank\" rel=\"noopener noreferrer\">https://docs.aws.amazon.com/aws-certification/latest/cloud-practitioner-02/clf-02-in-scope-services.html</a>"
+						],
+						"children": null
+					}
+				]
+			}
+		}
+	]
+}

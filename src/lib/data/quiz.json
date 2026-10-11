@@ -1,0 +1,3970 @@
+[
+	{
+		"id": 1,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "บริษัท E-Commerce กำลังพัฒนาระบบตะกร้าสินค้า (Shopping Cart) สำหรับงานโปรโมชัน Flash Sale ซึ่งคาดว่าจะมีปริมาณการอ่านและเขียนข้อมูลสูงมากอย่างกะทันหัน และโครงสร้างข้อมูลของสินค้าแต่ละชิ้นอาจมีฟิลด์ที่ไม่แน่นอน ทีมพัฒนาควรเลือกใช้บริการฐานข้อมูลใดเพื่อรองรับภาระงานนี้ได้อย่างมีประสิทธิภาพที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Amazon RDS (MySQL)"
+			},
+			{
+				"key": "ข",
+				"text": "Amazon DynamoDB"
+			},
+			{
+				"key": "ค",
+				"text": "Amazon Redshift"
+			},
+			{
+				"key": "ง",
+				"text": "Amazon ElastiCache"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "Amazon RDS เป็น Relational Database ที่มี schema ตายตัว และการสเกลเพื่อรองรับการเขียนระดับสูงอย่างกะทันหันทำได้ยากกว่า"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "Amazon DynamoDB เป็น Managed NoSQL Database ที่ออกแบบมาเพื่อรองรับงาน Key-Value/Document ที่ต้องการ latency ระดับ millisecond สเกลได้ไม่จำกัด และรับข้อมูลแบบ dynamic schema เหมาะกับตะกร้าสินค้า"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "Amazon Redshift เป็น Data Warehouse สำหรับงานวิเคราะห์ข้อมูลขนาดใหญ่ (OLAP) ไม่เหมาะกับงาน transactional ความเร็วสูง (OLTP)"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "Amazon ElastiCache เป็น In-memory Cache ไม่ใช่ฐานข้อมูลหลักสำหรับจัดเก็บข้อมูลอย่างถาวร"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 2,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ในตาราง DynamoDB ชื่อ <code>UserOrders</code> ทีมงานต้องการเก็บประวัติการสั่งซื้อของผู้ใช้ โดยต้องการค้นหาคำสั่งซื้อทั้งหมดของ <code>userId</code> คนใดคนหนึ่ง และเรียงลำดับตาม <code>orderTimestamp</code> การออกแบบ Primary Key ในข้อใดถูกต้องที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ใช้ <code>userId</code> เป็น Partition Key อย่างเดียว"
+			},
+			{
+				"key": "ข",
+				"text": "ใช้ <code>orderTimestamp</code> เป็น Partition Key และ <code>userId</code> เป็น Sort Key"
+			},
+			{
+				"key": "ค",
+				"text": "ใช้ <code>userId</code> เป็น Partition Key และ <code>orderTimestamp</code> เป็น Sort Key"
+			},
+			{
+				"key": "ง",
+				"text": "ใช้ <code>orderId</code> เป็น Partition Key เพียงอย่างเดียว"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "หากใช้ <code>userId</code> เป็น Partition Key อย่างเดียว ค่า <code>userId</code> จะซ้ำกันไม่ได้ ทำให้ผู้ใช้ 1 คนมีได้แค่ 1 คำสั่งซื้อ"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "การใช้ timestamp เป็น Partition Key จะทำให้เกิด Hot Partition เมื่อมีคำสั่งซื้อเข้ามาพร้อมกันในเวลาเดียวกัน"
+			},
+			{
+				"key": "ค",
+				"verdict": "correct",
+				"text": "การใช้ Composite Primary Key โดยให้ <code>userId</code> เป็น Partition Key จะช่วยจัดกลุ่มข้อมูลของผู้ใช้คนเดียวกันไว้ใน Partition เดียวกัน และใช้ <code>orderTimestamp</code> เป็น Sort Key ช่วยเรียงลำดับเวลาการสั่งซื้อได้แม่นยำ"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "การใช้ <code>orderId</code> เป็น Partition Key อย่างเดียวจะทำให้ไม่สามารถดึงประวัติทั้งหมดของ <code>userId</code> ได้อย่างมีประสิทธิภาพโดยไม่สแกนทั้งตาราง"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 3,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "คุณต้องการสร้างตาราง DynamoDB สำหรับเก็บข้อมูลสินค้า ชนิดข้อมูล (Data Type) ในข้อใดต่อไปนี้ที่ <strong>ไม่สามารถ</strong> นำมาใช้เป็น Partition Key ของตารางได้?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "String (S)"
+			},
+			{
+				"key": "ข",
+				"text": "Number (N)"
+			},
+			{
+				"key": "ค",
+				"text": "Boolean (BOOL)"
+			},
+			{
+				"key": "ง",
+				"text": "Binary (B)"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "AWS DynamoDB อนุญาตให้ใช้ Scalar Data Types เพียง 3 ชนิดเท่านั้นในการทำ Primary Key (Partition Key/Sort Key) ได้แก่ String (S), Number (N) และ Binary (B)"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "AWS DynamoDB อนุญาตให้ใช้ Scalar Data Types เพียง 3 ชนิดเท่านั้นในการทำ Primary Key (Partition Key/Sort Key) ได้แก่ String (S), Number (N) และ Binary (B)"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "AWS DynamoDB อนุญาตให้ใช้ Scalar Data Types เพียง 3 ชนิดเท่านั้นในการทำ Primary Key (Partition Key/Sort Key) ได้แก่ String (S), Number (N) และ Binary (B)"
+			},
+			{
+				"key": "ค",
+				"verdict": "correct",
+				"text": "Boolean (BOOL) ไม่สามารถใช้เป็น Primary Key หรือ Partition Key ได้ สามารถใช้เป็น attribute ทั่วไปได้เท่านั้น"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 4,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "บริษัท สื่อสารมวลชนแห่งหนึ่งมี Web Server รันบน EC2 จำนวน 5 เครื่อง ทุกเครื่องจำเป็นต้องอ่านและเขียนไฟล์ภาพข่าวเด็ดลงใน Directory <code>/var/www/html/media</code> ร่วมกันตลอดเวลา โดยต้องการให้ไฟล์อัปเดตตรงกันทันที ควรเลือกโซลูชันใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "เชื่อมต่อ Amazon EBS Volume เดียวกันเข้ากับ EC2 ทั้ง 5 เครื่องพร้อมกัน"
+			},
+			{
+				"key": "ข",
+				"text": "ติดตั้ง Amazon EFS แล้วทำการ Mount ไปยัง Directory ของ EC2 ทุกเครื่อง"
+			},
+			{
+				"key": "ค",
+				"text": "ใช้ Amazon S3 Glacier ในการเก็บไฟล์และดึงข้อมูลผ่าน API"
+			},
+			{
+				"key": "ง",
+				"text": "สร้าง Script ให้ EC2 แต่ละเครื่องทำการ sync ไฟล์หากันผ่าน rsync ทุกๆ 1 นาที"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "EBS Volume ทั่วไป (เช่น gp3/io2) ออกแบบมาให้ Attach กับ EC2 ได้ทีละ 1 เครื่อง (ยกเว้นโหมด Multi-Attach ของ io1/io2 ซึ่งมีข้อจำกัดและต้องใช้ Cluster File System)"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "Amazon EFS เป็น Shared File System ที่ใช้โปรโตคอล NFSv4 ออกแบบมาเพื่อให้ EC2 หลายเครื่อง mount เข้าถึงไฟล์/directory เดียวกันได้พร้อมกันทันที"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "S3 Glacier เป็น Archive Storage ที่ใช้เวลาดึงข้อมูลคืนหลายนาทีถึงหลายชั่วโมง ไม่เหมาะกับการใช้งานของ Web Server"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "การรัน rsync ทุก 1 นาทีทำให้เกิด Real-time delay และสิ้นเปลืองทรัพยากรตัวเครื่อง"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 5,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "EC2 Instance ใน Private Subnet ไม่สามารถ Mount เข้ากับ Amazon EFS ที่เพิ่งสร้างขึ้นมาใหม่ได้ จากการตรวจสอบพบว่า Network Path และ DNS ถูกต้องทั้งหมด ข้อใดคือสาเหตุที่เป็นไปได้มากที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Security Group ของ EFS ไม่ได้เปิดอนุญาต Inbound Traffic บนพอร์ต TCP 2049"
+			},
+			{
+				"key": "ข",
+				"text": "Security Group ของ EFS ไม่ได้เปิดอนุญาต Inbound Traffic บนพอร์ต TCP 80 และ 443"
+			},
+			{
+				"key": "ค",
+				"text": "ไม่ได้เปิดใช้งาน Internet Gateway ใน VPC"
+			},
+			{
+				"key": "ง",
+				"text": "EC2 ไม่ได้ผูก IAM Role ที่มีสิทธิ์ <code>AmazonS3FullAccess</code>"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "EFS ทำงานผ่านโปรโตคอล NFS ซึ่งสื่อสารผ่านพอร์ต TCP 2049 หาก Security Group ของ EFS Mount Target ไม่ได้อนุญาต TCP 2049 จาก Security Group ของ EC2 จะทำให้ mount ไม่ผ่าน"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "พอร์ต 80/443 เป็นพอร์ตสำหรับ HTTP/HTTPS ไม่เกี่ยวข้องกับการสื่อสารของ EFS"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "EFS ทำงานภายใน VPC เดียวกันได้โดยไม่ต้องใช้ Internet Gateway"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "EFS เป็น Network File System ที่ mount ผ่านโปรโตคอล NFS ไม่ได้ใช้ IAM Role ของ S3 ในการเชื่อมต่อไฟล์"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 6,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "สถาปัตยกรรมระบบของคุณจำเป็นต้องมีความทนทานต่อการขัดข้องสูงสุด (High Availability &amp; Fault Tolerance) ในระดับศูนย์ข้อมูล (Data Center) หากต้องการสร้าง EFS File System ควรเลือก Storage Class รูปแบบใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "EFS One Zone"
+			},
+			{
+				"key": "ข",
+				"text": "EFS Regional"
+			},
+			{
+				"key": "ค",
+				"text": "EBS Provisioned IOPS"
+			},
+			{
+				"key": "ง",
+				"text": "S3 Standard-Infrequent Access"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "EFS One Zone จัดเก็บข้อมูลใน Availability Zone (AZ) เดียว หาก AZ นั้นมีปัญหา ข้อมูลจะไม่สามารถเข้าถึงได้"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "EFS Regional จะทำการจัดเก็บข้อมูลกระจายซ้ำซ้อนข้ามหลาย Availability Zones (อย่างน้อย 3 AZs) ภายใน Region นั้นโดยอัตโนมัติ ทำให้ทนทานต่อการล่มของ AZ"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ประเภทของ EFS Storage Class"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ประเภทของ EFS Storage Class"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 7,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "นักพัฒนาซอฟต์แวร์แอบนำ AWS Access Key และ Secret Key ไปเขียนไว้ใน Source Code แล้ว Push ขึ้น Public GitHub Repository การกระทำนี้ละเมิดหลักการความปลอดภัยใดใน AWS Shared Responsibility Model และใครเป็นผู้รับผิดชอบ?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Security of the Cloud — เป็นความรับผิดชอบของ AWS ที่ไม่ได้ตรวจจับ Code บน GitHub"
+			},
+			{
+				"key": "ข",
+				"text": "Security in the Cloud — เป็นความรับผิดชอบของลูกค้าในการปกป้อง Credentials และ Source Code"
+			},
+			{
+				"key": "ค",
+				"text": "Security of the Cloud — เป็นความรับผิดชอบของ GitHub ที่ไม่ได้บล็อกการ Push"
+			},
+			{
+				"key": "ง",
+				"text": "Security in the Cloud — เป็นความรับผิดชอบของ AWS ที่ไม่ปฏิเสธการใช้ Access Key"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "AWS รับผิดชอบ \"Security of the Cloud\" (โครงสร้างพื้นฐาน ศูนย์ข้อมูล ฮาร์ดแวร์) ส่วนลูกค้าทำหน้าที่ดูแล \"Security in the Cloud\" (ข้อมูล การจัดการ IAM credentials และโค้ด)"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "AWS รับผิดชอบ \"Security of the Cloud\" (โครงสร้างพื้นฐาน ศูนย์ข้อมูล ฮาร์ดแวร์) ส่วนลูกค้าทำหน้าที่ดูแล \"Security in the Cloud\" (ข้อมูล การจัดการ IAM credentials และโค้ด)"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "AWS รับผิดชอบ \"Security of the Cloud\" (โครงสร้างพื้นฐาน ศูนย์ข้อมูล ฮาร์ดแวร์) ส่วนลูกค้าทำหน้าที่ดูแล \"Security in the Cloud\" (ข้อมูล การจัดการ IAM credentials และโค้ด)"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "การจัดการ รหัสผ่าน Access Keys และโค้ดเป็นความรับผิดชอบของลูกค้า (Security in the Cloud) ตามโมเดลการแบ่งรับผิดชอบ"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 8,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "คุณต้องการตั้งค่าให้ EC2 Instance สามารถอ่านและเขียนไฟล์ใน Amazon S3 Bucket โดยไม่ต้องฮาร์ดโค้ด Access Keys ไว้ภายในเครื่อง วิธีการที่ปลอดภัยที่สุดตามมาตรฐาน Security Best Practices คือข้อใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "สร้าง IAM User ใหม่ แล้วนำ Access Key ใส่ไว้ใน Environment Variable ของ EC2"
+			},
+			{
+				"key": "ข",
+				"text": "สร้าง IAM Role ที่มี Policy อนุญาต S3 แล้วผูก (Attach) IAM Role เข้ากับ EC2 Instance"
+			},
+			{
+				"key": "ค",
+				"text": "ฝัง Root User Access Key ไว้ในไฟล์การตั้งค่าของแอปพลิเคชัน"
+			},
+			{
+				"key": "ง",
+				"text": "อนุญาตสิทธิ์ S3 Bucket ให้เป็น Public Read/Write เพื่อให้ EC2 เข้าถึงได้โดยไม่ต้องใช้ Key"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "การใช้ Long-term Access Key บนเครื่อง EC2 มีความเสี่ยงหากเครื่องถูกแฮก"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "การใช้ IAM Role ผูกกับ EC2 จะช่วยให้ EC2 ได้รับ Temporary Credentials ผ่าน AWS STS โดยอัตโนมัติ ไม่ต้องจัดการ Key เอง และสอดคล้องกับหลัก Least Privilege"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "อันตรายอย่างยิ่ง ห้ามใช้ Root credentials ในการทำงานประจำวันหรือใส่ในแอปพลิเคชัน"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "การเปิด S3 เป็น Public ทำให้คนทั้งโลกเข้าถึงและแก้ไขข้อมูลได้ สร้างความเสียหายร้ายแรงต่อระบบความปลอดภัย"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 9,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "พนักงานแผนก Finance ต้องการสิทธิ์ในการดูรายงานสรุปใน S3 Bucket แต่ผู้ดูแลระบบกดมอบสิทธิ์ <code>AdministratorAccess</code> ให้เพื่อความสะดวก การกระทำนี้ละเมิดหลักการความปลอดภัยใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Principle of Explicit Deny"
+			},
+			{
+				"key": "ข",
+				"text": "Principle of Least Privilege"
+			},
+			{
+				"key": "ค",
+				"text": "Separation of Multi-Factor Authentication"
+			},
+			{
+				"key": "ง",
+				"text": "Chain of Trust Protocol"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ไม่ตรงกับคำนิยามของการให้สิทธิ์เกินจำเป็น"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ตรงกับคำนิยามของการให้สิทธิ์เกินจำเป็น"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ตรงกับคำนิยามของการให้สิทธิ์เกินจำเป็น"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "หลักการ Least Privilege (สิทธิ์ขั้นต่ำที่จำเป็น) ระบุว่าผู้ใช้หรือระบบควรได้รับสิทธิ์เฉพาะเท่าที่จำเป็นต่อการปฏิบัติงานเท่านั้น การให้สิทธิ์ <code>AdministratorAccess</code> แก่ผู้ใช้ที่ต้องการเพียงอ่านไฟล์ ถือเป็นการให้สิทธิ์เกินจำเป็นอย่างร้ายแรง"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 10,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ในกรณีที่มี IAM Policy หลายใบผูกอยู่กับ User คนเดียวกัน โดย Policy A ระบุ <code>Allow</code> การเข้าถึง S3 Bucket แต่องค์กรมีการใส่ Policy B ที่ระบุ <code>Deny</code> การเข้าถึง S3 Bucket เดียวกัน ผลลัพธ์การประเมินสิทธิ์ (Policy Evaluation) จะเป็นอย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "อนุญาตให้เข้าถึงได้ เพราะ <code>Allow</code> มีผลเหนือกว่า"
+			},
+			{
+				"key": "ข",
+				"text": "ปฏิเสธการเข้าถึง เพราะ <code>Explicit Deny</code> มีผลเหนือกว่า <code>Allow</code> เสมอ"
+			},
+			{
+				"key": "ค",
+				"text": "ระบบจะสุ่มเลือก Policy ที่โหลดมาได้ก่อน"
+			},
+			{
+				"key": "ง",
+				"text": "ขึ้นอยู่กับว่า Policy ใดถูกสร้างขึ้นมาก่อนตามลำดับเวลา"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ไม่ถูกต้องตามลำดับการประเมินสิทธิ์ของ AWS"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ถูกต้องตามลำดับการประเมินสิทธิ์ของ AWS"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ถูกต้องตามลำดับการประเมินสิทธิ์ของ AWS"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "ใน AWS IAM การตัดสินใจประเมินสิทธิ์ใช้หลักการ: หากมี <code>Explicit Deny</code> แม้เพียงข้อเดียวใน Policy ใดๆ ที่เกี่ยวข้อง การร้องขอนั้นจะถูก \"ปฏิเสธทันที\" (Explicit Deny overrides Allow)"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 11,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ฝ่ายความปลอดภัยพบว่ามีคนพยายามแฮกเข้ามาเปลี่ยนค่าการตั้งค่าเครือข่ายใน AWS Console คุณในฐานะผู้ดูแลระบบต้องการตรวจสอบว่า \"ใคร (Who) ทำอะไร (What) เมื่อไหร่ (When) และจาก IP ใด\" คุณควรไปเช็กข้อมูลบันทึกจากบริการใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Amazon CloudWatch"
+			},
+			{
+				"key": "ข",
+				"text": "AWS CloudTrail"
+			},
+			{
+				"key": "ค",
+				"text": "AWS Config"
+			},
+			{
+				"key": "ง",
+				"text": "Amazon GuardDuty"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "CloudWatch ใช้เก็บ Metrics, System Logs และจัดการ Alarms สำหรับการตรวจสอบประสิทธิภาพ"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "AWS CloudTrail บันทึกทุก API Calls และกิจกรรมที่เกิดขึ้นในบัญชี AWS ช่วยให้ตรวจสอบย้อนหลังได้ว่าใครดำเนินการอะไร"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "AWS Config บันทึกประวัติการเปลี่ยนแปลงสถานะ (Configuration) ของ Resource"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "GuardDuty เป็นบริการ Threat Detection ตรวจจับความผิดปกติ ไม่ใช่ระบบค้นหา Audit Trail หลัก"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 12,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "แอปพลิเคชันของคุณจำเป็นต้องติดต่อกับฐานข้อมูล PostgreSQL โดยใช้ Database Password คุณต้องการจัดเก็บ Password นี้อย่างปลอดภัย และต้องการให้ระบบทำการสลับเปลี่ยนรหัสผ่าน (Password Rotation) โดยอัตโนมัติทุกๆ 30 วัน บริการใดตอบโจทย์นี้ได้ดีที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "AWS KMS"
+			},
+			{
+				"key": "ข",
+				"text": "AWS Secrets Manager"
+			},
+			{
+				"key": "ค",
+				"text": "Amazon EBS Encryption"
+			},
+			{
+				"key": "ง",
+				"text": "AWS Systems Manager Parameter Store (Standard)"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "AWS KMS ใช้สำหรับจัดการและสร้าง Encryption Keys ไม่ได้ออกแบบมาเพื่อจัดการสลับเปลี่ยนรหัสผ่าน DB โดยตรง"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "AWS Secrets Manager ออกแบบมาเพื่อเก็บ Secrets เช่น DB Credentials, API Keys และรองรับการทำ Automatic Rotation ร่วมกับ AWS Lambda"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "EBS Encryption ใช้สำหรับการเข้ารหัส Block Storage At-Rest"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "SSM Parameter Store แบบ Standard ไม่รองรับ Automatic Rotation ในตัวเองแบบ Managed"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 13,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "บริษัทของคุณรัน Web Application บน EC2 ใน Auto Scaling Group (ASG) โดยกำหนดค่าไว้ดังนี้: <code>Minimum = 2</code>, <code>Desired = 3</code>, <code>Maximum = 6</code> หากเกิดเหตุการณ์ที่ EC2 Instance จำนวน 1 เครื่องใน ASG เกิด Hardware Failure จนดับไป ระบบ ASG จะดำเนินการอย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ลดค่า Desired Capacity เหลือ 2 เพื่อให้เท่ากับจำนวนเครื่องที่เหลือ"
+			},
+			{
+				"key": "ข",
+				"text": "ทำการเปิด EC2 Instance เครื่องใหม่ขึ้นมาแทนที่ทันที เพื่อรักษาจำนวน Desired Capacity ให้เป็น 3"
+			},
+			{
+				"key": "ค",
+				"text": "ปรับค่า Maximum Capacity ลงเหลือ 5"
+			},
+			{
+				"key": "ง",
+				"text": "ระบบจะไม่ทำอะไรเลยจนกว่าจะมี Scaling Policy สั่งงาน"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ไม่ใช่พฤติกรรมของ Auto-healing"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่พฤติกรรมของ Auto-healing"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่พฤติกรรมของ Auto-healing"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "คุณสมบัติ <strong>Auto-healing</strong> ของ Auto Scaling Group จะพยายามรักษาจำนวนเครื่องให้อยู่ที่ <code>Desired Capacity</code> เสมอ เมื่อเครื่องเดิมตายหรือ Unhealthy ระบบจะสร้าง Instance ใหม่มาแทนทันที"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 14,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ในช่วงเวลา 12:00 - 13:00 น. ของทุกวันทำการ จะมีผู้ใช้งานเข้ามาสั่งอาหารพร้อมกันเป็นจำนวนมาก ทำให้ CPU Utilization ของ EC2 พุ่งสูงเกิน 90% หากคุณต้องการวางแผนรับมือล่วงหน้าโดยไม่อยากรอให้ระบบพุ่งสูงก่อนค่อยขยาย ควรใช้ Scaling Policy รูปแบบใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Target Tracking Scaling Policy"
+			},
+			{
+				"key": "ข",
+				"text": "Scheduled Scaling"
+			},
+			{
+				"key": "ค",
+				"text": "Step Scaling Policy"
+			},
+			{
+				"key": "ง",
+				"text": "Manual Scaling บน AWS CLI"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "Target Tracking จะทำงานเมื่อ Metric พุ่งสูงขึ้นแล้ว (Reactive)"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "Scheduled Scaling เหมาะสำหรับงานที่มีรูปแบบเวลาการใช้งานที่คาดการณ์ได้อย่างแน่นอน (Predictable Workloads) ช่วยให้เพิ่มเครื่องเตรียมไว้ก่อนถึงเวลา 12:00 น."
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "Step Scaling เป็นการขยายตามระดับของ Alarm เมื่อเกิดเหตุการณ์ขึ้นแล้ว"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "Manual Scaling ต้องใช้คนมานั่งกดสั่งงาน ไม่ใช่การทำงานแบบอัตโนมัติ"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 15,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "คุณต้องการตั้งค่า Auto Scaling Group ให้ปรับจำนวน EC2 ตามภาระงานจริง โดยต้องการรักษาระดับการทำงานของ CPU Utilization เฉลี่ยทั้งกลุ่มให้อยู่ที่ประมาณ 60% อยู่เสมอ ควรเลือกใช้ Scaling Policy ชนิดใดที่ตั้งค่าง่ายที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Target Tracking Scaling Policy"
+			},
+			{
+				"key": "ข",
+				"text": "Simple Scaling Policy"
+			},
+			{
+				"key": "ค",
+				"text": "Scheduled Scaling"
+			},
+			{
+				"key": "ง",
+				"text": "Predictive Scaling ตามสถิติในอดีต"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "Target Tracking Scaling เปรียบเหมือนการตั้งอุณหภูมิแอร์ เพียงระบุ Metric และค่าเป้าหมาย (เช่น CPU 60%) ระบบจะคำนวณและเพิ่ม/ลดจำนวน Instance ให้อัตโนมัติ"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "Simple Scaling ต้องตั้งค่า CloudWatch Alarm และกำหนดจำนวนการเพิ่มลดเองหลายขั้นตอน"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่การปรับตามค่า Target Metric ณ เวลาปัจจุบันที่ง่ายที่สุด"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่การปรับตามค่า Target Metric ณ เวลาปัจจุบันที่ง่ายที่สุด"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 16,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ผู้ดูแลระบบสร้าง Launch Template สำหรับ Auto Scaling Group แต่ลืมระบุ Security Group ใน Launch Template ผลลัพธ์จะเกิดอะไรขึ้นเมื่อ Auto Scaling พยายามสร้าง EC2 เครื่องใหม่?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Auto Scaling จะใช้ Security Group หลัก (Default Security Group) ของ VPC โดยอัตโนมัติ"
+			},
+			{
+				"key": "ข",
+				"text": "ระบบจะสร้าง EC2 ไม่สำเร็จ หรือ EC2 ที่ถูกสร้างขึ้นมาจะไม่สามารถรับ Traffic ตามที่ต้องการได้ตามเงื่อนไข Launch Template"
+			},
+			{
+				"key": "ค",
+				"text": "ระบบจะยกเลิก Auto Scaling Group ทันที"
+			},
+			{
+				"key": "ง",
+				"text": "EC2 จะเปิดสิทธิ์พอร์ตทุกพอร์ตเป็น <code>0.0.0.0/0</code>"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ข้อกำหนดของการสร้าง Instance จาก Launch Template ต้องมีการระบุ Network Interface / Security Group ให้สอดคล้อง"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ข้อกำหนดของการสร้าง Instance จาก Launch Template ต้องมีการระบุ Network Interface / Security Group ให้สอดคล้อง"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ข้อกำหนดของการสร้าง Instance จาก Launch Template ต้องมีการระบุ Network Interface / Security Group ให้สอดคล้อง"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "การไม่ระบุหรือกำหนด Security Group ผิดพลาดใน Launch Template จะทำให้ EC2 ที่สร้างขึ้นใหม่ไม่สามารถสื่อสารกับ ALB หรือบริการอื่นได้ ส่งผลให้ Health Check ล้มเหลวและถูก Terminate วนไป"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 17,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "สถาปัตยกรรม Web Application ใช้งาน Application Load Balancer (ALB) กระจาย Traffic ไปยัง EC2 Instances ใน Target Group หากต้องการให้ระบบมีความยืดหยุ่นทนทานระดับ Multi-AZ ข้อใดคือข้อกำหนดเบื้องต้นที่สำคัญที่สุดของ ALB?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ALB จะต้องเปิดใช้งานในอย่างน้อย 2 Availability Zones (AZs)"
+			},
+			{
+				"key": "ข",
+				"text": "ALB จะต้องผูกกับ Elastic IP Address จำนวน 5 IP"
+			},
+			{
+				"key": "ค",
+				"text": "Target Group จะต้องมี EC2 อย่างน้อย 10 เครื่องต่อ 1 AZ"
+			},
+			{
+				"key": "ง",
+				"text": "EC2 ทุกเครื่องจะต้องอยู่ใน Public Subnet เท่านั้น"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "ข้อกำหนดของ Application Load Balancer (ALB) คือต้องเลือก Subnet ในอย่างน้อย <strong>2 Availability Zones</strong> เพื่อให้ตัว ALB เองมีโครงสร้างแบบ High Availability กระจายอยู่ในคนละศูนย์ข้อมูล"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ALB ไม่ได้ใช้ Elastic IP แบบคงที่เหมือน Network Load Balancer (NLB) แต่ใช้ DNS Name"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "จำนวน EC2 ใน Target Group ไม่ได้มีข้อบังคับขั้นต่ำถึง 10 เครื่อง"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "EC2 สามารถ (และควร) อยู่ใน Private Subnet เพื่อความปลอดภัย โดยให้ ALB อยู่ใน Public Subnet คอยรับ Traffic แทน"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 18,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ผู้ใช้งานแจ้งว่าเข้าใช้งานเว็บไซต์ไม่ได้ ขึ้นข้อความ \"502 Bad Gateway\" หรือ \"504 Gateway Timeout\" เมื่อตรวจสอบที่ Application Load Balancer (ALB) พบว่าใน Target Group ขึ้นสถานะ EC2 เป็น \"Unhealthy\" ทั้งหมด ข้อใด <strong>ไม่ใช่</strong> สาเหตุของปัญหานี้?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Web Service (เช่น Nginx/Apache) บน EC2 เกิด Crash หยุดทำงาน"
+			},
+			{
+				"key": "ข",
+				"text": "Path ของ Health Check (เช่น <code>/health</code>) ที่ตั้งไว้บน ALB ไม่ตรงกับหน้าเว็บที่มีอยู่จริงบน EC2 (คืนค่า 404 Not Found)"
+			},
+			{
+				"key": "ค",
+				"text": "Security Group ของ EC2 ไม่ได้เปิดรับ Inbound Traffic จาก Security Group ของ ALB"
+			},
+			{
+				"key": "ง",
+				"text": "Security Group ของ ALB ไม่ได้เปิดอนุญาต Outbound Traffic ไปยังอินเทอร์เน็ต"
+			}
+		],
+		"answerKey": "ง",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ทั้งหมดนี้เป็นสาเหตุหลักที่ทำให้ ALB ทำ Health Check ไม่ผ่านและขึ้น Unhealthy"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ทั้งหมดนี้เป็นสาเหตุหลักที่ทำให้ ALB ทำ Health Check ไม่ผ่านและขึ้น Unhealthy"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ทั้งหมดนี้เป็นสาเหตุหลักที่ทำให้ ALB ทำ Health Check ไม่ผ่านและขึ้น Unhealthy"
+			},
+			{
+				"key": "ง",
+				"verdict": "correct",
+				"text": "การที่ ALB ทำการ Health Check ไปยัง EC2 เป็นการสื่อสารภายใน VPC ไม่เกี่ยวกับการออก Outbound อินเทอร์เน็ตของ ALB"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 19,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ข้อใดอธิบายความแตกต่างหลักระหว่าง Security Group และ Network ACL (NACL) ได้ถูกต้องที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Security Group เป็น Stateful สั่งที่ระดับ Instance / NACL เป็น Stateless สั่งที่ระดับ Subnet"
+			},
+			{
+				"key": "ข",
+				"text": "Security Group เป็น Stateless สั่งที่ระดับ Subnet / NACL เป็น Stateful สั่งที่ระดับ Instance"
+			},
+			{
+				"key": "ค",
+				"text": "Security Group สามารถกำหนดกฎ Deny ได้ / NACL กำหนดได้เฉพาะ Allow"
+			},
+			{
+				"key": "ง",
+				"text": "ทั้งสองอย่างทำงานเหมือนกันทุกประการ ต่างกันแค่ชื่อเรียก"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Security Group</strong> ทำงานระดับ Instance และเป็น <strong>Stateful</strong> (หากอนุญาต Inbound แล้ว Outbound จะผ่านได้อัตโนมัติ) ส่วน <strong>NACL</strong> ทำงานระดับ Subnet และเป็น <strong>Stateless</strong> (ต้องกำหนดกฎทั้ง Inbound และ Outbound แยกกันชัดเจน)"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "นิยามสลับกันและไม่ถูกต้อง"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "นิยามสลับกันและไม่ถูกต้อง"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "NACL สามารถกำหนดกฎ Deny ได้อย่างชัดเจน แต่ Security Group กำหนดได้เฉพาะกฎ Allow เท่านั้น"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 20,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "สถาปัตยกรรมเว็บที่มีประสิทธิภาพและความปลอดภัยสูง (Well-Architected 3-Tier Web Application) ควรวางตำแหน่งของ Component ต่างๆ อย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "วาง ALB, EC2 Web Server และ Database ไว้ใน Public Subnet ทั้งหมด"
+			},
+			{
+				"key": "ข",
+				"text": "วาง ALB ใน Public Subnet ส่วน EC2 Web Server และ Database วางใน Private Subnet"
+			},
+			{
+				"key": "ค",
+				"text": "วาง ALB ใน Private Subnet ส่วน EC2 Web Server และ Database วางใน Public Subnet"
+			},
+			{
+				"key": "ง",
+				"text": "วางทุกอย่างไว้ใน Private Subnet โดยไม่ต้องใช้ Internet Gateway"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "การนำ Database ไปไว้ใน Public Subnet เสี่ยงต่อการถูกโจมตีจากภายนอก"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "โครงสร้างที่ปลอดภัยที่สุดคือ วาง ALB ไว้ใน Public Subnet เพื่อรับ Request จากผู้ใช้ แล้วซ่อน EC2 Web Server และ Database ไว้ใน Private Subnet เพื่อป้องกันการเข้าถึงจากอินเทอร์เน็ตโดยตรง"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "เป็นการวางสถาปัตยกรรมที่ไม่สามารถใช้งานได้จริงหรือไม่มีความปลอดภัย"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "เป็นการวางสถาปัตยกรรมที่ไม่สามารถใช้งานได้จริงหรือไม่มีความปลอดภัย"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 21,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "แอปพลิเคชันต้องการอ่านข้อมูลไฟล์วิดีโอที่มีขนาดใหญ่มากและเข้าถึงนานๆ ครั้ง โดยต้องการจ่ายค่าฝากไฟล์ที่ถูกที่สุด หากต้องการดึงข้อมูลต้องรอได้ประมาณ 3-5 ชั่วโมง ควรเลือก Amazon S3 Storage Class ใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "S3 Standard"
+			},
+			{
+				"key": "ข",
+				"text": "S3 Intelligent-Tiering"
+			},
+			{
+				"key": "ค",
+				"text": "S3 Glacier Flexible Retrieval"
+			},
+			{
+				"key": "ง",
+				"text": "S3 Express One Zone"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ Storage Class ที่เน้นค่าเก็บข้อมูลถูกที่สุดสำหรับไฟล์ Archive ที่รอการดึงข้อมูลได้หลายชั่วโมง"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ Storage Class ที่เน้นค่าเก็บข้อมูลถูกที่สุดสำหรับไฟล์ Archive ที่รอการดึงข้อมูลได้หลายชั่วโมง"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ Storage Class ที่เน้นค่าเก็บข้อมูลถูกที่สุดสำหรับไฟล์ Archive ที่รอการดึงข้อมูลได้หลายชั่วโมง"
+			},
+			{
+				"key": "ค",
+				"verdict": "correct",
+				"text": "S3 Glacier Flexible Retrieval ออกแบบมาเพื่อเก็บข้อมูลสำรองหรือไฟล์ประวัติที่ไม่ค่อยได้เข้าถึง ราคาประหยัดมาก โดยใช้เวลาดึงข้อมูลคืนตั้งแต่ไม่กี่นาทีถึง 3-5 ชั่วโมง"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 22,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "วิศวกรระบบต้องการส่งซอร์สโค้ด และ Configuration Script ไปรันอัตโนมัติขณะที่ EC2 Instance กำลังบูตเครื่องขึ้นมาครั้งแรก ควรใส่ Script ไว้ในส่วนใดของ EC2?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "EC2 User Data"
+			},
+			{
+				"key": "ข",
+				"text": "EC2 Metadata"
+			},
+			{
+				"key": "ค",
+				"text": "Amazon Machine Image (AMI) Header"
+			},
+			{
+				"key": "ง",
+				"text": "Instance Profile Tags"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>EC2 User Data</strong> คือสคริปต์ (เช่น Shell script/Cloud-init) ที่จะถูกประมวลผลเพียงครั้งเดียวตอนที่ EC2 Instance เริ่มต้นบูตเครื่องเป็นครั้งแรก"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "EC2 Metadata คือข้อมูลของตัว Instance เอง (เช่น IP Address, Instance ID) ที่เรียกดูจากภายในเครื่อง"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ช่องทางสำหรับใส่ Script ประมวลผลตอนเปิดเครื่อง"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ช่องทางสำหรับใส่ Script ประมวลผลตอนเปิดเครื่อง"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 23,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "องค์กรต้องการจำกัดขอบเขตไม่ให้โปรแกรมเมอร์ในบัญชี AWS สร้าง EC2 Instance ขนาดใหญ่เกินไป (เช่น <code>m5.24xlarge</code>) เพื่อป้องกันปัญหาค่าใช้จ่ายบานปลาย ควรใช้กลไกการควบคุมใดในระดับสูงสุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Service Control Policies (SCP) ใน AWS Organizations"
+			},
+			{
+				"key": "ข",
+				"text": "EC2 Auto Scaling Policy"
+			},
+			{
+				"key": "ค",
+				"text": "AWS CloudTrail Rule"
+			},
+			{
+				"key": "ง",
+				"text": "IAM Password Policy"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Service Control Policies (SCP)</strong> ใช้กำหนดขอบเขตสิทธิ์สูงสุด (Permission Boundaries) ในระดับองค์กรหรือ AWS Account สามารถบล็อกการสร้าง Resource ชนิดที่ไม่ได้รับอนุญาตได้แม้ User จะเป็น Admin"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ไม่ใช่กลไกการจำกัดสิทธิ์สร้าง Resource ในระดับ Account"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่กลไกการจำกัดสิทธิ์สร้าง Resource ในระดับ Account"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่กลไกการจำกัดสิทธิ์สร้าง Resource ในระดับ Account"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 24,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "หากคุณต้องการให้ EC2 ใน Private Subnet สามารถดาวน์โหลด Software Patch จากอินเทอร์เน็ตได้ แต่ไม่ต้องการให้อินเทอร์เน็ตภายนอกริเริ่มเชื่อมต่อเข้ามายัง EC2 เครื่องนี้ได้ ควรเลือกใช้อุปกรณ์ใดใน Public Subnet?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Internet Gateway"
+			},
+			{
+				"key": "ข",
+				"text": "NAT Gateway"
+			},
+			{
+				"key": "ค",
+				"text": "Egress-Only Internet Gateway (สำหรับ IPv4)"
+			},
+			{
+				"key": "ง",
+				"text": "Customer Gateway"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "Internet Gateway ให้การสื่อสารแบบ 2-way หากตั้งใน Private Subnet จะทำให้เครื่องกลายเป็น Public"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "<strong>NAT Gateway</strong> ทำหน้าที่แปลง Private IP เป็น Public IP เพื่อให้เครื่องใน Private Subnet ออกไปอินเทอร์เน็ตได้แบบ Outbound Only"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "Egress-Only IGW ออกแบบมาเฉพาะสำหรับ IPv6"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "Customer Gateway ใช้สำหรับฝั่ง On-Premises ในการทำ VPN Connection"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 25,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "บริการใดของ AWS ที่ใช้ในการแปลงชื่อโดเมนเนม (เช่น <code>www.example.com</code>) ให้เป็น IP Address พร้อมรองรับการทำ Health Check และ Failover Routing?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Amazon Route 53"
+			},
+			{
+				"key": "ข",
+				"text": "AWS Direct Connect"
+			},
+			{
+				"key": "ค",
+				"text": "Amazon CloudFront"
+			},
+			{
+				"key": "ง",
+				"text": "AWS Global Accelerator"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Amazon Route 53</strong> เป็น Highly Available and Scalable Cloud DNS Web Service"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "Direct Connect คือสายสัญญาณตรงจาก On-premise มายัง AWS"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "CloudFront เป็น CDN สำหรับ Caching Content"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "Global Accelerator ใช้เพิ่มความเร็วเครือข่ายด้วย IP แบบ Static ของ AWS"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 26,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "แอปพลิเคชันประมวลผลวิดีโอทำงานบน EC2 เมื่อประมวลผลเสร็จ จะนำผลลัพธ์ไปเก็บไว้ใน S3 แต่พบว่างานรันล้มเหลวบ่อยครั้งเพราะการเชื่อมต่อหลุดเนื่องจากส่งผ่าน Public Internet คุณควรแก้ปัญหานี้อย่างไรเพื่อเพิ่มความเร็วและความปลอดภัย?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "สร้าง VPC Endpoint สำหรับ Amazon S3"
+			},
+			{
+				"key": "ข",
+				"text": "สร้าง Internet Gateway เพิ่มเติมอีก 2 ตัว"
+			},
+			{
+				"key": "ค",
+				"text": "เปลี่ยนไปใช้ EFS แทน S3"
+			},
+			{
+				"key": "ง",
+				"text": "เปิดพอร์ต 80 ใน Security Group ของ EC2"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>VPC Endpoint (Gateway Endpoint)</strong> ช่วยให้ EC2 ใน VPC สามารถติดต่อกับ Amazon S3 ได้โดยตรงผ่านโครงสร้างเครือข่ายภายในของ AWS โดยไม่ต้องวิ่งผ่าน Public Internet"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ไม่ตรงกับโจทย์การเชื่อมต่อระหว่าง VPC กับ S3 อย่างปลอดภัย"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ตรงกับโจทย์การเชื่อมต่อระหว่าง VPC กับ S3 อย่างปลอดภัย"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ตรงกับโจทย์การเชื่อมต่อระหว่าง VPC กับ S3 อย่างปลอดภัย"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 27,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ฐานข้อมูล Amazon RDS (MySQL) มีภาระงานการอ่านข้อมูล (Read Queries) สูงมากจน CPU ของ Master Database พุ่งสูง 99% คุณควรเลือกปรับสถาปัตยกรรมอย่างไรเพื่อลดภาระงานอ่านของ Master DB?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "สร้าง Read Replicas สำหรับกระจายภาระการอ่านข้อมูล"
+			},
+			{
+				"key": "ข",
+				"text": "เปิดใช้งาน Multi-AZ Deployment"
+			},
+			{
+				"key": "ค",
+				"text": "แปลงฐานข้อมูลเป็น Amazon DynamoDB ทันที"
+			},
+			{
+				"key": "ง",
+				"text": "เพิ่มขนาด EBS Volume ของ Master DB"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Read Replicas</strong> ช่วยคัดลอกข้อมูลแบบ Asynchronous จาก Master DB มาไว้ที่ Instance ใหม่ เพื่อรับภาระงานอ่าน (Read Traffic) โดยเฉพาะ"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "Multi-AZ ทำขึ้นเพื่อ High Availability / Failover ไม่ได้ช่วยรับ Read Traffic"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "การย้ายฐานข้อมูลคนละประเภท (Relational เป็น NoSQL) ต้องรื้อโครงสร้างแอปพลิเคชันทั้งหมด"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "การเพิ่มดิสก์ไม่ได้ช่วยลดภาระประมวลผล CPU ของ Query อ่าน"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 28,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "คุณต้องการย้ายข้อมูลขนาด 500 TB จาก Data Center ในบริษัทขึ้นไปยัง Amazon S3 แต่สายอินเทอร์เน็ตของบริษัทมีความเร็วเพียง 10 Mbps ซึ่งหากส่งผ่านอินเทอร์เน็ตจะต้องใช้เวลาหลายปี โซลูชันใดประหยัดเวลาที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "AWS Snowball Edge"
+			},
+			{
+				"key": "ข",
+				"text": "AWS DataSync ผ่านสายอินเทอร์เน็ตเดิม"
+			},
+			{
+				"key": "ค",
+				"text": "อัปโหลดผ่าน AWS Management Console"
+			},
+			{
+				"key": "ง",
+				"text": "ใช้ multipart upload บน AWS CLI"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>AWS Snowball Edge</strong> เป็นอุปกรณ์ Physical Appliance ที่ AWS ส่งมาให้สำรองข้อมูลในไซต์งาน (ความจุระดับ Terabytes - Petabytes) แล้วส่งกลับไปอัปโหลดเข้า S3 ใน Data Center ของ AWS"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ติดข้อจำกัดเรื่องความเร็วสายอินเทอร์เน็ตเดิมที่ช้าเกินไป"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ติดข้อจำกัดเรื่องความเร็วสายอินเทอร์เน็ตเดิมที่ช้าเกินไป"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ติดข้อจำกัดเรื่องความเร็วสายอินเทอร์เน็ตเดิมที่ช้าเกินไป"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 29,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "หากต้องการเก็บภาพถ่ายของผู้ใช้ในแอปพลิเคชัน โดยต้องการมั่นใจว่าไฟล์จะไม่ถูกแก้ไขหรือลบทำลายเด็ดขาดเป็นเวลา 5 ปี เพื่อปฏิบัติตามข้อกำหนดทางกฎหมาย ควรตั้งค่า S3 อย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "เปิดใช้งาน S3 Object Lock ในโหมด Compliance"
+			},
+			{
+				"key": "ข",
+				"text": "เปิดใช้งาน S3 Versioning แต่ไม่ตั้งค่า Life Cycle"
+			},
+			{
+				"key": "ค",
+				"text": "ใส่ IAM Policy บล็อกการ Delete"
+			},
+			{
+				"key": "ง",
+				"text": "เปิดใช้งาน Server-Side Encryption (SSE-KMS)"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>S3 Object Lock</strong> แบบ Compliance Mode จะป้องกันไม่ให้วัตถุถูกลบหรือแก้ไขโดยผู้ใช้คนใดก็ตาม (รวมถึง Root User) ตลอดระยะเวลาที่กำหนด (WORM - Write Once Read Many)"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ผู้ดูแลระบบที่มีสิทธิ์สูงยังสามารถลบ Versioning, เปลี่ยน IAM Policy หรือลบ Encryption Key ได้"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ผู้ดูแลระบบที่มีสิทธิ์สูงยังสามารถลบ Versioning, เปลี่ยน IAM Policy หรือลบ Encryption Key ได้"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ผู้ดูแลระบบที่มีสิทธิ์สูงยังสามารถลบ Versioning, เปลี่ยน IAM Policy หรือลบ Encryption Key ได้"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 30,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ข้อใดคือคุณสมบัติเด่นของ <strong>Amazon DynamoDB On-Demand Capacity Mode</strong>?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ระบบจะปรับสเกล Provisioned Read/Write Capacity Units (RCUs/WCUs) ขึ้นลงตามภาระงานจริงทันที โดยไม่ต้องวางแผนจอง Capacity ล่วงหน้า"
+			},
+			{
+				"key": "ข",
+				"text": "คิดราคาแบบเหมาจ่ายรายเดือนเท่ากันตลอดปี"
+			},
+			{
+				"key": "ค",
+				"text": "บังคับให้ต้องใช้คู่กับ ElastiCache เสมอ"
+			},
+			{
+				"key": "ง",
+				"text": "รองรับการเชื่อมต่อเฉพาะผ่าน SQL Query เท่านั้น"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "On-Demand Mode ช่วยจัดการภาระงานที่ไม่แน่นอนโดยปรับเปลี่ยน Read/Write Throughput ตาม Request ที่เข้ามาจริงทันทีและจ่ายตามการใช้งานจริง"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ไม่ใช่คุณสมบัติของ DynamoDB On-Demand"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่คุณสมบัติของ DynamoDB On-Demand"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่คุณสมบัติของ DynamoDB On-Demand"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 31,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "เมื่อต้องการสร้างโครงสร้างพื้นฐานบน AWS (เช่น VPC, Subnets, EC2, RDS) ซ้ำๆ หลายๆ Environment (Dev/Test/Prod) ให้แม่นยำและเป็นมาตรฐานเดียวกัน ควรใช้บริการใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "AWS CloudFormation (Infrastructure as Code)"
+			},
+			{
+				"key": "ข",
+				"text": "AWS Elastic Beanstalk"
+			},
+			{
+				"key": "ค",
+				"text": "AWS CodeDeploy"
+			},
+			{
+				"key": "ง",
+				"text": "AWS Systems Manager"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>AWS CloudFormation</strong> ช่วยให้เราเขียน Code (JSON/YAML) เพื่อสร้างและจัดการ AWS Resources ทั้งหมดได้ในรูปแบบ Infrastructure as Code (IaC)"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "Elastic Beanstalk เป็น PaaS สำหรับ Deploy Application ไม่เน้นการจัดการ Network Infrastructure เชิงลึก"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "เป็นเครื่องมือสำหรับการ Deploy Code และจัดการ OS / Patch บนเครื่อง"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "เป็นเครื่องมือสำหรับการ Deploy Code และจัดการ OS / Patch บนเครื่อง"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 32,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "แอปพลิเคชันประมวลผลงานภาพขนาดใหญ่ ใช้เวลาประมวลผลแต่ละงานนานประมาณ 10 วินาที หากต้องการรันโค้ด Python แบบ Serverless โดยไม่ต้องสร้างหรือดูแล EC2 Instance เลย ควรเลือกใช้บริการใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "AWS Lambda"
+			},
+			{
+				"key": "ข",
+				"text": "Amazon EC2 Spot Instances"
+			},
+			{
+				"key": "ค",
+				"text": "AWS Fargate"
+			},
+			{
+				"key": "ง",
+				"text": "Amazon ECS"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>AWS Lambda</strong> เป็น Event-driven Serverless Compute Service ที่ให้รันโค้ดโดยไม่ต้องจัดการ Server คิดค่าบริการตามเวลาที่โค้ดรันจริงเป็นมิลลิวินาที"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "Spot Instance ยังต้องดูแล EC2 ส่วน Fargate/ECS เป็น Container Management"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "Spot Instance ยังต้องดูแล EC2 ส่วน Fargate/ECS เป็น Container Management"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "Spot Instance ยังต้องดูแล EC2 ส่วน Fargate/ECS เป็น Container Management"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 33,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "หากคุณต้องการกระจายไฟล์สแตติก (Static Content) เช่น ภาพ วิดีโอ และไฟล์ CSS/JS ไปยังผู้ใช้ทั่วโลกให้โหลดได้รวดเร็วที่สุดด้วย Latency ต่ำสุด ควรใช้บริการใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Amazon CloudFront"
+			},
+			{
+				"key": "ข",
+				"text": "AWS Global Accelerator"
+			},
+			{
+				"key": "ค",
+				"text": "Amazon Route 53"
+			},
+			{
+				"key": "ง",
+				"text": "Amazon S3 Transfer Acceleration"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Amazon CloudFront</strong> เป็น Content Delivery Network (CDN) ทำหน้าที่ Cache ข้อมูลไว้ที่ Edge Locations ทั่วโลก ช่วยลด Latency ในการดึงไฟล์"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ไม่ใช่บริการ CDN หลักในการทำ Content Caching"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่บริการ CDN หลักในการทำ Content Caching"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่บริการ CDN หลักในการทำ Content Caching"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 34,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ในกรณีที่ระบบเกิดปัญหาร้ายแรง ณ Availability Zone A (AZ-A) ล่มทั้งศูนย์ข้อมูล โครงสร้างแบบ Multi-AZ RDS จะมีพฤติกรรมอย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ระบบจะทำการ Failover โดยสลับไปใช้ Standby Instance ใน AZ-B เป็น Master ตัวใหม่โดยอัตโนมัติ"
+			},
+			{
+				"key": "ข",
+				"text": "ฐานข้อมูลจะหยุดทำงานและต้องรอให้วิศวกรเข้าไปสั่ง Restore ข้อมูลจาก Backup"
+			},
+			{
+				"key": "ค",
+				"text": "ข้อมูลทั้งหมดในฐานข้อมูลจะสูญหายทันที"
+			},
+			{
+				"key": "ง",
+				"text": "ระบบจะส่งข้อความแจ้งเตือน แต่แอปพลิเคชันยังคงส่งข้อมูลไปที่ AZ-A เดิม"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "Multi-AZ RDS จะทำการคัดลอกข้อมูลแบบ Synchronous ไปยัง Standby Instance ในคนละ AZ เมื่อ Primary AZ ล่ม ระบบจะสลับ DNS (Automatic Failover) ไปที่ Standby โดยอัตโนมัติภายในไม่กี่นาที"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 35,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "บริการใดใช้สำหรับตรวจจับภัยคุกคามและความผิดปกติในบัญชี AWS (Threat Detection) เช่น มีการพยายามสุ่มรหัสผ่าน หรือมี EC2 ถูกใช้เป็น Botnet ขุดเงินดิจิทัล โดยใช้ AI/ML วิเคราะห์?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Amazon GuardDuty"
+			},
+			{
+				"key": "ข",
+				"text": "AWS WAF"
+			},
+			{
+				"key": "ค",
+				"text": "AWS Shield"
+			},
+			{
+				"key": "ง",
+				"text": "Amazon Inspector"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Amazon GuardDuty</strong> ตรวจจับภัยคุกคามด้วย ML โดยวิเคราะห์จาก VPC Flow Logs, CloudTrail Logs และ DNS Logs"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "AWS WAF ป้องกัน Web Exploits ในระดับ Layer 7"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "AWS Shield ป้องกันการโจมตีแบบ DDoS"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "Inspector ใช้สแกนช่องโหว่ (Vulnerability Scanning) ของ OS และ Container"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 36,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "หากคุณต้องการจำกัดการเข้าถึง Web Application ให้เฉพาะผู้ใช้จากประเทศไทยเท่านั้น และบล็อก SQL Injection การโจมตีเว็บไซต์ ควรติดตั้งบริการใดไว้หน้า ALB?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "AWS WAF (Web Application Firewall)"
+			},
+			{
+				"key": "ข",
+				"text": "Amazon Cognito"
+			},
+			{
+				"key": "ค",
+				"text": "AWS Shield Advanced"
+			},
+			{
+				"key": "ง",
+				"text": "Network ACL"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>AWS WAF</strong> กรอง Traffic ใน Layer 7 สามารถตั้งกฎ Geo-match (บล็อกตามประเทศ) และกรอง SQL Injection / Cross-Site Scripting (XSS) ได้"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ Web Application Firewall"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ Web Application Firewall"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่ Web Application Firewall"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 37,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ข้อใดอธิบายหลักการทำงานของ <strong>AWS Key Management Service (KMS)</strong> ได้ถูกต้องที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "เป็นบริการสร้างและดูแลจัดการ Cryptographic Keys เพื่อใช้ในการเข้ารหัสข้อมูลข้ามบริการต่างๆ ของ AWS"
+			},
+			{
+				"key": "ข",
+				"text": "เป็นบริการจัดเก็บ Passwords และ API Keys ในรูปแบบ Plaintext"
+			},
+			{
+				"key": "ค",
+				"text": "เป็นบริการสแกนหาไวรัสใน S3 Bucket"
+			},
+			{
+				"key": "ง",
+				"text": "เป็นบริการออกใบรับรอง SSL/TLS สำหรับเว็บไซต์"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>AWS KMS</strong> เป็น Managed Service ที่ใช้สร้างและควบคุม Encryption Keys ที่ใช้ในการเข้ารหัสข้อมูล (At-Rest Encryption)"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "นิยามไม่ถูกต้อง"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "นิยามไม่ถูกต้อง"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "นิยามไม่ถูกต้อง"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 38,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "แอปพลิเคชันของคุณต้องการส่งข้อความการแจ้งเตือน (Push Notifications) เช่น อีเมล หรือ SMS ไปยังผู้ใช้จำนวนมากเมื่อเกิดเหตุการณ์ในระบบ ควรเลือกใช้บริการใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Amazon SNS (Simple Notification Service)"
+			},
+			{
+				"key": "ข",
+				"text": "Amazon SQS (Simple Queue Service)"
+			},
+			{
+				"key": "ค",
+				"text": "Amazon SES (Simple Email Service)"
+			},
+			{
+				"key": "ง",
+				"text": "AWS Step Functions"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Amazon SNS</strong> เป็นบริการส่งข้อความแบบ Pub/Sub (Publisher/Subscriber) รองรับการส่งทั้ง SMS, Email, HTTP endpoints และ Mobile Push"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "Amazon SQS เป็น Message Queue สำหรับ Decouple ระบบ"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "SES เน้นการส่ง Transactional Email ขนาดใหญ่"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "Step Functions ใช้เรียงลำดับ Workflow ของ Serverless"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 39,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "ข้อใดคือประโยชน์หลักของการทำ <strong>Decoupling Architecture</strong> โดยใช้ Amazon SQS ร่วมกับ EC2?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ช่วยให้อุปกรณ์แต่ละส่วนทำงานแยกเป็นอิสระต่อกัน (Asynchronous) หากส่วนประมวลผลล่ม ข้อความจะไม่สูญหายและถูกเก็บไว้ในคิว"
+			},
+			{
+				"key": "ข",
+				"text": "ช่วยเพิ่มความเร็วของอินเทอร์เน็ตในการเชื่อมต่อ"
+			},
+			{
+				"key": "ค",
+				"text": "ช่วยลดขนาดไฟล์ภาพใน S3 Bucket"
+			},
+			{
+				"key": "ง",
+				"text": "ช่วยแปลงรหัส SQL Query ให้ทำงานได้เร็วขึ้น"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "การใช้ Message Queue (SQS) ช่วยแยก Component (Decouple) ออกจากกัน หาก Worker ล่ม Message ยังคงอยู่ในคิว เมื่อ Worker กลับมาทำงานก็สามารถประมวลผลต่อได้โดยไม่มีข้อมูลสูญหาย"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 40,
+		"category": "aws",
+		"categoryLabel": "AWS Cloud Services & Architecture (ข้อ 1 - 40)",
+		"scenario": "คุณต้องการประหยัดค่าใช้จ่ายสำหรับ EC2 Instance ที่ต้องเปิดทำงานตลอดเวลา 24x7 เป็นระยะเวลา 3 ปีติดต่อกัน ควรเลือกซื้อ Pricing Model รูปแบบใดจึงจะคุ้มค่าที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Reserved Instances (RIs) หรือ Savings Plans"
+			},
+			{
+				"key": "ข",
+				"text": "On-Demand Instances"
+			},
+			{
+				"key": "ค",
+				"text": "Spot Instances"
+			},
+			{
+				"key": "ง",
+				"text": "Dedicated Hosts แบบ On-Demand"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Savings Plans / Reserved Instances</strong> เหมาะกับภาระงานที่คงที่และมั่นใจว่าจะใช้อย่างน้อย 1 ถึง 3 ปี มอบส่วนลดสูงสุดถึง 72% เมื่อเทียบกับ On-Demand"
+			},
+			{
+				"key": "ข",
+				"verdict": "wrong",
+				"text": "On-Demand มีราคาแพงที่สุดต่อชั่วโมง"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "Spot Instance ราคาถูกจริง แต่อาจถูกดึงเครื่องคืนได้ตลอดเวลา ไม่เหมาะกับงานที่ต้องการความต่อเนื่อง 24x7"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 41,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "บริษัทประกันภัยแห่งหนึ่งพัฒนาแชตบอตตอบคำถามกรมธรรม์ แต่พบปัญหาว่า AI มักแต่งคำตอบขึ้นมาเอง เช่น บอกว่ากรมธรรม์คุ้มครองอุบัติเหตุทางอวกาศ ทั้งๆ ที่ไม่มีในสัญญา ปัญหานี้เรียกว่าอะไร และเทคนิคใดนำมาใช้แก้ไขได้ตรงจุดที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Overfitting — แก้ด้วยการลดขนาดโมเดล"
+			},
+			{
+				"key": "ข",
+				"text": "Hallucination — แก้ด้วยเทคนิค RAG (Retrieval-Augmented Generation)"
+			},
+			{
+				"key": "ค",
+				"text": "Concept Drift — แก้ด้วยการทำ Fine-tuning โมเดลใหม่ทุกวัน"
+			},
+			{
+				"key": "ง",
+				"text": "Data Leakage — แก้ด้วยการทำ Encryption"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ไม่ใช่นิยามของการที่ LLM แต่งข้อมูลเท็จขึ้นมาเอง"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่นิยามของการที่ LLM แต่งข้อมูลเท็จขึ้นมาเอง"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่นิยามของการที่ LLM แต่งข้อมูลเท็จขึ้นมาเอง"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "ปรากฏการณ์ที่ LLM สร้างข้อมูลที่ไม่เป็นความจริงเรียกว่า <strong>Hallucination</strong> ซึ่งแก้ไขได้ด้วย <strong>RAG</strong> โดยการดึงข้อความจริงจากเอกสาร (Context) มาป้อนให้ LLM อ่านก่อนสังเคราะห์คำตอบ"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 42,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ในกระบวนการทำ RAG สำหรับเอกสารเงื่อนไขกรมธรรม์ประกันภัยความยาว 500 หน้า เหตุใดเราจึงต้องนำเอกสารมาผ่านขั้นตอน <strong>Text Splitter (Chunking)</strong> ก่อนแปลงเป็น Vector?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "เพื่อให้ไฟล์มีขนาดเล็กพอที่จะแนบส่งผ่าน Email ได้"
+			},
+			{
+				"key": "ข",
+				"text": "เพราะ LLM มีข้อจำกัดเรื่อง Context Window และการแบ่ง Chunk ช่วยให้การค้นหาตำแหน่งข้อมูลที่เกี่ยวข้อง (Semantic Search) มีความแม่นยำสูงขึ้น"
+			},
+			{
+				"key": "ค",
+				"text": "เพื่อทำการลบข้อความที่เป็นความลับออกจากเอกสารโดยอัตโนมัติ"
+			},
+			{
+				"key": "ง",
+				"text": "เพราะ Vector Database ไม่รองรับภาษาไทยหากไม่ตัดคำ"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ไม่ใช่เหตุผลทางเทคนิคของการทำ Chunking"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่เหตุผลทางเทคนิคของการทำ Chunking"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่เหตุผลทางเทคนิคของการทำ Chunking"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "การทำ Chunking ช่วยย่อยเอกสารขนาดใหญ่ให้อยู่ในขนาดที่เหมาะสม ทำให้เมื่อค้นหาความหมาย ข้อความส่วนที่ตรงกับคำถามที่สุดจะถูกดึงไปใช้งานได้ตรงจุด และไม่เกินขีดจำกัด Context Window ของ LLM"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 43,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "เมื่อเราใช้คำสั่งแปลงข้อความ \"ข้อยกเว้นการคุ้มครองโรคที่เป็นมาก่อนการทำประกัน\" ไปเป็น <strong>Vector Embedding</strong> ผลลัพธ์ที่ได้จากโมเดล Embedding จะอยู่ในรูปแบบใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ไฟล์ภาพขาวดำ (.png) ที่แสดงความหนาแน่นของอักขระ"
+			},
+			{
+				"key": "ข",
+				"text": "ชุดอาร์เรย์ของตัวเลขทศนิยม (Array of Floating-Point Numbers) ในพื้นที่หลายมิติ"
+			},
+			{
+				"key": "ค",
+				"text": "รหัสลับ Hash MD5 ที่ไม่สามารถย้อนกลับได้"
+			},
+			{
+				"key": "ง",
+				"text": "ตาราง SQL Database ที่มี Primary Key เป็น String"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ไม่ใช่โครงสร้างของ Vector Embedding"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่โครงสร้างของ Vector Embedding"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่โครงสร้างของ Vector Embedding"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "Embedding Model ทำหน้าที่แปลงความหมายของข้อความมนุษย์ให้กลายเป็นชุดตัวเลขความยาวคงที่ (Dense Vector / Array of Floats) เพื่อนำไปเปรียบเทียบความคล้ายคลึงทางความหมายด้วยการคำนวณทางคณิตศาสตร์ (เช่น Cosine Similarity)"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 44,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ในระบบ RAG หากต้องการค้นหาข้อความในเอกสารที่มี \"ความหมายคล้ายคลึง\" กับคำถามของผู้ใช้ แม้ว่าคำถามนั้นจะไม่ได้ใช้คำ keyword ตรงกับในเอกสารเลยก็ตาม ระบบจะใช้วิธีการค้นหาแบบใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Exact Keyword Matching"
+			},
+			{
+				"key": "ข",
+				"text": "Semantic Search โดยคำนวณระยะห่างของ Vector Embedding"
+			},
+			{
+				"key": "ค",
+				"text": "Regular Expression (Regex)"
+			},
+			{
+				"key": "ง",
+				"text": "Binary Search Tree บน Index"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "เป็นการค้นหาตามตัวอักษร หากใช้คำไม่ตรงกันจะไม่พบข้อมูล"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "เป็นการค้นหาตามตัวอักษร หากใช้คำไม่ตรงกันจะไม่พบข้อมูล"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "เป็นการค้นหาตามตัวอักษร หากใช้คำไม่ตรงกันจะไม่พบข้อมูล"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "Semantic Search ค้นหาจากความหมายผ่านระยะห่างของ Vector ในพื้นที่หลายมิติ ทำให้เข้าใจความหมายของคำถามแม้จะใช้คำศัพท์คนละคำกัน (เช่น \"เสียชีวิต\" กับ \"สวรรคต\" หรือ \"เข้าโรงพยาบาล\" กับ \"ผู้ป่วยใน\")"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 45,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "นักพัฒนากำลังเขียนโค้ดด้วย LangChain เพื่ออ่านไฟล์เงื่อนไขกรมธรรม์ที่เป็นไฟล์ <code>.pdf</code> ใน Python Class / Component ใดของ LangChain ที่ต้องเลือกใช้?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>TextSplitter</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>PyPDFLoader</code> (หรือ Document Loaders ที่เกี่ยวข้อง)"
+			},
+			{
+				"key": "ค",
+				"text": "<code>Chroma</code> Vector Store"
+			},
+			{
+				"key": "ง",
+				"text": "<code>PromptTemplate</code>"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ใช้สำหรับตัดแบ่งข้อความหลังจากโหลดเข้ามาแล้ว"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "<code>Document Loaders</code> (เช่น <code>PyPDFLoader</code>) ทำหน้าที่อ่านและดึงข้อความพร้อม Metadata จากแหล่งข้อมูลภายนอก เช่น ไฟล์ PDF"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ใช้สำหรับจัดเก็บ Vector"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ใช้สำหรับสร้างรูปแบบคำสั่งป้อนให้ LLM"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 46,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ข้อใดเรียงลำดับขั้นตอนกระบวนการทำ RAG (Retrieval-Augmented Generation) ได้ถูกต้องที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Generation -&gt; Retrieval -&gt; Chunking -&gt; Ingestion"
+			},
+			{
+				"key": "ข",
+				"text": "Ingestion (Load/Chunk/Embed) -&gt; Vector Storage -&gt; Retrieval -&gt; Generation"
+			},
+			{
+				"key": "ค",
+				"text": "Retrieval -&gt; Ingestion -&gt; Generation -&gt; Vector Storage"
+			},
+			{
+				"key": "ง",
+				"text": "Generation -&gt; Vector Storage -&gt; Retrieval -&gt; Ingestion"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ลำดับการทำงานผิดพลาด"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ลำดับการทำงานผิดพลาด"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ลำดับการทำงานผิดพลาด"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "ลำดับที่ถูกต้องคือ: 1. อ่านและย่อยเอกสาร (Ingestion: Load/Chunk/Embed) -&gt; 2. เก็บลงฐานข้อมูล (Vector Storage) -&gt; 3. ค้นหาข้อความที่เกี่ยวข้องเมื่อมีคำถาม (Retrieval) -&gt; 4. ส่งข้อความให้ LLM สร้างคำตอบ (Generation)"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 47,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "หากคุณต้องการเลือกใช้งาน Vector Database แบบ Open-source ที่สามารถรัน Local บนเครื่องเพื่อทดสอบใน LangChain Lab ได้ง่ายโดยไม่ต้องสมัคร Cloud Service ภายนอก ควรเลือกตัวใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Amazon RDS"
+			},
+			{
+				"key": "ข",
+				"text": "Chroma / FAISS"
+			},
+			{
+				"key": "ค",
+				"text": "Google BigQuery"
+			},
+			{
+				"key": "ง",
+				"text": "Redis Sentinel"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "เป็นฐานข้อมูลประเภท Relational / Data Warehouse / In-memory Key-Value ทั่วไป"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "เป็นฐานข้อมูลประเภท Relational / Data Warehouse / In-memory Key-Value ทั่วไป"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "เป็นฐานข้อมูลประเภท Relational / Data Warehouse / In-memory Key-Value ทั่วไป"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "<strong>Chroma</strong> และ <strong>FAISS</strong> เป็น Vector Stores ที่นิยมใช้มากในพัฒนาโปรเจกต์ LangChain สามารถรันแบบ Local ในหน่วยความจำหรือไฟล์โฟลเดอร์ได้ง่ายดาย"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 48,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ในการตั้งค่า Prompt Template สำหรับระบบ RAG ตอบคำถามประกันภัย ข้อความ System Prompt ในข้อใดที่ <strong>เข้มงวดและปลอดภัยที่สุด</strong> ในการป้องกันไม่ให้ AI ให้ข้อมูลผิดพลาดทางกฎหมาย?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "\"คุณคือผู้เชี่ยวชาญ ตอบคำถามอะไรก็ได้ตามความรู้ที่คุณมี\""
+			},
+			{
+				"key": "ข",
+				"text": "\"จงตอบคำถามโดยใช้เฉพาะข้อมูลจาก Context ที่กำหนดให้เท่านั้น หากไม่มีข้อมูลใน Context ให้ตอบว่า 'ไม่พบข้อมูลในเงื่อนไขกรมธรรม์' ห้ามแต่งคำตอบเองเด็ดขาด\""
+			},
+			{
+				"key": "ค",
+				"text": "\"จงคาดเดาคำตอบที่น่าจะเป็นไปได้มากที่สุดหากไม่มีเอกสารอ้างอิง\""
+			},
+			{
+				"key": "ง",
+				"text": "\"ให้ค้นหาข้อมูลจาก Google เพิ่มเติมหากเอกสารระบุไว้ไม่ชัดเจน\""
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "เปิดโอกาสให้เกิด Hallucination หรือดึงข้อมูลภายนอกที่อาจขัดกับสัญญาทางกฎหมายของกรมธรรม์"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "เปิดโอกาสให้เกิด Hallucination หรือดึงข้อมูลภายนอกที่อาจขัดกับสัญญาทางกฎหมายของกรมธรรม์"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "เปิดโอกาสให้เกิด Hallucination หรือดึงข้อมูลภายนอกที่อาจขัดกับสัญญาทางกฎหมายของกรมธรรม์"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "การระบุ Grounding Constraint อย่างชัดเจนใน System Prompt บังคับให้ AI สังเคราะห์คำตอบจาก Context ที่ดึงมาได้เท่านั้น ป้องกันปัญหาทางกฎหมายประกันภัยได้ดีที่สุด"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 49,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "เมื่อมีการปรับขนาดของ Chunk Size ในการทำ Text Splitting เป็นขนาดที่ <strong>เล็กมากๆ</strong> (เช่น 50 ตัวอักษร) ผลกระทบที่จะเกิดขึ้นกับระบบ RAG คืออะไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ระบบจะตอบคำถามได้รวดเร็วขึ้นและได้ความหมายที่สมบูรณ์เสมอ"
+			},
+			{
+				"key": "ข",
+				"text": "บริบท (Context) ของข้อความอาจขาดออกจากกัน ทำให้ LLM ไม่เข้าใจเนื้อหาโดยรวมของมาตรานั้นๆ"
+			},
+			{
+				"key": "ค",
+				"text": "ไม่เกิดผลกระทบใดๆ ทั้งสิ้น"
+			},
+			{
+				"key": "ง",
+				"text": "Vector Database จะปฏิเสธการจัดเก็บข้อมูล"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ข้อสันนิษฐานไม่ถูกต้อง"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ข้อสันนิษฐานไม่ถูกต้อง"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ข้อสันนิษฐานไม่ถูกต้อง"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "การตั้ง Chunk Size เล็กเกินไป ทำให้ประโยคหรือบริบทที่สำคัญหลุดออกจากกัน (เช่น เงื่อนไขตัวเลขกับข้อยกเว้นอยู่คนละ Chunk) ส่งผลให้ LLM ได้ข้อมูลไม่ครบถ้วนและตอบผิดได้"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 50,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "Component ใดใน LangChain ที่ทำหน้าที่เป็นตัวกลางในการเชื่อมโยง \"Retriever\" (ตัวค้นหาข้อมูล) และ \"LLM\" (ตัวสังเคราะห์ภาษา) เข้าด้วยกันเพื่อสร้างคำตอบ?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>DocumentLoader</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>RetrievalQA</code> Chain (หรือ <code>create_retrieval_chain</code>)"
+			},
+			{
+				"key": "ค",
+				"text": "<code>CharacterTextSplitter</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>EmbeddingModel</code>"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "เป็นเพียง Component ย่อยเฉพาะหน้าที่"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "เป็นเพียง Component ย่อยเฉพาะหน้าที่"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "เป็นเพียง Component ย่อยเฉพาะหน้าที่"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "<strong>RetrievalQA Chain</strong> เป็นตัวร้อยเรียง workflow โดยนำคำถามไปส่งให้ Retriever ค้นหา Context แล้วเอา Context + คำถาม ส่งต่อไปให้ LLM สรุปคำตอบออกมา"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 51,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "การกำหนดพารามิเตอร์ <code>chunk_overlap</code> ใน <code>RecursiveCharacterTextSplitter</code> มีวัตถุประสงค์หลักอย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "เพื่อเพิ่มความเร็วในการอ่านไฟล์ PDF"
+			},
+			{
+				"key": "ข",
+				"text": "เพื่อป้องกันไม่ให้ข้อมูลสำคัญตรงขอบเขตการตัดแบ่ง (Boundary) ขาดหายไป โดยการเชื่อมข้อความส่วนท้ายของ Chunk ก่อนหน้าเข้ากับส่วนต้นของ Chunk ถัดไป"
+			},
+			{
+				"key": "ค",
+				"text": "เพื่อบีบอัดขนาดของ Vector ให้เล็กที่สุด"
+			},
+			{
+				"key": "ง",
+				"text": "เพื่อสุ่มลบคำซ้ำในเอกสารออก"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ไม่ตรงตามหลักการทำ Overlap"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ตรงตามหลักการทำ Overlap"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ตรงตามหลักการทำ Overlap"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "<code>chunk_overlap</code> ช่วยรักษาความหมายของข้อความบริเวณรอยต่อของ Chunk ไม่ให้ขาดความต่อเนื่อง"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 52,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "หากต้องการดึงเอกสารย้อนกลับมา k ชิ้นที่มีความเกี่ยวข้องสูงสุดจาก Vector Database ใน LangChain เราสามารถกำหนดค่าพารามิเตอร์นี้ผ่านสิ่งใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>retriever = vectorstore.as_retriever(search_kwargs={\"k\": 3})</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>splitter = TextSplitter(k=3)</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>llm = VertexAI(k=3)</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>loader = PDFLoader(k=3)</code>"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "การใช้ <code>as_retriever</code> ร่วมกับ <code>search_kwargs={\"k\": 3}</code> เป็นการสั่งให้ Retriever ดึงเฉพาะ Top-k (ในที่นี้คือ 3 Chunks) ที่มีค่า Similarity สูงที่สุดส่งไปให้ LLM"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 53,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "โมเดลประมวลผลภาษาขนาดใหญ่ (LLM) ในระบบ RAG ทำหน้าที่อะไรในขั้นตอนสุดท้าย?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "แปลงเอกสาร PDF เป็นรูปภาพ"
+			},
+			{
+				"key": "ข",
+				"text": "สังเคราะห์คำตอบภาษาธรรมชาติจาก Context ที่ได้รับให้อยู่ในรูปแบบที่มนุษย์เข้าใจง่าย"
+			},
+			{
+				"key": "ค",
+				"text": "คำนวณ IP Subnet ของระบบเครือข่าย"
+			},
+			{
+				"key": "ง",
+				"text": "จัดเก็บ Vector ลงบน Hard Disk"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "ไม่ใช่หน้าที่ของ LLM ในขั้นตอน RAG Generation"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "ไม่ใช่หน้าที่ของ LLM ในขั้นตอน RAG Generation"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "ไม่ใช่หน้าที่ของ LLM ในขั้นตอน RAG Generation"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "ในขั้นตอน Generation ตัว LLM ทำหน้าที่อ่าน Context ที่ Retrive มาได้ แล้วเรียบเรียงเป็นคำตอบที่ถูกต้อง สละสลวย ตรงตามคำถาม"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 54,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ในโจทย์การตอบคำถามประกันภัย หากคำถามคือ \"ประกันสุขภาพนี้คุ้มครองโรคโควิด-19 หรือไม่?\" แต่ในเอกสารใช้คำว่า \"โรคติดเชื้อไวรัสโคโรนา 2019\" การสืบค้นแบบ Semantic Search จะสามารถหาเจอหรือไม่ เพราะเหตุใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ไม่พบ เพราะคำศัพท์ไม่ตรงกัน"
+			},
+			{
+				"key": "ข",
+				"text": "พบ เพราะ Vector Embedding สามารถจับความหมายเชิงบริบท (Context/Semantics) ได้ว่าสองคำนี้หมายถึงสิ่งเดียวกัน"
+			},
+			{
+				"key": "ค",
+				"text": "ไม่พบ จนกว่าจะเขียนโค้ดเพิ่มคำศัพท์ใน Dictionary"
+			},
+			{
+				"key": "ง",
+				"text": "พบ เฉพาะกรณีที่ใช้ภาษาอังกฤษเท่านั้น"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "wrong",
+				"text": "เป็นข้อจำกัดของการค้นหาแบบ Keyword Match ไม่ใช่ Semantic Search"
+			},
+			{
+				"key": "ค",
+				"verdict": "wrong",
+				"text": "เป็นข้อจำกัดของการค้นหาแบบ Keyword Match ไม่ใช่ Semantic Search"
+			},
+			{
+				"key": "ง",
+				"verdict": "wrong",
+				"text": "เป็นข้อจำกัดของการค้นหาแบบ Keyword Match ไม่ใช่ Semantic Search"
+			},
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "Vector Embedding มีคุณสมบัติในการเข้าใจความหมายบริบท ทำให้คำที่มีความหมายเดียวกันหรือเกี่ยวข้องกันอย่างใกล้ชิดมีตำแหน่ง Vector ใกล้เคียงกัน จึงค้นพบได้แม้ใช้คำศัพท์ต่างกัน"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 55,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "หากผู้ใช้ถามว่า \"เบี้ยประกันปีละเท่าไหร่?\" แต่ในเอกสารที่ Retrive มาได้ระบุเพียง \"เบี้ยประกันเริ่มต้น 12,000 บาทต่อปี ขึ้นอยู่กับอายุ\" แต่ AI ตอบว่า \"เบี้ยประกัน 5,000 บาท\" การตอบของ AI นี้ถือเป็นปัญหาใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Accuracy High"
+			},
+			{
+				"key": "ข",
+				"text": "Hallucination"
+			},
+			{
+				"key": "ค",
+				"text": "Over-fitting"
+			},
+			{
+				"key": "ง",
+				"text": "Data Encryption Error"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "การที่ AI ให้ข้อมูลตัวเลขที่ไม่ตรงกับ Context อ้างอิง ถือเป็นการเกิด Hallucination (สร้างข้อมูลเท็จ)"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 56,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ในการประเมินประสิทธิภาพของระบบ RAG ค่า <strong>Context Precision</strong> หมายถึงสิ่งใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "สัดส่วนของข้อความที่ดึงมา (Retrieved Chunks) ว่ามีเนื้อหาตรงและเกี่ยวข้องกับคำถามจริงมากน้อยเพียงใด"
+			},
+			{
+				"key": "ข",
+				"text": "ความเร็วในการบูตเครื่องเซิร์ฟเวอร์"
+			},
+			{
+				"key": "ค",
+				"text": "จำนวนไฟล์ PDF ทั้งหมดในระบบ"
+			},
+			{
+				"key": "ง",
+				"text": "ค่าความถูกต้องของคำตอบทางคณิตศาสตร์"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Context Precision</strong> วัดความแม่นยำในการค้นหาข้อความอ้างอิง ว่าส่วนที่ดึงมามีข้อมูลที่เป็นประโยชน์และตรงกับคำถามมากน้อยเพียงใด โดยไม่มีขยะหรือข้อมูลไม่เกี่ยวข้องปนมามากเกินไป"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 57,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "เมื่อต้องการนำข้อมูลกรมธรรม์ที่มีการอัปเดตใหม่ทุกๆ สัปดาห์ เข้าสู่ระบบ RAG ควรทำอย่างไรกับ Vector Database?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ต้องทำการ Re-index หรือ อัปเดต Embeddings ของเอกสารฉบับใหม่ลงใน Vector Database"
+			},
+			{
+				"key": "ข",
+				"text": "ไม่ต้องทำอะไรเลย AI จะเรียนรู้ข้อมูลใหม่ได้เองผ่านอินเทอร์เน็ต"
+			},
+			{
+				"key": "ค",
+				"text": "ลบโค้ด Python แล้วเขียนใหม่ทั้งหมด"
+			},
+			{
+				"key": "ง",
+				"text": "ปรับขนาด RAM ของเครื่องคอมพิวเตอร์เพิ่มขึ้น"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "เมื่อเอกสารต้นทางเปลี่ยนแปลงหรือเพิ่มขึ้น จำเป็นต้องนำเอกสารใหม่มาผ่านกระบวนการ Ingestion (Load -&gt; Chunk -&gt; Embed) และบันทึก Vector ใหม่ลง Vector DB"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 58,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ข้อใดคือข้อเสียของการตั้งค่า <code>chunk_size</code> ที่ <strong>ใหญ่เกินไป</strong> (เช่น 5,000 ตัวอักษร)?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ทำให้ดึงข้อมูลได้เร็วเกินไป"
+			},
+			{
+				"key": "ข",
+				"text": "ทำให้ข้อมูลในแต่ละ Chunk มีเนื้อหาปะปนกันหลายเรื่องเกินไป จนทำให้ค่า Similarity สกอร์ลดลงและปนเปื้อนข้อมูลที่ไม่เกี่ยวข้องไปให้ LLM"
+			},
+			{
+				"key": "ค",
+				"text": "ทำให้ไฟล์ PDF เสียหาย"
+			},
+			{
+				"key": "ง",
+				"text": "ไม่สามารถแปลงเป็น Vector ได้"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "Chunk ขนาดใหญ่เกินไปจะรวมหลายหัวข้อไว้ด้วยกัน ทำให้ความเฉพาะเจาะจง (Specificity) ลดลง นำไปสู่การส่งข้อมูลที่ไม่เกี่ยวข้อง (Noise) ไปให้ LLM สรุป"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 59,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "หากเราต้องการเก็บข้อมูลอ้างอิงเพิ่มเติม เช่น เลขหน้า หรือ ชื่อหมวดหมู่ของเอกสาร ควบคู่ไปกับ Vector ของข้อความ ควรจัดเก็บไว้ในส่วนใดของ LangChain Document Object?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>page_content</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>metadata</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>template</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>config</code>"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "LangChain Document Object ประกอบด้วย <code>page_content</code> (ตัวข้อความ) และ <code>metadata</code> (Dictionary เก็บข้อมูลกำกับ เช่น <code>{\"source\": \"policy.pdf\", \"page\": 12}</code>)"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 60,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ใน LangChain หากเราใช้งาน <code>GoogleGenerativeAI</code> หรือ <code>VertexAI</code> เป็น LLM Component การเรียกใช้ API Key จะต้องถูกยืนยันผ่านสิ่งใดในระบบ?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Environment Variable (เช่น <code>GOOGLE_API_KEY</code>)"
+			},
+			{
+				"key": "ข",
+				"text": "การพิมพ์รหัสผ่านผ่านหน้าจอ Monitor"
+			},
+			{
+				"key": "ค",
+				"text": "การส่งจดหมายไปที่ Google"
+			},
+			{
+				"key": "ง",
+				"text": "ไม่ต้องใช้อะไรเลย"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "การเชื่อมต่อ API ของ Google Gemini / Vertex AI ใน LangChain มักทำการอ่านค่าจาก Environment Variable เช่น <code>GOOGLE_API_KEY</code> เพื่อยืนยันตัวตนอย่างปลอดภัย"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 61,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "การใช้เทคนิค <strong>MMR (Maximal Marginal Relevance)</strong> ในการค้นหาของ Retriever มีวัตถุประสงค์หลักอย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "เพื่อค้นหาข้อความที่พิมพ์ผิด"
+			},
+			{
+				"key": "ข",
+				"text": "เพื่อดึงผลลัพธ์ที่มีความเกี่ยวข้องกับคำถาม พร้อมทั้งเพิ่มความหลากหลาย (Diversity) ของเนื้อหา ลดการได้ Chunks ที่มีข้อความซ้ำซ้อนกัน"
+			},
+			{
+				"key": "ค",
+				"text": "เพื่อเรียงลำดับตามขนาดตัวอักษร"
+			},
+			{
+				"key": "ง",
+				"text": "เพื่อค้นหาเฉพาะข้อความที่เป็นตัวเลข"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "<strong>MMR</strong> ช่วยคัดเลือกผลลัพธ์ที่ไม่เพียงแต่คล้ายกับคำถาม แต่ยังไม่ซ้ำซ้อนกับผลลัพธ์ข้ออื่นๆ ที่ถูกเลือกมาแล้ว ทำให้ LLM ได้ข้อมูลหลายมิติ"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 62,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ในกรณีที่เอกสารประกันภัยเป็นไฟล์สแกนรูปภาพ (Scanned PDF) ไม่ใช่ Text PDF โค้ด <code>PyPDFLoader</code> ทั่วไปจะไม่สามารถอ่านข้อความได้ ต้องใช้เทคนิคใดเสริมในขั้นตอน Ingestion?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "OCR (Optical Character Recognition)"
+			},
+			{
+				"key": "ข",
+				"text": "SQL Injection"
+			},
+			{
+				"key": "ค",
+				"text": "CSS Selector"
+			},
+			{
+				"key": "ง",
+				"text": "RegEx Substitution"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "เอกสารที่เป็นภาพสแกนต้องผ่านกระบวนการ <strong>OCR</strong> เพื่อแปลงภาพตัวอักษรให้กลายเป็นข้อความ Text ก่อน จึงจะนำไปทำ Chunking และ Embedding ได้"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 63,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "หากต้องการสร้างระบบแชตบอตที่สามารถ <strong>จดจำประวัติการสนทนาก่อนหน้า</strong> (Conversation History) ร่วมกับการทำ RAG ใน LangChain ต้องนำ Component ใดเข้ามาใช้?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>ConversationBufferMemory</code> หรือ Memory Modules"
+			},
+			{
+				"key": "ข",
+				"text": "<code>TextSplitter</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>BaseLoader</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>FAISS</code>"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "Memory Modules ช่วยบันทึกประวัติคำถาม-คำตอบก่อนหน้า เพื่อนำไปผนวกเข้ากับ Prompt ทำให้ AI สามารถตอบคำถามที่มีสรรพนามอ้างอิงถึงข้อความก่อนหน้าได้"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 64,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "การทำ <strong>Grounding</strong> ในระบบ AI ประกันภัย หมายถึงสิ่งใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "การต่อสายดินให้เซิร์ฟเวอร์"
+			},
+			{
+				"key": "ข",
+				"text": "การผูกและจำกัดคำตอบของ AI ให้อยู่บนพื้นฐานของเอกสารอ้างอิงที่เป็นความจริงเท่านั้น"
+			},
+			{
+				"key": "ค",
+				"text": "การลบข้อมูลทั้งหมดใน Vector Store"
+			},
+			{
+				"key": "ง",
+				"text": "การหยุดการทำงานของแชตบอต"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [
+			{
+				"key": "ข",
+				"verdict": "correct",
+				"text": "<strong>Grounding</strong> คือกระบวนการควบคุมให้การตอบของ LLM อ้างอิงยึดโยงอยู่กับข้อมูลจริง (Ground Truth / Context) ที่ป้อนเข้าไปเท่านั้น"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 65,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ข้อใด <strong>ไม่ใช่</strong> ข้อดีของการใช้ RAG เมื่อเทียบกับการ Fine-tuning LLM?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "RAG อัปเดตข้อมูลใหม่ได้ง่ายเพียงแค่อัปเดต Vector DB ไม่ต้องเสียเวลา retraining โมเดล"
+			},
+			{
+				"key": "ข",
+				"text": "RAG สามารถระบุที่มา (Source Citation) ของข้อมูลอ้างอิงได้ชัดเจน"
+			},
+			{
+				"key": "ค",
+				"text": "RAG ช่วยลดค่าใช้จ่ายในการฝึกโมเดลขนาดใหญ่"
+			},
+			{
+				"key": "ง",
+				"text": "RAG สามารถเปลี่ยนสไตล์การพูดและน้ำเสียงของโมเดลได้ดีกว่าการ Fine-tuning"
+			}
+		],
+		"answerKey": "ง",
+		"explanations": [
+			{
+				"key": "ง",
+				"verdict": "correct",
+				"text": "การปรับเปลี่ยนสไตล์ โทนเสียง หรือรูปแบบภาษาเฉพาะทาง (Tone &amp; Style) เป็นจุดเด่นของการ Fine-tuning ไม่ใช่จุดเด่นหลักของ RAG ซึ่งเน้นเรื่องการดึงข้อความจริงมาอ้างอิง"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 66,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "เมื่อเราคำนวณ Cosine Similarity ระหว่าง Vector คำถาม และ Vector ของ Chunk หากได้ค่าเท่ากับ <code>1.0</code> หมายความว่าอย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Vector ทั้งสองมีความทิศทางและความหมายเหมือนกันสมบูรณ์"
+			},
+			{
+				"key": "ข",
+				"text": "Vector ทั้งสองตั้งฉากกันและไม่มีความเกี่ยวข้องกันเลย"
+			},
+			{
+				"key": "ค",
+				"text": "Vector ทั้งสองมีความหมายตรงกันข้ามกันอย่างสิ้นเชิง"
+			},
+			{
+				"key": "ง",
+				"text": "เกิดข้อผิดพลาดในการคำนวณ"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "Cosine Similarity มีค่าตั้งแต่ -1 ถึง 1 โดยค่า <code>1.0</code> หมายถึง Vector มีทิศทางเดียวกันสมบูรณ์ (มีความหมายคล้ายคลึงกันมากที่สุด)"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 67,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "หากต้องการทดสอบความถูกต้องของระบบ RAG โดยวัดสัดส่วนคำตอบที่ตอบถูกต้องเทียบกับคำตอบมาตรฐาน จะใช้วิธีใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Evaluation Metric (เช่น RAGAS Framework หรือ Faithfulness Score)"
+			},
+			{
+				"key": "ข",
+				"text": "การตรวจสอบ IP Address"
+			},
+			{
+				"key": "ค",
+				"text": "การรัน Ping Test"
+			},
+			{
+				"key": "ง",
+				"text": "การนับจำนวนบรรทัดของโค้ด"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "การประเมิน RAG ใช้ Framework เช่น <strong>RAGAS</strong> เพื่อวัดค่า Faithfulness, Answer Relevance, Context Recall และ Context Precision"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 68,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ในกรณีที่คำถามของผู้ใช้สั้นเกินไป เช่น \"เคลมยังไง?\" เทคนิคใดที่ช่วยขยายคำถามให้ชัดเจนก่อนนำไปค้นหาใน Vector DB?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Query Transformation / Query Rewriting"
+			},
+			{
+				"key": "ข",
+				"text": "Data Decryption"
+			},
+			{
+				"key": "ค",
+				"text": "Vector Compression"
+			},
+			{
+				"key": "ง",
+				"text": "Memory Erasing"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Query Transformation</strong> คือการให้ LLM ช่วยเกลาคำถามสั้นๆ ให้กลายเป็นคำถามที่สมบูรณ์และบริบทครบถ้วนก่อนส่งไปดึงข้อมูล"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 69,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "บริการ Vector Database บน Google Cloud Platform ที่ใช้สำหรับการค้นหา Vector ขนาดใหญ่ระดับ Production คือบริการใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Vertex AI Vector Search (Matching Engine)"
+			},
+			{
+				"key": "ข",
+				"text": "Google Drive"
+			},
+			{
+				"key": "ค",
+				"text": "Cloud SQL for MySQL (Standard)"
+			},
+			{
+				"key": "ง",
+				"text": "Google Sheets"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<strong>Vertex AI Vector Search</strong> เป็นบริการสืบค้น Vector ความเร็วสูงแบบ Fully Managed บน Google Cloud"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 70,
+		"category": "rag",
+		"categoryLabel": "Google RAG & LangChain Lab (ข้อ 41 - 70)",
+		"scenario": "ใน LangChain คำสั่ง <code>PromptTemplate.from_template(\"...\")</code> ใช้ทำหน้าที่อะไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "กำหนดโครงสร้างข้อความป้อนเข้า (Prompt) โดยมีตัวแปรเติมคำในช่องว่าง (Variables) สำหรับส่งให้ LLM"
+			},
+			{
+				"key": "ข",
+				"text": "สร้างตารางใน SQL"
+			},
+			{
+				"key": "ค",
+				"text": "เชื่อมต่อ WiFi"
+			},
+			{
+				"key": "ง",
+				"text": "ดาวน์โหลดไฟล์ PDF"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "<code>PromptTemplate</code> ช่วยสร้างแม่แบบข้อความคำสั่ง โดยสามารถใส่ placeholder เช่น <code>{context}</code> และ <code>{question}</code> เพื่อแทนที่ด้วยข้อมูลจริงแบบ Dynamic"
+			}
+		],
+		"notes": []
+	},
+	{
+		"id": 71,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "เครือข่ายหมายเลข <code>192.168.1.0/24</code> ถูกนำมาแบ่ง Subnet โดยใช้ Prefix <code>/26</code> จะสามารถแบ่งออกเป็นเครือข่ายย่อย (Subnets) ได้ทั้งหมดกี่ Subnet และแต่ละ Subnet มีจำนวน IP Address ทั้งหมดกี่หมายเลข?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "2 Subnets, Subnet ละ 128 IPs"
+			},
+			{
+				"key": "ข",
+				"text": "4 Subnets, Subnet ละ 64 IPs"
+			},
+			{
+				"key": "ค",
+				"text": "8 Subnets, Subnet ละ 32 IPs"
+			},
+			{
+				"key": "ง",
+				"text": "16 Subnets, Subnet ละ 16 IPs"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"จากเดิม <code>/24</code> ยืมบิตมาเป็น <code>/26</code> เท่ากับยืมมา 26 - 24 = 2 บิต",
+			"จำนวน Subnet = 2<sup>2</sup> = 4 Subnets",
+			"บิตที่เหลือสำหรับ Host = 32 - 26 = 6 บิต",
+			"จำนวน IP ทั้งหมดต่อ Subnet = 2<sup>6</sup> = 64 IPs"
+		]
+	},
+	{
+		"id": 72,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "สำหรับหมายเลข IP Address <code>192.168.10.130/26</code> จงหาหมายเลข Network ID และ Broadcast IP ของ Subnet นี้?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Network ID: <code>192.168.10.0</code>, Broadcast IP: <code>192.168.10.63</code>"
+			},
+			{
+				"key": "ข",
+				"text": "Network ID: <code>192.168.10.64</code>, Broadcast IP: <code>192.168.10.127</code>"
+			},
+			{
+				"key": "ค",
+				"text": "Network ID: <code>192.168.10.128</code>, Broadcast IP: <code>192.168.10.191</code>"
+			},
+			{
+				"key": "ง",
+				"text": "Network ID: <code>192.168.10.192</code>, Broadcast IP: <code>192.168.10.255</code>"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [],
+		"notes": [
+			"<code>/26</code> มี Block Size = 256 - 192 = 64",
+			"ช่วง Subnet:\nSubnet 0: <code>10.0</code> - <code>10.63</code>\nSubnet 1: <code>10.64</code> - <code>10.127</code>\nSubnet 2: <code>10.128</code> - <code>10.191</code>",
+			"IP <code>192.168.10.130</code> อยู่ใน Subnet 2 ดังนั้น Network ID คือ <code>192.168.10.128</code> และ Broadcast IP คือ <code>192.168.10.191</code>"
+		]
+	},
+	{
+		"id": 73,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "หากบริษัทต้องการจัดตั้งวงเครือข่ายสำหรับอุปกรณ์เครื่องเซิร์ฟเวอร์จำนวน 25 เครื่อง จงเลือก Subnet Mask (CIDR) ที่ประหยัดพื้นที่ IP Address ที่สุดและเพียงพอกับความต้องการ",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>/28</code> (Subnet Mask <code>255.255.255.240</code>)"
+			},
+			{
+				"key": "ข",
+				"text": "<code>/27</code> (Subnet Mask <code>255.255.255.224</code>)"
+			},
+			{
+				"key": "ค",
+				"text": "<code>/26</code> (Subnet Mask <code>255.255.255.192</code>)"
+			},
+			{
+				"key": "ง",
+				"text": "<code>/25</code> (Subnet Mask <code>255.255.255.128</code>)"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"ต้องการ 25 Hosts -&gt; สูตร Usable Hosts = 2<sup>h</sup> - 2",
+			"เลือก <code>/28</code> (h=4): Usable = 16 - 2 = 14 IPs (ไม่พอ)",
+			"เลือก <code>/27</code> (h=5): Usable = 32 - 2 = 30 IPs (เพียงพอและประหยัดที่สุด)"
+		]
+	},
+	{
+		"id": 74,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "ข้อใดคือช่วงของหมายเลข IP Address ที่สามารถนำไปกำหนดให้กับเครื่องคอมพิวเตอร์ลูกข่าย (Usable IP Range) ในวงเครือข่าย <code>172.16.5.32/28</code> ได้จริง?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>172.16.5.32</code> ถึง <code>172.16.5.47</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>172.16.5.33</code> ถึง <code>172.16.5.46</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>172.16.5.33</code> ถึง <code>172.16.5.47</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>172.16.5.32</code> ถึง <code>172.16.5.46</code>"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"<code>/28</code> Block Size = 16",
+			"Network ID = <code>172.16.5.32</code>",
+			"Broadcast IP = <code>172.16.5.47</code>",
+			"Usable Range = <code>172.16.5.33</code> ถึง <code>172.16.5.46</code>"
+		]
+	},
+	{
+		"id": 75,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "ในการเชื่อมต่อ Router สองตัวเข้าด้วยกันแบบ Point-to-Point Link (ใช้ IP เพียง 2 หมายเลขสำหรับ Interface ของ Router ทั้งสองฝั่ง) การเลือกใช้ Subnet Prefix ในข้อใดประหยัดและถูกต้องตามมาตรฐานที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>/28</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>/29</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>/30</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>/32</code>"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [],
+		"notes": [
+			"<code>/30</code> มี h=2 บิต ทำให้ได้ Usable IPs = 2<sup>2</sup> - 2 = 2 IPs พอดีสำหรับลิงก์ระหว่าง Router 2 ตัว"
+		]
+	},
+	{
+		"id": 76,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "Subnet Mask <code>255.255.255.224</code> เมื่อเขียนในรูปแบบ CIDR Notation จะได้ค่าตรงกับข้อใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>/25</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>/26</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>/27</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>/28</code>"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [],
+		"notes": [
+			"<code>255.255.255.224</code> ในฐานสองคือ <code>11111111.11111111.11111111.11100000</code>",
+			"มีบิตเลข 1 ทั้งหมด 27 บิต ดังนั้น CIDR คือ <code>/27</code>"
+		]
+	},
+	{
+		"id": 77,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "เหตุใดจึงต้องนำค่า 2 ไปลบออกจากสูตรการคำนวณจำนวน Host ที่ใช้งานได้ (2<sup>h</sup> - 2)?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ลบออกสำหรับ Gateway IP และ DNS Server IP"
+			},
+			{
+				"key": "ข",
+				"text": "ลบออกสำหรับ Network ID (IP ตัวแรก) และ Broadcast IP (IP ตัวสุดท้าย)"
+			},
+			{
+				"key": "ค",
+				"text": "ลบออกสำหรับ DHCP Server และ Firewall IP"
+			},
+			{
+				"key": "ง",
+				"text": "เป็นค่าความปลอดภัยสำรองที่มาตรฐาน IEEE กำหนดไว้"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"IP ตัวแรกสุดของ Subnet คือ Network ID และ IP ตัวสุดท้ายคือ Broadcast IP ทั้งสองตัวนี้ถูกสงวนไว้ ไม่สามารถนำไปตั้งให้ Host ได้"
+		]
+	},
+	{
+		"id": 78,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "เทคนิค <strong>VLSM (Variable Length Subnet Masking)</strong> มีประโยชน์หลักอย่างไรในการออกแบบระบบเครือข่าย?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ช่วยเพิ่มความเร็วในการส่งข้อมูลของสาย Fiber Optic"
+			},
+			{
+				"key": "ข",
+				"text": "ช่วยให้สามารถแบ่ง Subnet ให้มีขนาดแตกต่างกันตามความต้องการจริงของแต่ละแผนก ลดการสูญเสีย IP Address โดยเปล่าประโยชน์"
+			},
+			{
+				"key": "ค",
+				"text": "ช่วยเปลี่ยน IPv4 ให้เป็น IPv6 โดยอัตโนมัติ"
+			},
+			{
+				"key": "ง",
+				"text": "ช่วยบล็อกการโจมตีแบบ DDoS จากภายนอก"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"VLSM ช่วยให้แบ่ง Subnet Mask ความยาวต่างกันได้ตามขนาดของแต่ละวงเครือข่าย ลดการสิ้นเปลือง IP"
+		]
+	},
+	{
+		"id": 79,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "IP Address <code>10.0.0.0/8</code> จัดเป็น IP Address ประเภทใด และนิยมนำไปใช้งานอย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Public IP Address — นำไปใช้ฝั่ง Server บนอินเทอร์เน็ต"
+			},
+			{
+				"key": "ข",
+				"text": "Private IP Address (Class A) — นำไปใช้ภายในองค์กรขนาดใหญ่"
+			},
+			{
+				"key": "ค",
+				"text": "Loopback Address — นำไปใช้ทดสอบการทำงานของ Network Card"
+			},
+			{
+				"key": "ง",
+				"text": "Multicast Address — นำไปใช้ส่งสตรีมมิงวิดีโอ"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"ตาม RFC 1918 ช่วง <code>10.0.0.0/8</code> เป็น Private IP Address Range สำหรับใช้งานภายในองค์กร"
+		]
+	},
+	{
+		"id": 80,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "เครื่องคอมพิวเตอร์ A มี IP <code>192.168.1.50/25</code> ต้องการส่งข้อมูลไปหาเครื่องคอมพิวเตอร์ B หมายเลข IP <code>192.168.1.130/25</code> ทั้งสองเครื่องสามารถสื่อสารกันโดยตรงผ่าน Switch โดยไม่ผ่าน Router ได้หรือไม่?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "ได้ เพราะอยู่ใน IP Class C เหมือนกัน"
+			},
+			{
+				"key": "ข",
+				"text": "ได้ เพราะ Subnet Mask เป็น <code>/25</code> เท่ากัน"
+			},
+			{
+				"key": "ค",
+				"text": "ไม่ได้ เพราะทั้งสองเครื่องอยู่คนละ Subnet (เครื่อง A อยู่ Subnet <code>192.168.1.0</code> ส่วนเครื่อง B อยู่ Subnet <code>192.168.1.128</code>)"
+			},
+			{
+				"key": "ง",
+				"text": "ไม่ได้ เพราะหมายเลข IP ลงท้ายไม่เท่ากัน"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [],
+		"notes": [
+			"<code>/25</code> แบ่ง Subnet เป็น: <code>0-127</code> และ <code>128-255</code>",
+			"เครื่อง A (<code>.50</code>) และเครื่อง B (<code>.130</code>) อยู่คนละ Subnet จึงต้องผ่าน Router เท่านั้น"
+		]
+	},
+	{
+		"id": 81,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "สำหรับเครือข่าย <code>10.50.0.0/16</code> หากต้องการแบ่งเป็น Subnet ย่อย เพื่อรองรับโฮสต์อย่างน้อย Subnet ละ 500 เครื่อง จะต้องใช้ Subnet Mask ใดประหยัดที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>/22</code> (Subnet Mask <code>255.255.252.0</code>)"
+			},
+			{
+				"key": "ข",
+				"text": "<code>/23</code> (Subnet Mask <code>255.255.254.0</code>)"
+			},
+			{
+				"key": "ค",
+				"text": "<code>/24</code> (Subnet Mask <code>255.255.255.0</code>)"
+			},
+			{
+				"key": "ง",
+				"text": "<code>/25</code> (Subnet Mask <code>255.255.255.128</code>)"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"ต้องการ 500 Hosts -&gt; 2<sup>h</sup> - 2 ≥ 500",
+			"2<sup>9</sup> - 2 = 510 IPs (h=9 บิต)",
+			"Prefix = 32 - 9 = /23 (<code>255.255.254.0</code>)"
+		]
+	},
+	{
+		"id": 82,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "หมายเลข IP Address <code>127.0.0.1</code> มีชื่อเรียกว่าอะไร และถูกใช้ทำหน้าที่อะไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Default Gateway — ใช้สำหรับออกอินเทอร์เน็ต"
+			},
+			{
+				"key": "ข",
+				"text": "Loopback Address — ใช้สำหรับทดสอบ Internal Network Stack ของเครื่องตนเอง"
+			},
+			{
+				"key": "ค",
+				"text": "Broadcast Address — ใช้สำหรับส่งข้อมูลหาทุกเครื่อง"
+			},
+			{
+				"key": "ง",
+				"text": "Anycast Address — ใช้สำหรับกระจาย Load Balancer"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"<code>127.0.0.1</code> คือ <strong>IPv4 Loopback Address</strong> (localhost) ใช้สื่อสารภายในเครื่องตัวเอง"
+		]
+	},
+	{
+		"id": 83,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "Subnet Mask <code>255.255.255.248</code> ตรงกับ Prefix ยาวกี่บิต (CIDR Notation)?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>/28</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>/29</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>/30</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>/31</code>"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": ["248 = 11111000 (5 บิตแรกเป็น 1)", "8 + 8 + 8 + 5 = 29 บิต หรือ <code>/29</code>"]
+	},
+	{
+		"id": 84,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "หมายเลข Broadcast Address ของเครือข่าย <code>10.1.4.0/22</code> คือข้อใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>10.1.4.255</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>10.1.5.255</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>10.1.7.255</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>10.1.255.255</code>"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [],
+		"notes": [
+			"<code>/22</code> มี Block Size Octet ที่ 3 = 256 - 252 = 4",
+			"Subnet: <code>10.1.4.0</code> ถึง <code>10.1.7.255</code>",
+			"ดังนั้น Broadcast IP คือ <code>10.1.7.255</code>"
+		]
+	},
+	{
+		"id": 85,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "เครื่องเซิร์ฟเวอร์มี IP <code>192.168.2.100/29</code> ข้อใดคือ Network ID ของเซิร์ฟเวอร์เครื่องนี้?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>192.168.2.0</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>192.168.2.96</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>192.168.2.98</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>192.168.2.104</code>"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"<code>/29</code> Block Size = 256 - 248 = 8",
+			"Multiples of 8 ใกล้เคียง 100 คือ 8 × 12 = 96",
+			"Network ID คือ <code>192.168.2.96</code> (ช่วง IP: <code>.96</code> ถึง <code>.103</code>)"
+		]
+	},
+	{
+		"id": 86,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "ข้อใดจัดเป็น Private IP Address ตามมาตรฐาน RFC 1918?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>8.8.8.8</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>172.20.10.4</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>1.1.1.1</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>200.100.50.25</code>"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"ช่วง Private IP Class B คือ <code>172.16.0.0</code> ถึง <code>172.31.255.255</code> ดังนั้น <code>172.20.10.4</code> เป็น Private IP"
+		]
+	},
+	{
+		"id": 87,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "หากต้องการแบ่ง IP <code>192.168.1.0/24</code> ออกเป็น 8 Subnets เท่าๆ กัน จะได้ Subnet Prefix ใหม่เป็นเท่าใด และแต่ละ Subnet มีกี่ IPs?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>/26</code> Subnet ละ 64 IPs"
+			},
+			{
+				"key": "ข",
+				"text": "<code>/27</code> Subnet ละ 32 IPs"
+			},
+			{
+				"key": "ค",
+				"text": "<code>/28</code> Subnet ละ 16 IPs"
+			},
+			{
+				"key": "ง",
+				"text": "<code>/29</code> Subnet ละ 8 IPs"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"ต้องการ 8 Subnets = 2<sup>3</sup> (ยืม 3 บิต)",
+			"Prefix ใหม่ = 24 + 3 = /27",
+			"จำนวน IPs ต่อ Subnet = 2<sup>32-27</sup> = 2<sup>5</sup> = 32 IPs"
+		]
+	},
+	{
+		"id": 88,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "ใน AWS VPC เมื่อคุณสร้าง Subnet ขนาด <code>/24</code> (มี 256 IPs) AWS จะจอง IP Address ไว้ใช้งานในระบบกี่ IP และเหลือนำไปแจกจริงกี่ IP?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "จอง 2 IPs, เหลือ 254 IPs"
+			},
+			{
+				"key": "ข",
+				"text": "จอง 5 IPs, เหลือ 251 IPs"
+			},
+			{
+				"key": "ค",
+				"text": "จอง 0 IPs, เหลือ 256 IPs"
+			},
+			{
+				"key": "ง",
+				"text": "จอง 10 IPs, เหลือ 246 IPs"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"AWS สงวนไว้ 5 IP Address ในทุก Subnet ( Network Address, VPC Router, DNS Server, Future Use, และ Network Broadcast Address) ทำให้เหลือแจกได้ 256 - 5 = 251 IPs"
+		]
+	},
+	{
+		"id": 89,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "ข้อใดคือ Subnet Mask ของ <code>/30</code>?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>255.255.255.240</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>255.255.255.248</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>255.255.255.252</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>255.255.255.254</code>"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [],
+		"notes": [
+			"<code>/30</code> เหลือ 2 บิตเป็น 0 (256 - 2<sup>2</sup> = 252) สรุปคือ <code>255.255.255.252</code>"
+		]
+	},
+	{
+		"id": 90,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "IP Address <code>169.254.x.x</code> ที่เครื่องคอมพิวเตอร์ได้รับเองเมื่อไม่สามารถติดต่อ DHCP Server ได้ เรียกว่าอะไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "APIPA (Automatic Private IP Addressing)"
+			},
+			{
+				"key": "ข",
+				"text": "Public Static IP"
+			},
+			{
+				"key": "ค",
+				"text": "Loopback IP"
+			},
+			{
+				"key": "ง",
+				"text": "Multicast IP"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [],
+		"notes": [
+			"<strong>APIPA:</strong> หรือ Link-Local Address (<code>169.254.0.0/16</code>) คือ IP ที่ OS สุ่มตั้งให้ตัวเองเมื่อแจก IP จาก DHCP ไม่สำเร็จ"
+		]
+	},
+	{
+		"id": 91,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "หากต้องการกำหนด Subnet ใน AWS VPC เพื่อรองรับ EC2 จำนวน 1,000 เครื่อง ควรเลือก CIDR Block ใดจึงจะครอบคลุมและประหยัดที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>/24</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>/23</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>/22</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>/20</code>"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [],
+		"notes": [
+			"ต้องการ 1,000 เครื่อง -&gt; 2<sup>10</sup> = 1024 (h=10 บิต)",
+			"Prefix = 32 - 10 = /22 (สามารถรองรับได้สูงสุด 1024 - 5 = 1019 เครื่องใน AWS)"
+		]
+	},
+	{
+		"id": 92,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "สำหรับ IP Address <code>10.10.10.10/32</code> Prefix <code>/32</code> หมายความว่าอย่างไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "มีจำนวน Host ทั้งหมด 32 เครื่อง"
+			},
+			{
+				"key": "ข",
+				"text": "ระบุถึงตัวเครื่อง Host เพียงเครื่องเดียวแบบเจาะจง (Single IP Address)"
+			},
+			{
+				"key": "ค",
+				"text": "เป็นวงเครือข่ายขนาดใหญ่"
+			},
+			{
+				"key": "ง",
+				"text": "เป็น Broadcast Address ของ Class A"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"Prefix <code>/32</code> หมายถึงบิตทั้ง 32 บิตเป็น Network Bit ทั้งหมด จึงใช้แทน IP Address เดี่ยวๆ 1 หมายเลข"
+		]
+	},
+	{
+		"id": 93,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "หมายเลข IP ตัวแรกสุดของ Subnet <code>192.168.5.64/26</code> ที่สามารถนำไปตั้งค่าให้เครื่องคอมพิวเตอร์ได้ (First Usable IP) คือหมายเลขใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>192.168.5.64</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>192.168.5.65</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>192.168.5.66</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>192.168.5.127</code>"
+			}
+		],
+		"answerKey": "ข",
+		"explanations": [],
+		"notes": [
+			"Network ID = <code>192.168.5.64</code>",
+			"First Usable IP = Network ID + 1 = <code>192.168.5.65</code>"
+		]
+	},
+	{
+		"id": 94,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "หมายเลข IP ตัวสุดท้ายของ Subnet <code>192.168.5.64/26</code> ที่สามารถนำไปตั้งค่าให้เครื่องคอมพิวเตอร์ได้ (Last Usable IP) คือหมายเลขใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>192.168.5.126</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>192.168.5.127</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>192.168.5.128</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>192.168.5.63</code>"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [],
+		"notes": [
+			"Broadcast IP = <code>192.168.5.127</code>",
+			"Last Usable IP = Broadcast IP - 1 = <code>192.168.5.126</code>"
+		]
+	},
+	{
+		"id": 95,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "การทำ CIDR Supernetting / Route Aggregation มีวัตถุประสงค์หลักเพื่ออะไร?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "รวมหลายวง Subnet ย่อยให้กลายเป็น Route เดียว เพื่อลดขนาด Routing Table ของ Router"
+			},
+			{
+				"key": "ข",
+				"text": "เพิ่มจำนวนพอร์ตบน Switch"
+			},
+			{
+				"key": "ค",
+				"text": "เปลี่ยนรหัสผ่าน Router อัตโนมัติ"
+			},
+			{
+				"key": "ง",
+				"text": "ป้องกันไวรัสในเครือข่าย"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [],
+		"notes": [
+			"Supernetting/Route Summarization ช่วยยุบรวมตารางเส้นทางหลายเส้นให้เหลือเพียงเส้นเดียว ช่วยลดภาระการประมวลผลของ Router"
+		]
+	},
+	{
+		"id": 96,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "หากเครื่องลูกข่ายตั้งค่า Subnet Mask ผิดพลาดเป็น <code>255.255.255.0</code> แทนที่จะเป็น <code>255.255.255.128</code> (<code>/25</code>) จะเกิดอะไรขึ้นเมื่อลูกข่ายพยายามส่งข้อมูลหาเครื่องที่อยู่ในช่วง IP <code>.130</code> ซึ่งอยู่คนละ Subnet จริง?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "เครื่องลูกข่ายจะเข้าใจว่าเครื่องปลายทางอยู่ใน Subnet เดียวกัน จึงพยายามส่งข้อมูลโดยไม่ผ่าน Gateway ทำให้สื่อสารไม่สำเร็จ"
+			},
+			{
+				"key": "ข",
+				"text": "สื่อสารได้เร็วขึ้น 2 เท่า"
+			},
+			{
+				"key": "ค",
+				"text": "เครื่องจะทำการรีบูตตัวเอง"
+			},
+			{
+				"key": "ง",
+				"text": "Router จะทำการแก้ไข Subnet Mask ให้โดยอัตโนมัติ"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [],
+		"notes": [
+			"หาก Subnet Mask กว้างกว่าความเป็นจริง Host จะคิดว่าปลายทางอยู่ใน Local Network เดียวกัน จึงส่ง ARP Request หาโดยตรง ไม่ยอมส่งผ่าน Default Gateway ทำให้ไม่สามารถสื่อสารข้ามวงได้"
+		]
+	},
+	{
+		"id": 97,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "สำหรับเครือข่าย <code>172.16.0.0/12</code> Range ของ IP ทั้งหมดในวงนี้คือข้อใด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "<code>172.16.0.0</code> ถึง <code>172.31.255.255</code>"
+			},
+			{
+				"key": "ข",
+				"text": "<code>172.16.0.0</code> ถึง <code>172.16.255.255</code>"
+			},
+			{
+				"key": "ค",
+				"text": "<code>172.0.0.0</code> ถึง <code>172.15.255.255</code>"
+			},
+			{
+				"key": "ง",
+				"text": "<code>172.16.0.0</code> ถึง <code>172.20.255.255</code>"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [],
+		"notes": [
+			"<code>/12</code> ยืมบิตใน Octet ที่ 2 ไป 4 บิต (16 = 2<sup>4</sup>) ช่วงคือ 16 + 16 - 1 = 31",
+			"ดังนั้นช่วงคือ <code>172.16.0.0</code> ถึง <code>172.31.255.255</code>"
+		]
+	},
+	{
+		"id": 98,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "อุปกรณ์ Layer ใดใน OSI Model ที่ทำหน้าที่รับส่งข้อมูลโดยพิจารณาจาก IP Address?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Layer 1 — Physical Layer"
+			},
+			{
+				"key": "ข",
+				"text": "Layer 2 — Data Link Layer"
+			},
+			{
+				"key": "ค",
+				"text": "Layer 3 — Network Layer"
+			},
+			{
+				"key": "ง",
+				"text": "Layer 4 — Transport Layer"
+			}
+		],
+		"answerKey": "ค",
+		"explanations": [],
+		"notes": [
+			"<strong>Layer 3 (Network Layer):</strong> รับผิดชอบการระบุตำแหน่งด้วย IP Address และทำRouting ข้อมูลข้ามเครือข่าย"
+		]
+	},
+	{
+		"id": 99,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "ข้อใดคือความแตกต่างหลักระหว่าง Unicast, Multicast และ Broadcast?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "Unicast (1 ต่อ 1), Multicast (1 ต่อ กลุ่มเฉพาะ), Broadcast (1 ต่อ ทุกคนในวง)"
+			},
+			{
+				"key": "ข",
+				"text": "Unicast (1 ต่อ ทุกคน), Multicast (1 ต่อ 1), Broadcast (1 ต่อ กลุ่มเฉพาะ)"
+			},
+			{
+				"key": "ค",
+				"text": "Unicast (ส่งภาพ), Multicast (ส่งเสียง), Broadcast (ส่งข้อความ)"
+			},
+			{
+				"key": "ง",
+				"text": "ทั้งหมดทำงานเหมือนกัน"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [],
+		"notes": [
+			"<strong>Unicast:</strong> ส่งหาเครื่องเดียวแบบเจาะจง",
+			"<strong>Multicast:</strong> ส่งหากลุ่มเครื่องที่ลงทะเบียนรับข้อมูลไว้",
+			"<strong>Broadcast:</strong> ส่งหาทุกเครื่องภายใน Subnet เดียวกัน"
+		]
+	},
+	{
+		"id": 100,
+		"category": "subnet",
+		"categoryLabel": "IP Subnetting & Network Fundamentals (ข้อ 71 - 100)",
+		"scenario": "วิศวกรคลาวด์ออกแบบระบบ VPC โดยสร้าง Primary CIDR เป็น <code>10.0.0.0/16</code> และต้องการแบ่ง 4 Subnets สำหรับ 2 Availability Zones (AZ-A, AZ-B) โดยแต่ละ AZ มีทั้ง Public และ Private Subnet ข้อใดคือการจัดวาง CIDR ที่เป็นระบบและไม่ทับซ้อนกัน (Non-overlapping) มากที่สุด?",
+		"choices": [
+			{
+				"key": "ก",
+				"text": "AZ-A Public: <code>10.0.1.0/24</code>, AZ-A Private: <code>10.0.2.0/24</code>, AZ-B Public: <code>10.0.3.0/24</code>, AZ-B Private: <code>10.0.4.0/24</code>"
+			},
+			{
+				"key": "ข",
+				"text": "ทุก Subnet ใช้ <code>10.0.1.0/24</code> เหมือนกันทั้งหมด"
+			},
+			{
+				"key": "ค",
+				"text": "AZ-A Public: <code>10.0.0.0/16</code>, AZ-A Private: <code>10.0.0.0/24</code>"
+			},
+			{
+				"key": "ง",
+				"text": "AZ-A Public: <code>10.0.1.0/24</code>, AZ-A Private: <code>10.0.1.0/25</code>"
+			}
+		],
+		"answerKey": "ก",
+		"explanations": [
+			{
+				"key": "ก",
+				"verdict": "correct",
+				"text": "การแบ่งด้วย Prefix <code>/24</code> โดยเปลี่ยน Octet ที่ 3 (<code>10.0.1.0/24</code>, <code>10.0.2.0/24</code>, <code>10.0.3.0/24</code>, <code>10.0.4.0/24</code>) ทำให้แต่ละ Subnet ไม่ทับซ้อนกัน และเป็นระเบียบในการบริหารจัดการ"
+			}
+		],
+		"notes": []
+	}
+]

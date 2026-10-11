@@ -1,0 +1,295 @@
+{
+	"slug": "ha-web",
+	"title": "Highly Available Web Applications — Load Balancing และ Multi-AZ",
+	"blocks": [
+		{
+			"type": "callout",
+			"text": "<strong>สถานะเอกสาร:</strong> ปรับปรุงสำหรับทบทวน ณ วันที่ 11 ตุลาคม 2026 โดยใช้เอกสาร AWS และข้อมูล AWS Cloud Quest ที่เผยแพร่ให้ตรวจสอบได้\n\n\n<strong>ข้อควรทราบ:</strong> รายละเอียดชื่อ resource, ค่า key, จำนวน instance, VPC, subnet และขั้นตอนในหน้าจออาจต่างกันตามเวอร์ชันหรือโจทย์ที่ระบบ Skill Builder มอบให้ ให้ยึดค่าที่โจทย์ในแล็บระบุเป็นหลัก ส่วนหลักการของบริการด้านล่างใช้ทบทวนสอบได้"
+		},
+		{
+			"type": "h3",
+			"text": "เป้าหมายของแล็บ"
+		},
+		{
+			"type": "p",
+			"text": "ออกแบบเว็บแอปให้ยังให้บริการได้เมื่อ EC2 instance หรือ Availability Zone บางส่วนมีปัญหา โดยกระจาย request ไปยัง instance ที่พร้อมให้บริการและใช้หลาย Availability Zones"
+		},
+		{
+			"type": "h3",
+			"text": "แนวคิดสำคัญ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>Availability (ความพร้อมใช้งาน):</strong> ความสามารถของระบบในการให้บริการเมื่อผู้ใช้ต้องการ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>High Availability (HA):</strong> ลด single point of failure ด้วยการกระจายองค์ประกอบและมีทางรองรับเมื่อบางส่วนเสีย",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Availability Zone (AZ):</strong> ตำแหน่งแยกกันภายใน AWS Region ซึ่งออกแบบให้มีความเป็นอิสระจากกันในระดับหนึ่ง",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Elastic Load Balancing (ELB):</strong> กระจาย traffic ไปยัง targets",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Application Load Balancer (ALB):</strong> load balancer ชั้น Application (Layer 7) เหมาะกับ HTTP/HTTPS และรองรับ routing rules",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Target group:</strong> กลุ่ม targets เช่น EC2 instances ที่ load balancer ส่ง traffic ไป",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Listener:</strong> รับ connection บน protocol/port ที่กำหนด เช่น HTTP 80 หรือ HTTPS 443",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Health check:</strong> ตรวจว่า target พร้อมรับ traffic หรือไม่",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "สถาปัตยกรรมตัวอย่าง"
+		},
+		{
+			"type": "diagram",
+			"id": "alb-multi-az"
+		},
+		{
+			"type": "p",
+			"text": "ในระบบจริง อาจมี Auto Scaling group เชื่อมกับ target group และกระจาย EC2 instances ข้ามหลาย AZ เพื่อให้ระบบขยายตัวและทดแทน instance ที่เสียได้ ส่วนชั้นฐานข้อมูลและไฟล์ก็ต้องออกแบบ availability ให้สอดคล้องกันด้วย การมี ALB อย่างเดียวไม่ได้ทำให้ทุกส่วนของแอปพลิเคชัน highly available โดยอัตโนมัติ"
+		},
+		{
+			"type": "h3",
+			"text": "แนวทางทำแล็บ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": true,
+				"items": [
+					{
+						"text": "ตรวจสอบ VPC และเลือก public subnets ในอย่างน้อย 2 Availability Zones สำหรับ ALB ตามข้อกำหนดของบริการและโจทย์",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตรวจสอบว่า web server instances อยู่ใน subnets/AZ ที่ถูกต้องและแอปพลิเคชันเริ่มทำงานแล้ว",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "สร้าง target group โดยกำหนด target type, protocol และ port ให้ตรงกับแอป",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตั้ง health check path ให้ตรงกับ endpoint ที่ web server ตอบกลับได้",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "สร้าง Application Load Balancer และเปิดใช้งาน AZ/subnets ตามโจทย์",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตั้ง listener เช่น HTTP 80 หรือ HTTPS 443 และส่งต่อ request ไป target group",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตรวจ security groups: ALB รับ traffic จากแหล่งที่เหมาะสม และ EC2 อนุญาต traffic จาก security group ของ ALB บนพอร์ตแอปพลิเคชัน ไม่ควรเปิด inbound ของ EC2 กว้างเกินจำเป็น",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ลงทะเบียน targets หรือเชื่อม ASG กับ target group ตามที่โจทย์กำหนด",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "รอ health checks ให้ targets เป็น healthy แล้วทดสอบเข้าผ่าน DNS name ของ load balancer",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ตรวจว่าคำขอถูกส่งไปยัง healthy targets และทำตามขั้นตอน validation ของ Cloud Quest",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "Public subnet, private subnet และ security group"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>Public subnet:</strong> subnet ที่ route table มี route ไป Internet Gateway; แต่ resource จะเข้าถึงอินเทอร์เน็ตได้จริงหรือไม่ ยังขึ้นกับ public IP/การตั้งค่า route และ security group/NACL ด้วย",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Private subnet:</strong> ไม่มี route โดยตรงจาก subnet ไป Internet Gateway สำหรับรับการเชื่อมต่อขาเข้าจากอินเทอร์เน็ตโดยตรง โดยอาจมี NAT Gateway สำหรับ outbound internet ในกรณีที่ต้องการ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>ALB security group:</strong> อนุญาต traffic จาก client ตาม protocol/port ที่ต้องการ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>EC2 security group:</strong> ควรรับ traffic ของแอปจาก ALB security group เท่าที่จำเป็น",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "p",
+			"text": "อย่าสรุปว่าเพียงชื่อ subnet เป็น public หรือ private ก็เพียงพอ ต้องตรวจ route table และ security configuration จริง"
+		},
+		{
+			"type": "h3",
+			"text": "High Availability กับ Scalability"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "<strong>High Availability:</strong> ลด downtime จากความขัดข้อง เช่น ใช้หลาย AZ และกระจาย traffic ไปยัง targets ที่ healthy",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Scalability:</strong> เพิ่มหรือลด capacity เพื่อรับการเปลี่ยนแปลงของ workload",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "<strong>Elasticity:</strong> ปรับทรัพยากรขึ้น/ลงตามความต้องการได้อย่างเหมาะสม",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "p",
+			"text": "Load balancer ช่วยกระจาย traffic และหลีกเลี่ยง targets ที่ไม่ healthy ตาม health checks แต่ไม่ได้สร้าง EC2 เพิ่มเอง เว้นแต่จะทำงานร่วมกับ Auto Scaling หรือระบบอื่นที่จัดการ capacity"
+		},
+		{
+			"type": "h3",
+			"text": "จุดที่มักผิด"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "มี EC2 หลายเครื่องแต่ทั้งหมดอยู่ AZ เดียว: ยังมีความเสี่ยงจากความขัดข้องของ AZ นั้น",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ALB มี subnets ไม่ครบตามข้อกำหนด หรือเลือก AZ ไม่ถูก",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "target group ใช้ port/path ผิด ทำให้ health checks ไม่ผ่าน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "security group ของ EC2 ไม่อนุญาต traffic จาก ALB",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "เข้าเว็บผ่าน public IP ของ EC2 แทน DNS name ของ ALB ขณะทดสอบ load balancing",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "คิดว่า ALB สำรองข้อมูลหรือทำให้ฐานข้อมูลมี HA โดยอัตโนมัติ: แต่ละชั้นต้องออกแบบแยกกัน",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "คิดว่า load balancer เท่ากับ Auto Scaling: ALB กระจาย traffic ส่วน ASG จัดการจำนวนและสุขภาพของ EC2 instances",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		},
+		{
+			"type": "h3",
+			"text": "จำก่อนสอบ"
+		},
+		{
+			"type": "list",
+			"list": {
+				"ordered": false,
+				"items": [
+					{
+						"text": "ALB = Layer 7, HTTP/HTTPS, listener/rules/target groups/health checks",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ALB ต้องเปิดใช้งานอย่างน้อย 2 AZ",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "ใช้ DNS name ของ ALB เป็นจุดเข้าเว็บ แทนการผูกผู้ใช้กับ EC2 เครื่องเดียว",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "กระจาย EC2 ไปหลาย AZ และใช้ ASG เมื่อจำเป็นต้องทดแทน/ปรับจำนวน instance",
+						"plain": [],
+						"children": null
+					},
+					{
+						"text": "HA ต้องพิจารณาทุก dependency ไม่ใช่เฉพาะ web tier",
+						"plain": [],
+						"children": null
+					}
+				]
+			}
+		}
+	]
+}
