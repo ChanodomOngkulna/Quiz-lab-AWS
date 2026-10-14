@@ -7,8 +7,8 @@
 
 	const chipClass = {
 		aws: 'bg-accent-soft text-accent-deep',
-		rag: 'bg-[#ebe7f8] text-[#5b4aa0]',
-		subnet: 'bg-[#e1eef3] text-[#2c6a84]'
+		rag: 'bg-[#ebe7f8] text-[#5b4aa0] dark:bg-[#282244] dark:text-[#c4b5fd]',
+		subnet: 'bg-[#e1eef3] text-[#2c6a84] dark:bg-[#162f3d] dark:text-[#7dd3fc]'
 	};
 	const catLabel = { aws: 'AWS Cloud', rag: 'RAG & LangChain', subnet: 'IP Subnetting' };
 

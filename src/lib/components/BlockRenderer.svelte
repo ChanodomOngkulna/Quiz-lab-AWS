@@ -122,7 +122,7 @@
 			</aside>
 		{:else if block.type === 'code'}
 			<pre
-				class="mt-5 overflow-x-auto rounded-lg bg-[#f4f0e3] p-4 text-[13px] leading-relaxed"><code
+				class="mt-5 overflow-x-auto rounded-lg border border-line bg-[#f4f0e3] p-4 text-[13px] leading-relaxed dark:bg-[#181920]"><code
 					>{@html block.text}</code
 				></pre>
 		{:else if block.type === 'checklist'}

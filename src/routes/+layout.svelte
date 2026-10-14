@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 
 	let { children } = $props();
 
@@ -25,40 +26,46 @@
 </a>
 
 <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur">
-	<div class="mx-auto flex h-14 max-w-4xl items-center justify-between px-4 sm:px-6">
+	<div class="mx-auto flex h-14 max-w-4xl items-center justify-between px-3 sm:px-6">
 		<a
 			href="/"
-			class="flex items-center gap-2.5 font-semibold text-ink"
+			class="flex items-center gap-2 font-semibold text-ink sm:gap-2.5"
 			aria-label="AWS-Quiz-CPE — หน้าหลัก"
 		>
 			<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" class="shrink-0">
 				<circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2" />
 				<circle cx="12" cy="12" r="4.5" fill="var(--color-accent)" />
 			</svg>
-			<span class="hidden text-[15px] min-[420px]:inline">AWS-Quiz-CPE</span>
+			<span class="hidden text-[15px] min-[460px]:inline">AWS-Quiz-CPE</span>
 		</a>
-		<nav aria-label="เมนูหลัก">
-			<ul class="flex items-center gap-0.5 min-[420px]:gap-1 sm:gap-2">
-				{#each links as link (link.href)}
-					<li>
-						<a
-							href={link.href}
-							aria-current={isActive(link.href) ? 'page' : undefined}
-							class="group flex items-center gap-1.5 rounded-full px-2 py-1.5 text-[13.5px] transition-colors min-[420px]:px-3 min-[420px]:text-[14px]
-								{isActive(link.href) ? 'font-medium text-ink' : 'text-muted hover:text-ink'}"
-						>
-							<span
-								class="h-1.5 w-1.5 rounded-full transition-all duration-200
-									{isActive(link.href)
-									? 'animate-dot-in bg-accent'
-									: 'scale-100 bg-transparent group-hover:scale-150 group-hover:bg-accent/60'}"
-							></span>
-							{link.label}
-						</a>
-					</li>
-				{/each}
-			</ul>
-		</nav>
+		<div class="flex items-center gap-1.5 min-[420px]:gap-2 sm:gap-3">
+			<nav aria-label="เมนูหลัก">
+				<ul class="flex items-center gap-0.5 min-[420px]:gap-1 sm:gap-2">
+					{#each links as link (link.href)}
+						<li>
+							<a
+								href={link.href}
+								aria-current={isActive(link.href) ? 'page' : undefined}
+								class="group flex items-center gap-1.5 rounded-full px-2 py-1.5 text-[13px] transition-colors min-[420px]:px-2.5 min-[420px]:text-[13.5px] sm:px-3 sm:text-[14px]
+									{isActive(link.href) ? 'font-medium text-ink' : 'text-muted hover:text-ink'}"
+							>
+								<span
+									class="h-1.5 w-1.5 rounded-full transition-all duration-200
+										{isActive(link.href)
+										? 'animate-dot-in bg-accent'
+										: 'scale-100 bg-transparent group-hover:scale-150 group-hover:bg-accent/60'}"
+								></span>
+								{link.label}
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</nav>
+
+			<div class="h-4 w-[1px] shrink-0 bg-line" aria-hidden="true"></div>
+
+			<ThemeToggle />
+		</div>
 	</div>
 </header>
 
